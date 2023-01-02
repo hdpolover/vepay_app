@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vepay_app/screens/auth/login.dart';
+import 'package:vepay_app/screens/auth/register.dart';
 
 import '../../resources/color_manager.dart';
 
@@ -52,30 +54,61 @@ class _IntroState extends State<Intro> {
                     padding: EdgeInsets.symmetric(horizontal: w * 0.1),
                     child: Text(
                       "Top Up Saldo Skrill, PayPal, Perfect Money, Payeer, USDT & BUSD Murah hanya di Vepay!",
-                      style: Theme.of(context).textTheme.bodyText2?.copyWith(),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          ?.copyWith(color: Colors.grey),
                     ),
                   ),
                   SizedBox(
-                    height: h * 0.03,
+                    height: h * 0.15,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.07),
+                    child: SizedBox(
+                      height: h * 0.06,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorManager.primary, // background
+                          foregroundColor: Colors.white, // foreground
+                        ),
+                        child: const Text('Daftar'),
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Register(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                   SizedBox(
-                    height: h * 0.06,
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorManager.primary, // background
-                        foregroundColor: Colors.white, // foreground
+                    height: h * 0.02,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.07),
+                    child: SizedBox(
+                      height: h * 0.06,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white54, // background
+                          foregroundColor: ColorManager.primary, // foreground
+                        ),
+                        child: const Text('Masuk'),
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Login(),
+                            ),
+                          );
+                        },
                       ),
-                      child: const Text('Daftar'),
-                      onPressed: () async {
-                        // if (_formKey.currentState!.validate()) {
-                        //   setState(() {
-                        //     isLoading = true;
-                        //   });
-
-                        //   loginUser();
-                        // }
-                      },
                     ),
                   ),
                 ],

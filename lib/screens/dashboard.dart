@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/screens/tabs/home_tab.dart';
 import 'package:vepay_app/screens/tabs/profile_tab.dart';
@@ -9,7 +10,8 @@ import 'package:vepay_app/screens/tabs/transaction_tab.dart';
 import 'package:vepay_app/screens/tabs/withdraw_tab.dart';
 
 class Dashboard extends StatefulWidget {
-  Dashboard({Key? key}) : super(key: key);
+  MemberModel member;
+  Dashboard({required this.member, Key? key}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -28,11 +30,15 @@ class _DashboardState extends State<Dashboard> {
 
   List<Widget> _buildScreens() {
     return [
-      HomeTab(),
+      HomeTab(
+        member: widget.member,
+      ),
       WithdrawTab(),
       TransactionTab(),
       RateTab(),
-      ProfileTab()
+      ProfileTab(
+        member: widget.member,
+      )
     ];
   }
 

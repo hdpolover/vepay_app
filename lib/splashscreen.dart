@@ -1,8 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vepay_app/common/common_dialog.dart';
+import 'package:vepay_app/common/common_method.dart';
+import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/intro.dart';
+import 'package:vepay_app/screens/auth/login.dart';
 import 'package:vepay_app/screens/dashboard.dart';
+import 'package:vepay_app/services/auth_service.dart';
 
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key? key}) : super(key: key);
@@ -31,13 +37,51 @@ class _SplashScreenState extends State<SplashScreen> {
     super.dispose();
   }
 
+  Future<bool> _checkUserLoginStatus() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    var prefs = await SharedPreferences.getInstance();
+    return prefs.getBool("loginStatus") ?? false;
+  }
+
   _goNext() async {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (ctx) => Dashboard(),
-      ),
-    );
+    if (await _checkUserLoginStatus()) {
+      var prefs = await SharedPreferences.getInstance();
+
+      String? email = prefs.getString("email");
+      String? password = prefs.getString("password");
+
+      Map<String, dynamic> data = {
+        'email': email,
+        'password': password,
+      };
+
+      try {
+        MemberModel? res = await AuthService().login(data);
+
+        CommonMethods().saveUserLoginsDetails(
+          res.userId!,
+          res.name!,
+          res.email!,
+          password!,
+          true,
+        );
+
+        _goToPage(Dashboard(member: res));
+      } catch (e) {
+        buildError(e);
+      }
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => Login(),
+        ),
+      );
+    }
+  }
+
+  buildError(var e) {
+    CommonDialog.buildWrongWithAuth(context, false, e.toString());
   }
 
   _goToPage(Widget name) {
@@ -52,6 +96,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

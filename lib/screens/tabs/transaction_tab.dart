@@ -14,20 +14,25 @@ class _TransactionTabState extends State<TransactionTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Riwayat Transaksi"),
+        title: const Text("Riwayat Transaksi"),
         foregroundColor: Colors.black,
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(15),
+          const Padding(
+            padding: EdgeInsets.all(15),
             child: FaIcon(
               Icons.filter_list,
               size: 30,
             ),
           ),
         ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [],
+        ),
       ),
     );
   }
