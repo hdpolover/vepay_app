@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/models/member_model.dart';
+import 'package:vepay_app/screens/auth/intro.dart';
+import 'package:vepay_app/screens/auth/login.dart';
 import 'package:vepay_app/screens/profile/about_us.dart';
 import 'package:vepay_app/screens/profile/contact_us.dart';
 import 'package:vepay_app/screens/profile/edit_profile.dart';
@@ -27,15 +30,12 @@ class _ProfileTabState extends State<ProfileTab> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 buildHeader(),
-                SizedBox(
-                  height: h * 0.03,
-                ),
                 buildBody(),
               ],
             ),
@@ -129,7 +129,17 @@ class _ProfileTabState extends State<ProfileTab> {
                 title: const Text("Hubungi Kami"),
               ),
               ListTile(
-                onTap: () {},
+                onTap: () {
+                  CommonMethods().saveUserLoginsDetails("", "", "", "", false);
+
+                  Navigator.of(context, rootNavigator: true).pop();
+
+                  PersistentNavBarNavigator.pushNewScreen(
+                    context,
+                    screen: Intro(),
+                    withNavBar: false,
+                  );
+                },
                 contentPadding: const EdgeInsets.fromLTRB(15, 5, 5, 5),
                 leading: Container(
                   width: 50,
@@ -155,38 +165,49 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 
   buildHeader() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        CircleAvatar(
-          backgroundImage: NetworkImage(widget.member.photo ??
-              "https://app.vepay.id/asset/images/placeholder.jpg"),
-          radius: 40,
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Nama"),
-              const SizedBox(height: 5),
-              Text(
-                widget.member.name!,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CircleAvatar(
+            backgroundImage: NetworkImage(widget.member.photo ??
+                "https://vectorified.com/images/user-icon-1.png"),
+            radius: 30,
           ),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: const FaIcon(FontAwesomeIcons.penToSquare),
-        ),
-      ],
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Nama"),
+                const SizedBox(height: 5),
+                Text(
+                  widget.member.name!,
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: EditProfile(
+                  member: widget.member,
+                ),
+                withNavBar: false,
+              );
+            },
+            icon: const FaIcon(FontAwesomeIcons.penToSquare),
+          ),
+        ],
+      ),
     );
   }
 }

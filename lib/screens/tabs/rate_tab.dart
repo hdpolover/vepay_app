@@ -5,6 +5,7 @@ import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/screens/rate/rate_item_widget.dart';
 import 'package:vepay_app/services/rate_service.dart';
 
+import '../../common/common_shimmer.dart';
 import '../../models/rate_model.dart';
 
 class RateTab extends StatefulWidget {
@@ -24,14 +25,24 @@ class _RateTabState extends State<RateTab> with AutomaticKeepAliveClientMixin {
     getRates();
   }
 
-  Future<void> getRates() async {
+  getRates() async {
     try {
-      rates = await RateService().getRates();
+      rates = await RateService().getRates("top_up");
+
+      rates!.removeWhere((item) => item.price! == "0");
 
       setState(() {});
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<void> loadRates() async {
+    rates == null;
+
+    setState(() {});
+
+    getRates();
   }
 
   @override
@@ -40,12 +51,20 @@ class _RateTabState extends State<RateTab> with AutomaticKeepAliveClientMixin {
 
     return Scaffold(
       appBar: CommonWidgets().buildMenuAppBar("Rate Hari ini"),
-      body: rates == null
-          ? const CircularProgressIndicator()
-          : RefreshIndicator(
-              onRefresh: getRates,
-              color: ColorManager.primary,
-              child: ListView.builder(
+      body: RefreshIndicator(
+        onRefresh: loadRates,
+        color: ColorManager.primary,
+        child: rates == null
+            ? ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                shrinkWrap: true,
+                itemCount: 5,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (context, index) {
+                  return CommonShimmer().buildRateItemShimmer(context);
+                },
+              )
+            : ListView.builder(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 shrinkWrap: true,
@@ -56,7 +75,7 @@ class _RateTabState extends State<RateTab> with AutomaticKeepAliveClientMixin {
                   );
                 },
               ),
-            ),
+      ),
     );
   }
 

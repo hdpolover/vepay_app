@@ -57,7 +57,7 @@ class _DashboardState extends State<Dashboard> {
         title: "Withdraw",
       ),
       PersistentBottomNavBarItem(
-        icon: const FaIcon(FontAwesomeIcons.backward),
+        icon: const FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
         activeColorPrimary: ColorManager.primary,
         inactiveColorPrimary: Colors.grey,
         title: "Transaksi",

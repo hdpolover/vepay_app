@@ -5,8 +5,8 @@ import 'package:vepay_app/app_constants.dart';
 import 'package:vepay_app/models/rate_model.dart';
 
 class RateService {
-  Future<List<RateModel>> getRates() async {
-    String url = "${AppConstants.apiUrl}get_all_rate?type=top_up";
+  Future<List<RateModel>> getRates(String type) async {
+    String url = "${AppConstants.apiUrl}get_all_rate?type=$type";
 
     print(url);
 

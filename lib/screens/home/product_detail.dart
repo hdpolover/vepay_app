@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:vepay_app/common/common_dialog.dart';
+import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/common/common_widgets.dart';
+import 'package:vepay_app/models/blockchain_model.dart';
+import 'package:vepay_app/models/payment_method_model.dart';
 import 'package:vepay_app/models/rate_model.dart';
 import 'package:vepay_app/screens/home/product_buy_detail.dart';
+import 'package:vepay_app/services/blockchain_service.dart';
 
 import '../../resources/color_manager.dart';
 
@@ -19,10 +24,13 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends State<ProductDetail> {
   TextEditingController emailController = TextEditingController();
   TextEditingController totalController = TextEditingController();
+  TextEditingController fieldController = TextEditingController();
 
-  final _emailValidator = MultiValidator([
-    RequiredValidator(errorText: 'Harap masukan email'),
-    EmailValidator(errorText: "Harap masukan email yang valid")
+  List<BlockchainModel> chains = [];
+  BlockchainModel? selectedChain;
+
+  final _akunValidator = MultiValidator([
+    RequiredValidator(errorText: 'Harap masukan akun yang sesuai'),
   ]);
 
   final _totalValidator = MultiValidator([
@@ -30,6 +38,21 @@ class _ProductDetailState extends State<ProductDetail> {
   ]);
 
   final _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    getRates();
+    super.initState();
+  }
+
+  getRates() async {
+    try {
+      chains = await BlockchainService().getChains();
+
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +67,13 @@ class _ProductDetailState extends State<ProductDetail> {
               Container(
                 padding: const EdgeInsets.all(10),
                 child: TextFormField(
-                  controller: emailController,
-                  validator: _emailValidator,
-                  keyboardType: TextInputType.emailAddress,
+                  controller: fieldController,
+                  validator: _akunValidator,
+                  keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    hintText: 'Email ${widget.rateModel.name}',
+                    hintText:
+                        CommonMethods().getFieldName(widget.rateModel.name!),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: ColorManager.primary,
@@ -81,11 +105,20 @@ class _ProductDetailState extends State<ProductDetail> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  int total =
-                                      int.parse(totalController.text) - 1;
-                                  totalController.text = total.toString();
-                                });
+                                if (totalController.text == "" ||
+                                    int.parse(totalController.text.trim()) ==
+                                        0) {
+                                  CommonDialog.buildOkDialog(context, false,
+                                      "Jumlah harus lebih dari 0");
+
+                                  totalController.text = 1.toString();
+                                } else {
+                                  setState(() {
+                                    int total =
+                                        int.parse(totalController.text) - 1;
+                                    totalController.text = total.toString();
+                                  });
+                                }
                               },
                               child: Align(
                                   alignment: Alignment.center,
@@ -106,8 +139,13 @@ class _ProductDetailState extends State<ProductDetail> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                int total = int.parse(totalController.text) + 1;
-                                totalController.text = total.toString();
+                                if (totalController.text == "") {
+                                  totalController.text = 1.toString();
+                                } else {
+                                  int total =
+                                      int.parse(totalController.text) + 1;
+                                  totalController.text = total.toString();
+                                }
                               },
                               child: Align(
                                   alignment: Alignment.center,
@@ -133,6 +171,59 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ),
               ),
+              widget.rateModel.categories != "crypto"
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      child: Container(
+                        height: 55,
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: DropdownButton<BlockchainModel>(
+                                  iconSize: 0.0,
+                                  underline: const SizedBox(),
+                                  value: selectedChain,
+                                  hint: const Text("Blockchain"),
+                                  items: chains
+                                      .map<DropdownMenuItem<BlockchainModel>>(
+                                          (value) {
+                                    return DropdownMenuItem<BlockchainModel>(
+                                      value: value,
+                                      child: Text(value.blockchain!),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(
+                                      () {
+                                        selectedChain = value;
+                                      },
+                                    );
+
+                                    //showFields();
+                                  },
+                                ),
+                              ),
+                            ),
+                            Container(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: const Icon(Icons.arrow_drop_down)),
+                          ],
+                        ),
+                      ),
+                    ),
               Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,
@@ -149,19 +240,30 @@ class _ProductDetailState extends State<ProductDetail> {
                         child: const Text('Selanjutnya'),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            Map<String, dynamic> data = {
-                              "email": emailController.text.trim(),
-                              "jumlah": totalController.text.trim(),
-                            };
+                            if (int.parse(totalController.text.trim()) == 0) {
+                              CommonDialog.buildOkDialog(
+                                  context, false, "Jumlah harus lebih dari 0");
+                            } else {
+                              Map<String, dynamic> data = {
+                                "akun_tujuan": fieldController.text.trim(),
+                                "jumlah": totalController.text.trim(),
+                                "blockchain_id": selectedChain == null
+                                    ? null
+                                    : selectedChain!.id,
+                                "blockchain_name": selectedChain == null
+                                    ? null
+                                    : selectedChain!.blockchain,
+                              };
 
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: ProductBuyDetail(
-                                rateModel: widget.rateModel,
-                                data: data,
-                              ),
-                              withNavBar: false,
-                            );
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: ProductBuyDetail(
+                                  rateModel: widget.rateModel,
+                                  data: data,
+                                ),
+                                withNavBar: false,
+                              );
+                            }
                           }
                         },
                       ),

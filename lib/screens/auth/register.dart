@@ -77,6 +77,8 @@ class _RegisterState extends State<Register> {
       setState(() {
         isLoading = false;
       });
+
+      print("sini" + e.toString());
       CommonDialog.buildOkDialog(
           context, false, "Terjadi kesalahan. Coba lagi.");
     }
@@ -259,7 +261,7 @@ class _RegisterState extends State<Register> {
                                 MaterialPageRoute(
                                   builder: (context) => WebViewPage(
                                     title: "ToS dan Privacy Policy",
-                                    url: "",
+                                    url: "https://vepay.id/privacy-policy/",
                                   ),
                                 ),
                               );

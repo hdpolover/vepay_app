@@ -46,21 +46,30 @@ class _LoginState extends State<Login> {
     try {
       MemberModel m = await AuthService().login(data);
 
-      CommonMethods().saveUserLoginsDetails(
-          m.userId!, m.name!, m.email!, passwordController.text.trim(), true);
+      if (m.status == "1") {
+        CommonMethods().saveUserLoginsDetails(
+            m.userId!, m.name!, m.email!, passwordController.text.trim(), true);
 
-      setState(() {
-        isLoading = false;
-      });
+        setState(() {
+          isLoading = false;
+        });
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Dashboard(
-            member: m,
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Dashboard(
+              member: m,
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+
+        CommonDialog.buildOkDialog(
+            context, false, "Akun Anda belum diverifikasi. Silakan cek email.");
+      }
     } catch (e) {
       setState(() {
         isLoading = false;

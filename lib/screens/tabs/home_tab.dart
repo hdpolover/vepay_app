@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:vepay_app/common/common_shimmer.dart';
 import 'package:vepay_app/models/member_model.dart';
+import 'package:vepay_app/models/promo_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/screens/home/product_item_widget.dart';
+import 'package:vepay_app/screens/home/promo_item_widget.dart';
+import 'package:vepay_app/services/promo_service.dart';
 
 import '../../models/rate_model.dart';
+import '../../models/transaction_model.dart';
 import '../../services/rate_service.dart';
+import '../../services/transaction_service.dart';
+import '../transaction/transaction_item_widget.dart';
 
 class HomeTab extends StatefulWidget {
   MemberModel member;
@@ -18,17 +24,41 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   List<RateModel>? rates;
+  List<PromoModel>? promos;
+  List<TransactionModel>? transactionList;
 
   @override
   void initState() {
-    super.initState();
-
     getRates();
+    getPromos();
+    getTrans();
+
+    super.initState();
+  }
+
+  Future<void> getPromos() async {
+    try {
+      promos = await PromoService().getPromos();
+
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> getRates() async {
     try {
-      rates = await RateService().getRates();
+      rates = await RateService().getRates("top_up");
+
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getTrans() async {
+    try {
+      transactionList = await TransactionService().getTransactionHistory();
 
       setState(() {});
     } catch (e) {
@@ -56,7 +86,12 @@ class _HomeTabState extends State<HomeTab> {
                 buildHeader(),
                 const SizedBox(height: 20),
                 buildProductSection(),
+                transactionList != null && transactionList!.isEmpty
+                    ? Container()
+                    : buildTransSection(),
+                const SizedBox(height: 10),
                 buildPromotionSection(),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -65,27 +100,65 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
+  buildTransSection() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Transaksi Terbaru",
+          style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                fontSize: 18,
+              ),
+        ),
+        transactionList == null
+            ? SizedBox(
+                height: MediaQuery.of(context).size.height * 0.16,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  shrinkWrap: true,
+                  itemCount: 2,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return CommonShimmer().buildPromoItemShimmer(context);
+                  },
+                ),
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                shrinkWrap: true,
+                itemCount: transactionList!.length > 1 ? 2 : 1,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return TransactionItemWidget(
+                      transaction: transactionList![index]);
+                },
+              ),
+      ],
+    );
+  }
+
   buildProductSection() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.25,
-      child: Expanded(
-        child: ResponsiveGridList(
-          minItemsPerRow: 4,
-          horizontalGridSpacing: 4,
-          verticalGridSpacing: 4,
-          minItemWidth: MediaQuery.of(context).size.width * 0.25,
-          children: rates == null
-              ? List.generate(
-                  8,
-                  (index) => CommonShimmer().buildProductItemShimmer(context),
-                  growable: false,
-                )
-              : List.generate(
-                  rates!.length,
-                  (index) => buildProductItemWidget(rates![index]),
-                  growable: false,
-                ),
-        ),
+      height: MediaQuery.of(context).size.height * 0.27,
+      child: ResponsiveGridList(
+        minItemsPerRow: 4,
+        horizontalGridSpacing: 4,
+        verticalGridSpacing: 4,
+        listViewBuilderOptions: ListViewBuilderOptions(
+            physics: const NeverScrollableScrollPhysics()),
+        minItemWidth: MediaQuery.of(context).size.width * 0.25,
+        children: rates == null
+            ? List.generate(
+                8,
+                (index) => CommonShimmer().buildProductItemShimmer(context),
+                growable: false,
+              )
+            : List.generate(
+                rates!.length,
+                (index) => buildProductItemWidget(rates![index]),
+                growable: false,
+              ),
       ),
     );
     // return Column(
@@ -110,6 +183,8 @@ class _HomeTabState extends State<HomeTab> {
 
   buildPromotionSection() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "Promosi",
@@ -117,6 +192,33 @@ class _HomeTabState extends State<HomeTab> {
                 fontSize: 18,
               ),
         ),
+        promos == null
+            ? SizedBox(
+                height: MediaQuery.of(context).size.height * 0.16,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  shrinkWrap: true,
+                  itemCount: 2,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return CommonShimmer().buildPromoItemShimmer(context);
+                  },
+                ),
+              )
+            : SizedBox(
+                height: MediaQuery.of(context).size.height * 0.21,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  shrinkWrap: true,
+                  itemCount: promos!.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return PromoItemWidget(
+                      promo: promos![index],
+                    );
+                  },
+                ),
+              ),
       ],
     );
   }
@@ -128,8 +230,8 @@ class _HomeTabState extends State<HomeTab> {
       children: [
         CircleAvatar(
           backgroundImage: NetworkImage(widget.member.photo ??
-              "https://app.vepay.id/asset/images/placeholder.jpg"),
-          radius: 40,
+              "https://vectorified.com/images/user-icon-1.png"),
+          radius: 30,
         ),
         const SizedBox(width: 20),
         Expanded(

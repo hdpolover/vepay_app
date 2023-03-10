@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_credit_card/credit_card_widget.dart';
+import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/common/common_widgets.dart';
+import 'package:vepay_app/models/vcc_model.dart';
+import 'package:vepay_app/resources/color_manager.dart';
+import 'package:vepay_app/screens/profile/vcc_detail.dart';
+import 'package:vepay_app/services/vcc_service.dart';
 
 class Vcc extends StatefulWidget {
   Vcc({Key? key}) : super(key: key);
@@ -10,6 +17,25 @@ class Vcc extends StatefulWidget {
 }
 
 class _VccState extends State<Vcc> {
+  List<VccModel>? vccs;
+  @override
+  void initState() {
+    super.initState();
+    getVcc();
+  }
+
+  getVcc() async {
+    try {
+      vccs = await VccService().getVccs();
+
+      print(vccs![0].holder);
+
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
+
   buildEmpty() {
     return Center(
       child: Padding(
@@ -62,7 +88,54 @@ class _VccState extends State<Vcc> {
           //     buildEmpty(),
           //   ],
           // ),
-          child: buildEmpty(),
+          child: vccs == null
+              ? buildEmpty()
+              : InkWell(
+                  onTap: () {
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: VccDetail(vcc: vccs![0]),
+                      withNavBar: false,
+                    );
+                  },
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    shrinkWrap: true,
+                    itemCount: vccs!.length,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      return CreditCardWidget(
+                        cardBgColor: ColorManager.primary,
+                        // glassmorphismConfig: Glassmorphism(
+                        //   blurX: 10.0,
+                        //   blurY: 10.0,
+                        //   gradient: LinearGradient(
+                        //     begin: Alignment.topLeft,
+                        //     end: Alignment.bottomRight,
+                        //     colors: <Color>[
+                        //       Colors.grey.withAlpha(20),
+                        //       Colors.white.withAlpha(20),
+                        //     ],
+                        //     stops: const <double>[
+                        //       0.3,
+                        //       0,
+                        //     ],
+                        //   ),
+                        // ),
+                        bankName: "VCC",
+                        cardNumber: vccs![index].number!,
+                        expiryDate: vccs![index].validDate!,
+                        cardHolderName: vccs![index].holder!,
+                        cvvCode: vccs![index].securityCode!,
+                        isHolderNameVisible: true,
+                        showBackView: false,
+                        isSwipeGestureEnabled: false,
+                        onCreditCardWidgetChange:
+                            (CreditCardBrand) {}, //true when you want to show cvv(back) view
+                      );
+                    },
+                  ),
+                ),
         ),
       ),
     );

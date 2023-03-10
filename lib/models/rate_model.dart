@@ -25,6 +25,9 @@ class RateModel {
     this.name,
     this.image,
     this.description,
+    this.isActive,
+    this.order,
+    this.categories,
   });
 
   String? id;
@@ -42,6 +45,9 @@ class RateModel {
   String? name;
   String? image;
   String? description;
+  String? isActive;
+  String? order;
+  String? categories;
 
   factory RateModel.fromJson(Map<String, dynamic> json) => RateModel(
         id: json["id"],
@@ -59,6 +65,9 @@ class RateModel {
         name: json["name"],
         image: json["image"],
         description: json["description"],
+        isActive: json["is_active"],
+        order: json["order"],
+        categories: json["categories"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -77,5 +86,8 @@ class RateModel {
         "name": name,
         "image": image,
         "description": description,
+        "is_active": isActive,
+        "order": order,
+        "categories": categories,
       };
 }

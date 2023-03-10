@@ -12,11 +12,13 @@ String memberModelToJson(MemberModel data) => json.encode(data.toJson());
 class MemberModel {
   MemberModel({
     this.userId,
+    this.username,
     this.email,
     this.password,
     this.role,
     this.status,
     this.online,
+    this.isGoogle,
     this.device,
     this.logTime,
     this.createdAt,
@@ -30,12 +32,14 @@ class MemberModel {
   });
 
   String? userId;
+  dynamic username;
   String? email;
   String? password;
   String? role;
   String? status;
   String? online;
-  dynamic device;
+  String? isGoogle;
+  String? device;
   String? logTime;
   String? createdAt;
   String? isDeleted;
@@ -48,11 +52,13 @@ class MemberModel {
 
   factory MemberModel.fromJson(Map<String, dynamic> json) => MemberModel(
         userId: json["user_id"],
+        username: json["username"],
         email: json["email"],
         password: json["password"],
         role: json["role"],
         status: json["status"],
         online: json["online"],
+        isGoogle: json["is_google"],
         device: json["device"],
         logTime: json["log_time"],
         createdAt: json["created_at"],
@@ -67,11 +73,13 @@ class MemberModel {
 
   Map<String, dynamic> toJson() => {
         "user_id": userId,
+        "username": username,
         "email": email,
         "password": password,
         "role": role,
         "status": status,
         "online": online,
+        "is_google": isGoogle,
         "device": device,
         "log_time": logTime,
         "created_at": createdAt,

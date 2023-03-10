@@ -30,7 +30,7 @@ class AuthService {
         return MemberModel.fromJson(result);
       } else {
         print(jsonDecode(response.body));
-        return null!;
+        return jsonDecode(response.body);
       }
     } catch (e) {
       print(e);

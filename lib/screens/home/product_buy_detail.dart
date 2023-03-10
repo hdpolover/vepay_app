@@ -19,6 +19,30 @@ class ProductBuyDetail extends StatefulWidget {
 }
 
 class _ProductBuyDetailState extends State<ProductBuyDetail> {
+  double? subtotal;
+  double? total;
+  double? feeFinal;
+
+  @override
+  void initState() {
+    countAll(
+      double.parse(widget.rateModel.price!),
+      double.parse(widget.data['jumlah']),
+      double.parse(widget.rateModel.fee!),
+    );
+
+    super.initState();
+  }
+
+  countAll(double price, double amount, double fee) {
+    subtotal = price * amount;
+
+    feeFinal = (fee * subtotal!) / 100;
+    total = subtotal! + feeFinal!;
+
+    setState(() {});
+  }
+
   buildTextItem(String title, String value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +87,9 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
       //   ),
       // ),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.3,
+        height: widget.data['blockchain_name'] == null
+            ? MediaQuery.of(context).size.height * 0.3
+            : MediaQuery.of(context).size.height * 0.33,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -105,8 +131,21 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
               const SizedBox(height: 10),
               buildTextItem("Jenis Produk", widget.rateModel.name!),
               const SizedBox(height: 10),
-              buildTextItem("Email", widget.data['email']!),
-              const SizedBox(height: 10),
+              widget.data['akun_tujuan'] == null
+                  ? Container()
+                  : buildTextItem(
+                      CommonMethods().getFieldName(widget.rateModel.name!),
+                      widget.data['akun_tujuan']!),
+              widget.data['akun_tujuan'] == null
+                  ? Container()
+                  : const SizedBox(height: 10),
+              widget.data['blockchain_name'] == null
+                  ? Container()
+                  : buildTextItem(
+                      "Blockchain", widget.data['blockchain_name']!),
+              widget.data['blockchain_name'] == null
+                  ? Container()
+                  : const SizedBox(height: 10),
               buildTextItem("Jumlah", widget.data['jumlah']!),
               const SizedBox(height: 10),
               buildTextItem(
@@ -117,9 +156,9 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
               ),
               const SizedBox(height: 10),
               buildTextItem(
-                "Fee Transaksi",
+                "Biaya Transaksi",
                 CommonMethods.formatCompleteCurrency(
-                  double.parse(widget.rateModel.fee!),
+                  feeFinal!,
                 ),
               ),
             ],
@@ -157,15 +196,15 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
               buildTextItem2(
                 "Subtotal Tagihan",
                 CommonMethods.formatCompleteCurrency(
-                  double.parse(widget.rateModel.price!),
+                  subtotal!,
                 ),
               ),
               const SizedBox(height: 10),
               buildTextItem2(
-                "Kode Promosi",
-                "-${CommonMethods.formatCompleteCurrency(
-                  double.parse(widget.rateModel.fee!),
-                )}",
+                "Kode Promosi", "-Rp0,00",
+                // "-${CommonMethods.formatCompleteCurrency(
+                //   double.parse(widget.rateModel.fee!),
+                // )}",
               ),
             ],
           ),
@@ -202,7 +241,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
               ),
               Text(
                 CommonMethods.formatCompleteCurrency(
-                  double.parse(widget.rateModel.price!),
+                  total!,
                 ),
                 style: Theme.of(context)
                     .textTheme
@@ -249,6 +288,10 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                       //     "email": emailController.text.trim(),
                       //     "jumlah": totalController.text.trim(),
                       //   };
+
+                      widget.data['sub_total'] = subtotal!;
+                      widget.data['total'] = total!;
+                      widget.data['fee'] = feeFinal;
 
                       PersistentNavBarNavigator.pushNewScreen(
                         context,

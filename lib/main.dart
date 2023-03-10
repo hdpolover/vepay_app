@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 import 'my_app.dart';
 
-void main() {
-  HttpOverrides.global = MyHttpOverrides();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
+  HttpOverrides.global = MyHttpOverrides();
+  initializeDateFormatting();
   runApp(MyApp());
 }
 
