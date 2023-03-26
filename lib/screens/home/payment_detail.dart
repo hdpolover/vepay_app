@@ -19,8 +19,11 @@ import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 import '../../common/common_method.dart';
 
 class PaymentDetail extends StatefulWidget {
+  Map<String, dynamic> trData;
   TransactionModel transactionModel;
-  PaymentDetail({required this.transactionModel, Key? key}) : super(key: key);
+  PaymentDetail(
+      {required this.trData, required this.transactionModel, Key? key})
+      : super(key: key);
 
   @override
   State<PaymentDetail> createState() => _PaymentDetailState();
@@ -129,7 +132,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
       //   ),
       // ),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.23,
+        height: MediaQuery.of(context).size.height * 0.26,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -149,6 +152,13 @@ class _PaymentDetailState extends State<PaymentDetail> {
                 "Subtotal Tagihan",
                 CommonMethods.formatCompleteCurrency(
                   double.parse(widget.transactionModel.subTotal!),
+                ),
+              ),
+              const SizedBox(height: 10),
+              buildTextItem2(
+                "Potongan Promosi",
+                CommonMethods.formatCompleteCurrency(
+                  widget.trData['total_promo'],
                 ),
               ),
               const SizedBox(height: 10),
@@ -188,7 +198,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
       //   ),
       // ),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.385,
+        height: MediaQuery.of(context).size.height * 0.39,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -196,6 +206,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 10),
               Text(
                 "Silakan Transfer ke",
                 style: Theme.of(context)

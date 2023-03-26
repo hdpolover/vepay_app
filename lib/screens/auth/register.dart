@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:vepay_app/common/common_dialog.dart';
@@ -8,7 +9,9 @@ import 'package:vepay_app/screens/dashboard.dart';
 import 'package:vepay_app/screens/webview_page.dart';
 import 'package:vepay_app/services/auth_service.dart';
 
+import '../../common/common_method.dart';
 import '../../resources/color_manager.dart';
+import '../../services/fb_service.dart';
 
 class Register extends StatefulWidget {
   Register({Key? key}) : super(key: key);
@@ -34,13 +37,13 @@ class _RegisterState extends State<Register> {
     MinLengthValidator(3, errorText: "Panjang nama minimal 3 karakter"),
   ]);
 
-  final _phoneValidator = MultiValidator([
-    RequiredValidator(errorText: 'Harap masukan nomor telepon'),
-    MinLengthValidator(10,
-        errorText: "Panjang nomor telepon minimal 10 karakter"),
-    MaxLengthValidator(15,
-        errorText: "Panjang nomor telepon maksimal 15 karakter"),
-  ]);
+  // final _phoneValidator = MultiValidator([
+  //   RequiredValidator(errorText: 'Harap masukan nomor telepon'),
+  //   MinLengthValidator(10,
+  //       errorText: "Panjang nomor telepon minimal 10 karakter"),
+  //   MaxLengthValidator(15,
+  //       errorText: "Panjang nomor telepon maksimal 15 karakter"),
+  // ]);
 
   final _passwordValidator = MultiValidator([
     RequiredValidator(errorText: "Harap masukan password"),
@@ -56,13 +59,23 @@ class _RegisterState extends State<Register> {
 
   bool checkValue = false;
 
-  regist() async {
-    Map<String, dynamic> data = {
-      "email": emailController.text.trim(),
-      "name": nameController.text.trim(),
-      "phone": phoneController.text.trim(),
-      "password": passwordController.text.trim(),
-    };
+  regist(String e, String n, String p, bool isGoogle) async {
+    Map<String, dynamic> data;
+    if (isGoogle) {
+      data = {
+        'is_google': true,
+        "email": e,
+        "nama": n,
+      };
+    } else {
+      data = {
+        'is_google': false,
+        "email": e,
+        "nama": n,
+        //"phone": phoneController.text.trim(),
+        "password": p,
+      };
+    }
 
     try {
       MemberModel m = await AuthService().register(data);
@@ -71,14 +84,70 @@ class _RegisterState extends State<Register> {
         isLoading = false;
       });
 
-      CommonDialog.buildOkRegister(context, true,
-          "Pendaftaran berhasil. Silakan cek email untuk verifikasi lalu lakukan login.");
+      if (isGoogle) {
+        try {
+          Map<String, dynamic> data = {
+            "is_google": true,
+            "email": m.email,
+          };
+
+          try {
+            MemberModel m = await AuthService().login(data);
+
+            if (m.status == "1") {
+              CommonMethods().saveUserLoginsDetails(
+                  m.userId!, m.name!, m.email!, "", true);
+
+              setState(() {
+                isLoading = false;
+              });
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Dashboard(
+                    member: m,
+                  ),
+                ),
+              );
+            } else {
+              setState(() {
+                isLoading = false;
+              });
+
+              CommonDialog.buildOkDialog(context, false,
+                  "Akun Anda belum diverifikasi. Silakan cek email.");
+            }
+          } catch (e) {
+            setState(() {
+              isLoading = false;
+            });
+            CommonDialog.buildOkDialog(context, false, e.toString());
+          }
+        } catch (e) {
+          Navigator.of(context).pop();
+
+          setState(() {
+            isLoading = false;
+          });
+
+          CommonDialog.buildOkDialog(
+              context, false, "Terjadi kesalahan. Coba lagi.");
+        }
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        CommonDialog.buildOkRegister(context, true,
+            "Pendaftaran berhasil. Silakan cek email untuk verifikasi lalu lakukan login.");
+      }
     } catch (e) {
+      Navigator.of(context).pop();
+
       setState(() {
         isLoading = false;
       });
 
-      print("sini" + e.toString());
       CommonDialog.buildOkDialog(
           context, false, "Terjadi kesalahan. Coba lagi.");
     }
@@ -141,23 +210,23 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: TextFormField(
-                      controller: phoneController,
-                      validator: _phoneValidator,
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        hintText: 'Telepon',
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: ColorManager.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: TextFormField(
+                  //     controller: phoneController,
+                  //     validator: _phoneValidator,
+                  //     keyboardType: TextInputType.phone,
+                  //     decoration: InputDecoration(
+                  //       border: const OutlineInputBorder(),
+                  //       hintText: 'Telepon',
+                  //       focusedBorder: OutlineInputBorder(
+                  //         borderSide: BorderSide(
+                  //           color: ColorManager.primary,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: TextFormField(
@@ -317,13 +386,166 @@ class _RegisterState extends State<Register> {
                                       isLoading = true;
                                     });
 
-                                    regist();
+                                    regist(
+                                      emailController.text.trim(),
+                                      nameController.text.trim(),
+                                      passwordController.text.trim(),
+                                      false,
+                                    );
                                   }
                                 }
                               },
                             ),
                           ),
                         ),
+                  const SizedBox(height: 20),
+                  const Text("atau"),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.02),
+                    child: SizedBox(
+                      height: h * 0.06,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0.2,
+                          backgroundColor: Colors.white, // background
+                          foregroundColor: ColorManager.primary, // foreground
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Image(
+                              width: 30,
+                              image: AssetImage('assets/google.png'),
+                            ),
+                            Text(
+                              '   Daftar/Masuk dengan Google',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ],
+                        ),
+                        onPressed: () async {
+                          showDialog(
+                              // The user CANNOT close this dialog  by pressing outsite it
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (_) {
+                                return Dialog(
+                                  // The background color
+                                  backgroundColor: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 50),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        // The loading indicator
+                                        CircularProgressIndicator(
+                                          color: ColorManager.primary,
+                                        ),
+                                        const SizedBox(height: 15),
+                                        const Text("Menyambungkan")
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
+
+                          try {
+                            UserCredential? result =
+                                await FbService.signInWithGoogle();
+
+                            if (result != null) {
+                              if (result.additionalUserInfo!.isNewUser) {
+                                // Close the dialog programmatically
+                                Navigator.of(context).pop();
+
+                                regist(
+                                  result.user!.email!,
+                                  result.user!.displayName!,
+                                  "",
+                                  true,
+                                );
+                              } else {
+                                try {
+                                  Map<String, dynamic> data = {
+                                    "is_google": true,
+                                    "email": result.user!.email!,
+                                  };
+
+                                  try {
+                                    MemberModel m =
+                                        await AuthService().login(data);
+
+                                    CommonMethods().saveUserLoginsDetails(
+                                        m.userId!, m.name!, m.email!, "", true);
+
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    Navigator.of(context).pop();
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Dashboard(
+                                          member: m,
+                                        ),
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    CommonDialog.buildOkDialog(
+                                        context, false, e.toString());
+                                  }
+                                } catch (e) {
+                                  Navigator.of(context).pop();
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+
+                                  CommonDialog.buildOkDialog(context, false,
+                                      "Something wrong with your account. Please contact admin for info.");
+                                }
+                              }
+                            } else {
+                              Navigator.of(context).pop();
+
+                              setState(() {
+                                isLoading = false;
+                              });
+                              SnackBar _snackBar = SnackBar(
+                                content: Text("Terjadi kesalahan. Coba lagi."),
+                                duration: const Duration(seconds: 2),
+                              );
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(_snackBar);
+                            }
+                          } catch (e) {
+                            Navigator.of(context).pop();
+
+                            setState(() {
+                              isLoading = false;
+                            });
+                            SnackBar _snackBar = SnackBar(
+                              content: Text("Terjadi kesalahan. Coba lagi."),
+                              duration: const Duration(seconds: 2),
+                            );
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(_snackBar);
+                          }
+                        },
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 30),

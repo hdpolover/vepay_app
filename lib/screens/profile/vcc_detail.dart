@@ -24,7 +24,7 @@ class _VccDetailState extends State<VccDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonWidgets().buildCommonAppBar("Detail Virtual Credit Card"),
+      appBar: CommonWidgets().buildCommonAppBar("Detail VCC"),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +51,7 @@ class _VccDetailState extends State<VccDetail> {
                 children: [
                   Center(
                     child: Text(
-                      "Detail VCC",
+                      "Detail",
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
@@ -188,60 +188,60 @@ class _VccDetailState extends State<VccDetail> {
                         ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 20),
-                  ListTile(
-                    onTap: () {
-                      PersistentNavBarNavigator.pushNewScreen(
-                        context,
-                        screen: WithdrawVcc(
-                          vccModel: widget.vcc,
-                        ),
-                        withNavBar: false,
-                      );
-                    },
-                    contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                    leading: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: ColorManager.primary.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.all(10),
-                      child: Center(
-                        child: FaIcon(
-                          FontAwesomeIcons.moneyBillTransfer,
-                          color: ColorManager.primary,
-                        ),
-                      ),
-                    ),
-                    title: const Text("Withdraw"),
-                  ),
-                  ListTile(
-                    onTap: () {
-                      PersistentNavBarNavigator.pushNewScreen(
-                        context,
-                        screen: TopupVcc(
-                          vccModel: widget.vcc,
-                        ),
-                        withNavBar: false,
-                      );
-                    },
-                    contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                    leading: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: ColorManager.primary.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.all(10),
-                      child: Center(
-                        child: FaIcon(
-                          FontAwesomeIcons.moneyCheck,
-                          color: ColorManager.primary,
-                        ),
-                      ),
-                    ),
-                    title: const Text("Top up"),
-                  ),
+                  // ListTile(
+                  //   onTap: () {
+                  //     PersistentNavBarNavigator.pushNewScreen(
+                  //       context,
+                  //       screen: WithdrawVcc(
+                  //         vccModel: widget.vcc,
+                  //       ),
+                  //       withNavBar: false,
+                  //     );
+                  //   },
+                  //   contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                  //   leading: Container(
+                  //     width: 50,
+                  //     height: 50,
+                  //     decoration: BoxDecoration(
+                  //         color: ColorManager.primary.withOpacity(0.2),
+                  //         borderRadius: BorderRadius.circular(12)),
+                  //     padding: const EdgeInsets.all(10),
+                  //     child: Center(
+                  //       child: FaIcon(
+                  //         FontAwesomeIcons.moneyBillTransfer,
+                  //         color: ColorManager.primary,
+                  //       ),
+                  //     ),
+                  //   ),
+                  //   title: const Text("Withdraw"),
+                  // ),
+                  // ListTile(
+                  //   onTap: () {
+                  //     PersistentNavBarNavigator.pushNewScreen(
+                  //       context,
+                  //       screen: TopupVcc(
+                  //         vccModel: widget.vcc,
+                  //       ),
+                  //       withNavBar: false,
+                  //     );
+                  //   },
+                  //   contentPadding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                  //   leading: Container(
+                  //     width: 50,
+                  //     height: 50,
+                  //     decoration: BoxDecoration(
+                  //         color: ColorManager.primary.withOpacity(0.2),
+                  //         borderRadius: BorderRadius.circular(12)),
+                  //     padding: const EdgeInsets.all(10),
+                  //     child: Center(
+                  //       child: FaIcon(
+                  //         FontAwesomeIcons.moneyCheck,
+                  //         color: ColorManager.primary,
+                  //       ),
+                  //     ),
+                  //   ),
+                  //   title: const Text("Top up"),
+                  // ),
                 ],
               ),
             ),

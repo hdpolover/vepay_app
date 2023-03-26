@@ -10,6 +10,7 @@ class ColorManager {
   static Color orange = HexColor.fromHex("#F0BE0D");
   static Color red = HexColor.fromHex("#DA2C38");
   static Color blue = HexColor.fromHex("#05B2DC");
+  static Color lightBlue = HexColor.fromHex("#4B7CBF");
 }
 
 extension HexColor on Color {

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "721643785078",
+    "project_id": "vepay-c8b0f",
+    "storage_bucket": "vepay-c8b0f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721643785078:android:fca9d48b344c17def34857",
+        "android_client_info": {
+          "package_name": "id.vepay.vepay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "721643785078-djn5d55iidt0v4471pade6f1fian2k8b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.vepay.vepay",
+            "certificate_hash": "08480d5b700f06c45997f2995e3025d944fd6b9d"
+          }
+        },
+        {
+          "client_id": "721643785078-ua03fno7rh3iff81etgkktgsdnackos7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHt-11tMH-MouC0yC75e_Px3oP_wOKPy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "721643785078-74evnppj59h60c07vcqhjf4f2il66u4s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

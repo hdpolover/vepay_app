@@ -16,6 +16,7 @@ class PromoModel {
     this.nama,
     this.image,
     this.value,
+    this.maksimalPromo,
     this.expired,
     this.quota,
     this.jenis,
@@ -32,6 +33,7 @@ class PromoModel {
   String? nama;
   String? image;
   String? value;
+  int? maksimalPromo;
   String? expired;
   String? quota;
   String? jenis;
@@ -48,6 +50,7 @@ class PromoModel {
         nama: json["nama"],
         image: json["image"],
         value: json["value"],
+        maksimalPromo: json["maksimal_promo"],
         expired: json["expired"],
         quota: json["quota"],
         jenis: json["jenis"],
@@ -65,6 +68,7 @@ class PromoModel {
         "nama": nama,
         "image": image,
         "value": value,
+        "maksimal_promo": maksimalPromo,
         "expired": expired,
         "quota": quota,
         "jenis": jenis,

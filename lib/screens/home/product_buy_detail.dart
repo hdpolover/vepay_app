@@ -1,9 +1,12 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
+import 'package:vepay_app/models/promo_model.dart';
 import 'package:vepay_app/models/rate_model.dart';
 import 'package:vepay_app/screens/home/product_payment_method.dart';
+import 'package:vepay_app/services/promo_service.dart';
 
 import '../../common/common_widgets.dart';
 import '../../resources/color_manager.dart';
@@ -22,6 +25,13 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
   double? subtotal;
   double? total;
   double? feeFinal;
+  double? totalPromo = 0;
+  bool isShowPromo = false;
+  bool isPromoValid = false;
+
+  PromoModel? selectedPromo;
+
+  TextEditingController promoController = TextEditingController();
 
   @override
   void initState() {
@@ -29,16 +39,91 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
       double.parse(widget.rateModel.price!),
       double.parse(widget.data['jumlah']),
       double.parse(widget.rateModel.fee!),
+      totalPromo!,
     );
 
     super.initState();
   }
 
-  countAll(double price, double amount, double fee) {
+  checkPromo() async {
+    try {
+      selectedPromo = await PromoService().check(promoController.text.trim());
+
+      CommonDialog.buildOkDialog(
+          context, true, "Kode promo berhasil digunakan");
+
+      setState(() {
+        isPromoValid = true;
+
+        countPromo(selectedPromo!);
+      });
+    } catch (e) {
+      CommonDialog.buildOkDialog(context, false, e.toString());
+    }
+  }
+
+  deletePromoTotal() {
+    setState(() {
+      totalPromo = 0;
+    });
+
+    countAll(
+      double.parse(widget.rateModel.price!),
+      double.parse(widget.data['jumlah']),
+      double.parse(widget.rateModel.fee!),
+      totalPromo!,
+    );
+  }
+
+  countPromo(PromoModel p) {
+    double maksPromo = p.maksimalPromo!.toDouble();
+
+    if (p.jenis == "2") {
+      double nilaiPromo = (total! * double.parse(p.value!)) / 100;
+
+      if (nilaiPromo > maksPromo) {
+        setState(() {
+          totalPromo = maksPromo;
+        });
+
+        countAll(
+          double.parse(widget.rateModel.price!),
+          double.parse(widget.data['jumlah']),
+          double.parse(widget.rateModel.fee!),
+          totalPromo!,
+        );
+      } else {
+        setState(() {
+          totalPromo = nilaiPromo;
+        });
+        countAll(
+          double.parse(widget.rateModel.price!),
+          double.parse(widget.data['jumlah']),
+          double.parse(widget.rateModel.fee!),
+          totalPromo!,
+        );
+      }
+    } else {
+      setState(() {
+        totalPromo = double.parse(p.value!);
+      });
+
+      countAll(
+        double.parse(widget.rateModel.price!),
+        double.parse(widget.data['jumlah']),
+        double.parse(widget.rateModel.fee!),
+        totalPromo!,
+      );
+    }
+  }
+
+  countAll(double price, double amount, double fee, double promo) {
     subtotal = price * amount;
 
     feeFinal = (fee * subtotal!) / 100;
-    total = subtotal! + feeFinal!;
+    double tempTotal = (subtotal! + feeFinal!);
+
+    total = tempTotal - promo;
 
     setState(() {});
   }
@@ -88,8 +173,8 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
       // ),
       child: SizedBox(
         height: widget.data['blockchain_name'] == null
-            ? MediaQuery.of(context).size.height * 0.3
-            : MediaQuery.of(context).size.height * 0.33,
+            ? MediaQuery.of(context).size.height * 0.27
+            : MediaQuery.of(context).size.height * 0.3,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -126,7 +211,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
               const SizedBox(height: 10),
               const Divider(
                 color: Colors.grey,
-                height: 1,
+                height: 2,
               ),
               const SizedBox(height: 10),
               buildTextItem("Jenis Produk", widget.rateModel.name!),
@@ -154,13 +239,6 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                   double.parse(widget.rateModel.price!),
                 ),
               ),
-              const SizedBox(height: 10),
-              buildTextItem(
-                "Biaya Transaksi",
-                CommonMethods.formatCompleteCurrency(
-                  feeFinal!,
-                ),
-              ),
             ],
           ),
         ),
@@ -177,7 +255,11 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
       //   ),
       // ),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.17,
+        height: isShowPromo
+            ? isPromoValid
+                ? MediaQuery.of(context).size.height * 0.3
+                : MediaQuery.of(context).size.height * 0.34
+            : MediaQuery.of(context).size.height * 0.24,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -201,11 +283,116 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
               ),
               const SizedBox(height: 10),
               buildTextItem2(
-                "Kode Promosi", "-Rp0,00",
-                // "-${CommonMethods.formatCompleteCurrency(
-                //   double.parse(widget.rateModel.fee!),
-                // )}",
+                "Biaya Transaksi",
+                CommonMethods.formatCompleteCurrency(
+                  feeFinal!,
+                ),
               ),
+              const SizedBox(height: 10),
+              buildTextItem2(
+                "Potongan Promosi",
+                "-${CommonMethods.formatCompleteCurrency(
+                  totalPromo!,
+                )}",
+              ),
+              isPromoValid ? Container() : const SizedBox(height: 15),
+              isPromoValid
+                  ? Container()
+                  : Row(
+                      children: [
+                        Text(
+                          "Punya kode promo?",
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        const SizedBox(width: 20),
+                        InkWell(
+                          onTap: () {
+                            if (isShowPromo) {
+                              setState(() {
+                                isShowPromo = false;
+                              });
+                            } else {
+                              setState(() {
+                                isShowPromo = true;
+                              });
+                            }
+                          },
+                          child: Text(
+                            "Masukan kode",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1
+                                ?.copyWith(color: ColorManager.primary),
+                          ),
+                        ),
+                      ],
+                    ),
+              !isShowPromo ? Container() : const SizedBox(height: 20),
+              !isShowPromo
+                  ? Container()
+                  : Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: promoController,
+                            keyboardType: TextInputType.text,
+                            readOnly: isPromoValid ? true : false,
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              hintText: "KODE PROMO",
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: ColorManager.primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        isPromoValid
+                            ? SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                width: MediaQuery.of(context).size.width * 0.25,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red, // background
+                                    foregroundColor: Colors.white, // foreground
+                                  ),
+                                  child: const Icon((Icons.delete)),
+                                  onPressed: () async {
+                                    setState(() {
+                                      isPromoValid = false;
+                                      promoController.clear();
+
+                                      deletePromoTotal();
+                                    });
+                                  },
+                                ),
+                              )
+                            : SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                width: MediaQuery.of(context).size.width * 0.25,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        ColorManager.primary, // background
+                                    foregroundColor: Colors.white, // foreground
+                                  ),
+                                  child: const Text('SIMPAN'),
+                                  onPressed: () async {
+                                    if (promoController.text.isNotEmpty) {
+                                      checkPromo();
+                                    } else {
+                                      CommonDialog.buildOkDialog(context, false,
+                                          "Harap masukan kode promo terlebih dahulu");
+                                    }
+                                  },
+                                ),
+                              ),
+                      ],
+                    ),
             ],
           ),
         ),
@@ -222,7 +409,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
       //   ),
       // ),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.08,
+        height: MediaQuery.of(context).size.height * 0.085,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -259,20 +446,20 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonWidgets().buildCommonAppBar(widget.rateModel.name!),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+      body: ListView(
         children: [
           buildTopSection(),
           const SizedBox(height: 10),
           buildMiddleSection(),
           const SizedBox(height: 10),
           buildBottomSection(),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.06),
           Expanded(
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.06,
                   width: double.infinity,
@@ -292,6 +479,11 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                       widget.data['sub_total'] = subtotal!;
                       widget.data['total'] = total!;
                       widget.data['fee'] = feeFinal;
+                      widget.data['total_promo'] = totalPromo;
+
+                      if (selectedPromo != null) {
+                        widget.data['promo_id'] = selectedPromo!.id;
+                      }
 
                       PersistentNavBarNavigator.pushNewScreen(
                         context,

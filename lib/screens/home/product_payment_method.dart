@@ -38,6 +38,8 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
   }
 
   getMethods() async {
+    print(widget.data['blockchain_id']);
+
     try {
       await PaymentMethodService().getMethods().then((value) {
         methods = value;
@@ -101,7 +103,7 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
       //   ),
       // ),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.6,
+        height: MediaQuery.of(context).size.height * 0.55,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -120,16 +122,16 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
                           ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: Text(
-                      "Lihat semua",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1
-                          ?.copyWith(color: ColorManager.primary),
-                    ),
-                  ),
+                  // InkWell(
+                  //   onTap: () {},
+                  //   child: Text(
+                  //     "Lihat semua",
+                  //     style: Theme.of(context)
+                  //         .textTheme
+                  //         .bodyText1
+                  //         ?.copyWith(color: ColorManager.primary),
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(height: 20),
@@ -205,7 +207,7 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
       //   ),
       // ),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.2,
+        height: MediaQuery.of(context).size.height * 0.23,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -225,6 +227,13 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
                 "Subtotal Tagihan",
                 CommonMethods.formatCompleteCurrency(
                   widget.data['sub_total'],
+                ),
+              ),
+              const SizedBox(height: 10),
+              buildTextItem2(
+                "Potongan Promosi",
+                CommonMethods.formatCompleteCurrency(
+                  widget.data['total_promo'],
                 ),
               ),
               const SizedBox(height: 10),
@@ -269,7 +278,7 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonWidgets().buildCommonAppBar("Pembayaran"),
-      body: Column(
+      body: ListView(
         children: [
           buildMetodePembayaranSection(),
           const SizedBox(height: 10),
@@ -324,6 +333,7 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
                                 'total_bayar': bayar,
                                 'akun_tujuan': widget.data['akun_tujuan'],
                                 'blockchain': widget.data['blockchain_id'],
+                                'promo_id': widget.data['promo_id'],
                               };
 
                               doTransaction(data);
@@ -350,6 +360,7 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
       PersistentNavBarNavigator.pushNewScreen(
         context,
         screen: PaymentDetail(
+          trData: widget.data,
           transactionModel: t,
         ),
         withNavBar: false,

@@ -1,11 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/resources/color_manager.dart';
+import 'package:vepay_app/services/auth_service.dart';
 
 import '../../models/member_model.dart';
 
@@ -19,10 +24,10 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   TextEditingController? nameController = TextEditingController();
-  TextEditingController? lastNameController = TextEditingController();
+  TextEditingController? birthController = TextEditingController();
   TextEditingController? emailController = TextEditingController();
   TextEditingController? phoneController = TextEditingController();
-  TextEditingController? companyController = TextEditingController();
+  TextEditingController? addressController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
   dynamic _pickImageError;
@@ -30,6 +35,31 @@ class _EditProfileState extends State<EditProfile> {
   XFile? _imageFile;
 
   bool _isLoading = false;
+
+  DateTime? _selectedDate;
+  String? birthDateValue;
+
+  var _result;
+
+  final _nameValidator = MultiValidator([
+    RequiredValidator(errorText: 'Harap masukan nama'),
+  ]);
+
+  final _phoneValidator = MultiValidator([
+    RequiredValidator(errorText: 'Harap masukan nomor telepon'),
+  ]);
+
+  final _emailValidator = MultiValidator([
+    RequiredValidator(errorText: 'Harap masukan email'),
+  ]);
+
+  final _addressValidator = MultiValidator([
+    RequiredValidator(errorText: 'Harap masukan alamat'),
+  ]);
+
+  final _birthDateValidator = MultiValidator([
+    RequiredValidator(errorText: 'Harap pilih tanggal lahir'),
+  ]);
 
   void _setImageFileListFromFile(XFile? value) {
     _imageFile = value;
@@ -175,6 +205,8 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     _initValues();
@@ -184,15 +216,11 @@ class _EditProfileState extends State<EditProfile> {
 
   _initValues() {
     setState(() {
-      // nameController!.text = widget.member.firstName!;
-      // lastNameController!.text = widget.currentCustomer.lastName!;
-      // emailController!.text = widget.currentCustomer.email!;
-      // emailController!.text = widget.currentCustomer.email!;
-      // phoneController!.text = widget.currentCustomer.phoneNumber;
-      // companyController!.text = widget.currentCustomer.companyName;
-
-      // currentUserCountry = widget.currentCustomer.country;
-      // selectedCountry = currentUserCountry;
+      nameController!.text = widget.member.name ?? "";
+      addressController!.text = widget.member.address ?? "";
+      emailController!.text = widget.member.email ?? "";
+      birthController!.text = widget.member.birthdate ?? "";
+      phoneController!.text = widget.member.phone ?? "";
     });
   }
 
@@ -204,287 +232,414 @@ class _EditProfileState extends State<EditProfile> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 13, width: MediaQuery.of(context).size.width),
-                Center(
-                  child: SizedBox(
-                    height: 129,
-                    width: 140,
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0), //or 15.0
-                          child: SizedBox(
-                            height: 120.0,
-                            width: 120.0,
-                            child: _imageFile == null
-                                ? SizedBox(
-                                    height: 120,
-                                    width: 120,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: FancyShimmerImage(
-                                        boxFit: BoxFit.cover,
-                                        imageUrl: widget.member.photo,
-                                        errorWidget: Image.network(
-                                            'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                      height: 13, width: MediaQuery.of(context).size.width),
+                  Center(
+                    child: SizedBox(
+                      height: 129,
+                      width: 140,
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0), //or 15.0
+                            child: SizedBox(
+                              height: 120.0,
+                              width: 120.0,
+                              child: _imageFile == null
+                                  ? SizedBox(
+                                      height: 120,
+                                      width: 120,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: FancyShimmerImage(
+                                          boxFit: BoxFit.cover,
+                                          imageUrl: widget.member.photo ??
+                                              "https://vectorified.com/images/user-icon-1.png",
+                                          errorWidget: Image.network(
+                                              'https://vectorified.com/images/user-icon-1.png'),
+                                        ),
                                       ),
+                                    )
+                                  : Image.file(
+                                      File(_imageFile!.path),
+                                      fit: BoxFit.cover,
                                     ),
-                                  )
-                                : Image.file(
-                                    File(_imageFile!.path),
-                                    fit: BoxFit.cover,
-                                  ),
+                            ),
                           ),
-                        ),
-                        Positioned.fill(
-                          top: 10,
-                          right: 10,
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: GestureDetector(
-                              onTap: () async {
-                                //_displayPickImageDialog(context);
-                                showPickImageDialog(context);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 17),
-                                height: 55,
-                                width: 55,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black,
-                                      spreadRadius: 2,
-                                      blurRadius: 3,
-                                      offset: Offset(
-                                          0, 0), // changes position of shadow
-                                    ),
-                                  ],
+                          Positioned.fill(
+                            top: 10,
+                            right: 10,
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  //_displayPickImageDialog(context);
+                                  showPickImageDialog(context);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 17),
+                                  height: 55,
+                                  width: 55,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black,
+                                        spreadRadius: 2,
+                                        blurRadius: 3,
+                                        offset: Offset(
+                                            0, 0), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(Icons.camera_alt),
                                 ),
-                                child: const Icon(Icons.camera_alt),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 13, width: MediaQuery.of(context).size.width),
-                Text("Nama", style: Theme.of(context).textTheme.subtitle2),
-                SizedBox(height: 15, width: MediaQuery.of(context).size.width),
-                Container(
-                  height: 55,
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(left: 24, top: 3),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: TextField(
-                    controller: nameController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                        hintText: 'First Name',
-                        border: InputBorder.none,
-                        labelStyle: Theme.of(context).textTheme.bodyText2),
-                  ),
-                ),
-                SizedBox(height: 13, width: MediaQuery.of(context).size.width),
-                Text("Last Name", style: Theme.of(context).textTheme.subtitle2),
-                SizedBox(height: 15, width: MediaQuery.of(context).size.width),
-                Container(
-                  height: 55,
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(left: 24, top: 3),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: TextField(
-                    controller: lastNameController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                        hintText: 'Last Name',
-                        border: InputBorder.none,
-                        labelStyle: Theme.of(context).textTheme.bodyText2),
-                  ),
-                ),
-                SizedBox(height: 13, width: MediaQuery.of(context).size.width),
-                Text("Email", style: Theme.of(context).textTheme.subtitle2),
-                SizedBox(height: 15, width: MediaQuery.of(context).size.width),
-                Container(
-                    height: 55,
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.only(left: 24, top: 3),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: TextField(
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        enabled: false,
-                        decoration: InputDecoration(
-                            hintText: 'Email',
-                            border: InputBorder.none,
-                            labelStyle:
-                                Theme.of(context).textTheme.bodyText2))),
-                SizedBox(height: 13, width: MediaQuery.of(context).size.width),
-                // Text("Email", style: Theme.of(context).textTheme.subtitle2),
-                // SizedBox(
-                //     height: 15, width: MediaQuery.of(context).size.width),
-                // Container(
-                //     height: 55,
-                //     width: MediaQuery.of(context).size.width,
-                //     padding: const EdgeInsets.only(left: 24, top: 3),
-                //     decoration: BoxDecoration(
-                //         border: Border.all(color: CustomColors.colorGrey),
-                //         borderRadius: BorderRadius.circular(5)),
-                //     child: TextField(
-                //         controller: emailController,
-                //         keyboardType: TextInputType.emailAddress,
-                //         decoration: InputDecoration(
-                //             hintText: 'Email',
-                //             border: InputBorder.none,
-                //             labelStyle:
-                //                 Theme.of(context).textTheme.bodyText2))),
-                // SizedBox(
-                //     height: 13, width: MediaQuery.of(context).size.width),
-
-                SizedBox(height: 13, width: MediaQuery.of(context).size.width),
-                Text("Associated Company",
-                    style: Theme.of(context).textTheme.subtitle2),
-                SizedBox(height: 15, width: MediaQuery.of(context).size.width),
-                Container(
-                  height: 55,
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(left: 24, top: 3),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: TextField(
-                    controller: companyController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                        hintText: 'Associated Company',
-                        border: InputBorder.none,
-                        labelStyle: Theme.of(context).textTheme.bodyText2),
-                  ),
-                ),
-                SizedBox(height: 30, width: MediaQuery.of(context).size.width),
-                if (_isLoading)
-                  Center(
-                    child: CircularProgressIndicator(
-                      color: ColorManager.primary,
-                    ),
-                  )
-                else
-                  Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      child: OutlinedButton(
-                        child: const Text('Save'),
-                        onPressed: () async {
-                          setState(() {
-                            _isLoading = true;
-                          });
-
-                          // CustomerModel cust;
-
-                          // if (_imageFile != null) {
-                          //   String imageLink = await BlobUploadService()
-                          //       .uploadProfileImageToAzure(
-                          //           context, _imageFile!);
-
-                          //   print(imageLink);
-
-                          //   cust = CustomerModel(
-                          //     id: widget.currentCustomer.id,
-                          //     firstName: firstNameController!.text,
-                          //     lastName: lastNameController!.text,
-                          //     email: widget.currentCustomer.email,
-                          //     userName: emailController!.text,
-                          //     phoneNumber: justPhoneNumber,
-                          //     companyName: companyController!.text,
-                          //     profileImage: imageLink,
-                          //     password:
-                          //         currentAppUser.currentCustomer!.password,
-                          //     userProperties:
-                          //         widget.currentCustomer.userProperties,
-                          //     country: selectedCountry,
-                          //     userRoleId: widget.currentCustomer.userRoleId,
-                          //     createTs: widget.currentCustomer.createTs,
-                          //     language: widget.currentCustomer.language,
-                          //     city: widget.currentCustomer.city,
-
-                          //     //for now it will be set to bali time
-                          //     //tzId: timezoneName,
-                          //     tzId: "China Standard Time",
-                          //     updateTs: DateTime.now().toIso8601String(),
-                          //   );
-                          // } else {
-                          //   cust = CustomerModel(
-                          //     id: currentAppUser.currentCustomer!.id,
-                          //     firstName: firstNameController!.text,
-                          //     lastName: lastNameController!.text,
-                          //     email: widget.currentCustomer.email,
-                          //     userName: emailController!.text,
-                          //     phoneNumber: justPhoneNumber,
-                          //     companyName: companyController!.text,
-                          //     city: widget.currentCustomer.city,
-                          //     language: widget.currentCustomer.language,
-                          //     profileImage:
-                          //         widget.currentCustomer.profileImage,
-                          //     password:
-                          //         currentAppUser.currentCustomer!.password,
-                          //     userProperties:
-                          //         widget.currentCustomer.userProperties,
-                          //     country: selectedCountry,
-                          //     userRoleId: widget.currentCustomer.userRoleId,
-                          //     createTs: widget.currentCustomer.createTs,
-
-                          //     //for now it will be set to bali time
-                          //     //tzId: timezoneName,
-                          //     tzId: "China Standard Time",
-                          //     updateTs: DateTime.now().toIso8601String(),
-                          //   );
-                          // }
-
-                          // var prefs = await SharedPreferences.getInstance();
-                          // String? token = prefs.getString('token');
-
-                          // var customer = await _customerApiService.updateUser(
-                          //     cust, token!);
-
-                          // setState(() {
-                          //   _isLoading = false;
-                          //   //currentAppUser.currentCustomer = customer;
-                          // });
-
-                          // if (customer == null) {
-                          //   CommonDialogWidgets.buildOkDialog(context, false,
-                          //       "Something went wrong. Try again!");
-                          // } else {
-                          //   CommonDialogWidgets.buildOkDialog(context, true,
-                          //       "Personal information successfully updated.");
-                          // }
-                        },
+                        ],
                       ),
                     ),
                   ),
-                const SizedBox(height: 30)
-              ],
+                  SizedBox(
+                      height: 13, width: MediaQuery.of(context).size.width),
+                  Text("Nama", style: Theme.of(context).textTheme.subtitle2),
+                  SizedBox(
+                      height: 15, width: MediaQuery.of(context).size.width),
+                  TextFormField(
+                    controller: nameController,
+                    validator: _nameValidator,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: 'Nama',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: ColorManager.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                      height: 13, width: MediaQuery.of(context).size.width),
+                  Text("Jenis Kelamin",
+                      style: Theme.of(context).textTheme.subtitle2),
+                  SizedBox(height: 5, width: MediaQuery.of(context).size.width),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile(
+                            title: const Text('Laki-laki'),
+                            value: "laki-laki",
+                            groupValue: _result,
+                            dense: true,
+                            onChanged: (value) {
+                              setState(() {
+                                _result = value;
+                              });
+                            }),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                            title: const Text('Perempuan'),
+                            value: "perempuan",
+                            groupValue: _result,
+                            dense: true,
+                            onChanged: (value) {
+                              setState(() {
+                                _result = value;
+                              });
+                            }),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                      height: 13, width: MediaQuery.of(context).size.width),
+                  Text("Tanggal Lahir",
+                      style: Theme.of(context).textTheme.subtitle2),
+                  SizedBox(
+                      height: 15, width: MediaQuery.of(context).size.width),
+                  TextFormField(
+                    controller: birthController,
+                    validator: _birthDateValidator,
+                    readOnly: true,
+                    onTap: () {
+                      displayDatePicker();
+                    },
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: 'Tanggal Lahir',
+                      suffixIcon: const Icon(Icons.calendar_month),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: ColorManager.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                      height: 13, width: MediaQuery.of(context).size.width),
+                  Text("Email", style: Theme.of(context).textTheme.subtitle2),
+                  SizedBox(
+                      height: 15, width: MediaQuery.of(context).size.width),
+                  TextFormField(
+                    controller: emailController,
+                    validator: _emailValidator,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: 'Email',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: ColorManager.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                      height: 13, width: MediaQuery.of(context).size.width),
+                  Text("Alamat", style: Theme.of(context).textTheme.subtitle2),
+                  SizedBox(
+                      height: 15, width: MediaQuery.of(context).size.width),
+                  TextFormField(
+                    controller: addressController,
+                    validator: _addressValidator,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: 'Alamat',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: ColorManager.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                      height: 13, width: MediaQuery.of(context).size.width),
+                  Text("Nomor Telepon",
+                      style: Theme.of(context).textTheme.subtitle2),
+                  SizedBox(
+                      height: 15, width: MediaQuery.of(context).size.width),
+                  TextFormField(
+                    controller: phoneController,
+                    validator: _phoneValidator,
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: 'Nomor Telepon',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: ColorManager.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                      height: 30, width: MediaQuery.of(context).size.width),
+                  if (_isLoading)
+                    Center(
+                      child: CircularProgressIndicator(
+                        color: ColorManager.primary,
+                      ),
+                    )
+                  else
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.02),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: ColorManager.primary, // background
+                            foregroundColor: Colors.white, // foreground
+                          ),
+                          child: const Text('Simpan'),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              if (_result == null) {
+                                CommonDialog.buildOkDialog(context, false,
+                                    "Silakan pilih jenis kelamin");
+                              } else {
+                                if (_selectedDate == null) {
+                                  CommonDialog.buildOkDialog(context, false,
+                                      "Silakan pilih tanggal lahir");
+                                } else {
+                                  setState(() {
+                                    _isLoading = true;
+                                  });
+
+                                  simpanData();
+                                }
+                              }
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 30)
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  simpanData() async {
+    if (_imageFile == null) {
+      Map<String, dynamic> data = {
+        'user_id': widget.member.userId,
+        'name': nameController!.text.trim(),
+        'gender': _result,
+        'birthdate': birthController!.text.trim(),
+        'phone': phoneController!.text.trim(),
+        'address': addressController!.text.trim(),
+      };
+
+      try {
+        bool res = await AuthService().updateDetail(data);
+
+        if (res) {
+          setState(() {
+            _isLoading = false;
+          });
+
+          CommonDialog.buildOkDialog(
+              context, true, "Berhasil memperbarui profil.");
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+
+          CommonDialog.buildOkDialog(
+              context, false, "Terjadi kesalahan. Coba lagi.");
+        }
+      } catch (e) {
+        CommonDialog.buildOkDialog(context, false, e.toString());
+      }
+    } else {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final bytes = File(_imageFile!.path).readAsBytesSync();
+
+      String img64 = base64Encode(bytes);
+
+      print(img64);
+
+      Map<String, dynamic> data = {
+        'user_id': widget.member.userId,
+        'photo': "data:image/jpeg;base64,$img64",
+      };
+
+      try {
+        bool p = await AuthService().updateFoto(data);
+
+        if (p) {
+          Map<String, dynamic> data = {
+            'user_id': widget.member.userId,
+            'name': nameController!.text.trim(),
+            'gender': _result,
+            'birthdate': birthController!.text.trim(),
+            'phone': phoneController!.text.trim(),
+            'address': addressController!.text.trim(),
+          };
+
+          try {
+            bool res = await AuthService().updateDetail(data);
+
+            if (res) {
+              setState(() {
+                _isLoading = false;
+              });
+
+              CommonDialog.buildOkDialog(
+                  context, true, "Berhasil memperbarui profil.");
+            } else {
+              setState(() {
+                _isLoading = false;
+              });
+
+              CommonDialog.buildOkDialog(
+                  context, false, "Terjadi kesalahan. Coba lagi.");
+            }
+          } catch (e) {
+            CommonDialog.buildOkDialog(context, false, e.toString());
+          }
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+
+          CommonDialog.buildOkDialog(
+              context, false, "Terjadi kesalahan. Coba lagi.");
+        }
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        CommonDialog.buildOkDialog(context, false,
+            "Terjadi kesalahan saat mengunggah foto. Coba lagi.");
+      }
+    }
+  }
+
+  displayDatePicker() {
+    showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950, 1, 1),
+        lastDate: DateTime.now(),
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              //Header background color
+              primaryColor: ColorManager.primary,
+              //Background color
+              scaffoldBackgroundColor: Colors.grey[50],
+              //Divider color
+              dividerColor: Colors.grey,
+              //Non selected days of the month color
+              textTheme: const TextTheme(
+                bodyText2: TextStyle(color: Colors.black),
+              ),
+              colorScheme: ColorScheme.fromSwatch().copyWith(
+                //Selected dates background color
+                primary: ColorManager.primary,
+                //Month title and week days color
+                onSurface: Colors.black,
+                //Header elements and selected dates text color
+                //onPrimary: Colors.white,
+              ),
+            ),
+            child: child!,
+          );
+        }).then((pickedDate) {
+      // Check if no date is selected
+      if (pickedDate == null) {
+        return;
+      }
+
+      setState(() {
+        // using state so that the UI will be rerendered when date is picked
+        _selectedDate = pickedDate;
+        birthController!.text = DateFormat.yMMMMd('id').format(_selectedDate!);
+
+        birthDateValue = DateFormat('dd-MM-yyyy').format(_selectedDate!);
+      });
+    });
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
+import 'package:vepay_app/screens/auth/forgot_password.dart';
 import 'package:vepay_app/screens/auth/register.dart';
 import 'package:vepay_app/screens/dashboard.dart';
 
@@ -39,6 +40,7 @@ class _LoginState extends State<Login> {
 
   login() async {
     Map<String, dynamic> data = {
+      "is_google": false,
       "email": emailController.text.trim(),
       "password": passwordController.text.trim(),
     };
@@ -245,9 +247,28 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.035),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ForgotPassword(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Lupa pasword?',
+                      style: TextStyle(
+                          color: ColorManager.primary,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 30),
+                        horizontal: 30, vertical: 10),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(

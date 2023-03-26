@@ -11,6 +11,7 @@ import 'package:vepay_app/screens/profile/edit_profile.dart';
 import 'package:vepay_app/screens/profile/vcc.dart';
 
 import '../../resources/color_manager.dart';
+import '../../services/fb_service.dart';
 
 class ProfileTab extends StatefulWidget {
   MemberModel member;
@@ -130,15 +131,31 @@ class _ProfileTabState extends State<ProfileTab> {
               ),
               ListTile(
                 onTap: () {
-                  CommonMethods().saveUserLoginsDetails("", "", "", "", false);
+                  if (widget.member.isGoogle == "1") {
+                    FbService.signOut(context);
 
-                  Navigator.of(context, rootNavigator: true).pop();
+                    CommonMethods()
+                        .saveUserLoginsDetails("", "", "", "", false);
 
-                  PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: Intro(),
-                    withNavBar: false,
-                  );
+                    Navigator.of(context, rootNavigator: true).pop();
+
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: Intro(),
+                      withNavBar: false,
+                    );
+                  } else {
+                    CommonMethods()
+                        .saveUserLoginsDetails("", "", "", "", false);
+
+                    Navigator.of(context, rootNavigator: true).pop();
+
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: Intro(),
+                      withNavBar: false,
+                    );
+                  }
                 },
                 contentPadding: const EdgeInsets.fromLTRB(15, 5, 5, 5),
                 leading: Container(

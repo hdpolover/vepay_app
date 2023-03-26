@@ -1,3 +1,4 @@
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:vepay_app/common/common_widgets.dart';
@@ -105,7 +106,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
               CommonWidgets().buildTextItem(
                   context,
                   CommonMethods().getFieldName(widget.transaction.product!),
-                  widget.transaction.akunTujuan!),
+                  widget.transaction.akunTujuan ?? ""),
               const SizedBox(height: 10),
               CommonWidgets()
                   .buildTextItem(context, "Nama", widget.transaction.name!),
@@ -147,7 +148,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
     return Card(
       margin: EdgeInsets.zero,
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.45,
+        height: MediaQuery.of(context).size.height * 0.53,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -174,22 +175,29 @@ class _TransactionDetailState extends State<TransactionDetail> {
               const SizedBox(height: 20),
               const Divider(
                 color: Colors.grey,
-                height: 1,
+                height: 2,
               ),
               const SizedBox(height: 20),
+              CommonWidgets().buildTextItem(
+                  context,
+                  "Sub Total Bayar",
+                  CommonMethods.formatCompleteCurrency(
+                    double.parse(widget.transaction.subTotal!),
+                  )),
+              const SizedBox(height: 10),
               CommonWidgets().buildTextItem(
                   context,
                   "Total Bayar",
                   CommonMethods.formatCompleteCurrency(
                     double.parse(widget.transaction.total!),
                   )),
-              const SizedBox(height: 10),
-              CommonWidgets().buildTextItem(
-                  context,
-                  "Diskon",
-                  CommonMethods.formatCompleteCurrency(
-                    0,
-                  )),
+              // const SizedBox(height: 10),
+              // CommonWidgets().buildTextItem(
+              //     context,
+              //     "Diskon",
+              //     CommonMethods.formatCompleteCurrency(
+              //       0,
+              //     )),
               const SizedBox(height: 20),
               const Divider(
                 color: Colors.grey,
@@ -216,6 +224,23 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 ],
               ),
               const SizedBox(height: 30),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.06,
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green, // background
+                    foregroundColor: Colors.white, // foreground
+                  ),
+                  child: const Text('Lihat Bukti Pembayaran'),
+                  onPressed: () async {
+                    showImageViewer(
+                        context, Image.network(widget.transaction.bukti!).image,
+                        swipeDismissible: true, doubleTapZoomable: true);
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.06,
                 width: double.infinity,

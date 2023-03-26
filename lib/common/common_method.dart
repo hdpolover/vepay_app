@@ -10,7 +10,7 @@ class CommonMethods {
 
   launchWhatsAppUri(String message) async {
     final link = WhatsAppUnilink(
-      phoneNumber: '+6285646637990',
+      phoneNumber: '+6288296973558',
       text: message,
     );
     // Convert the WhatsAppUnilink instance to a Uri.

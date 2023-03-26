@@ -66,9 +66,11 @@ class TransactionService {
           'total_bayar': data['total_bayar'],
           'sub_total': data['sub_total'],
           "akun_tujuan": data['akun_tujuan'],
-          "blockchain": data['blockchain_id'],
+          "blockchain": data['blockchain'],
           "no_tujuan": data['no_tujuan'],
           "id_vcc": data['id_vcc'],
+          "m_promo_id": data['promo_id'],
+          "jenis_transaksi_vcc": data['jenis_transaksi_vcc'],
         }),
       );
 

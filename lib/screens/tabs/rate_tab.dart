@@ -29,7 +29,17 @@ class _RateTabState extends State<RateTab> with AutomaticKeepAliveClientMixin {
     try {
       rates = await RateService().getRates("top_up");
 
+      List<RateModel>? withdrawRates;
+
+      withdrawRates = await RateService().getRates("withdraw");
+
+      rates!.addAll(withdrawRates);
+
       rates!.removeWhere((item) => item.price! == "0");
+
+      rates!.removeWhere((item) => item.categories!.toLowerCase() == "vcc");
+
+      rates!.sort(((a, b) => a.name!.compareTo(b.name!)));
 
       setState(() {});
     } catch (e) {
@@ -56,7 +66,8 @@ class _RateTabState extends State<RateTab> with AutomaticKeepAliveClientMixin {
         color: ColorManager.primary,
         child: rates == null
             ? ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.fromLTRB(
+                    10, 10, 10, MediaQuery.of(context).size.height * 0.07),
                 shrinkWrap: true,
                 itemCount: 5,
                 scrollDirection: Axis.vertical,
@@ -65,8 +76,8 @@ class _RateTabState extends State<RateTab> with AutomaticKeepAliveClientMixin {
                 },
               )
             : ListView.builder(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: EdgeInsets.fromLTRB(
+                    10, 10, 10, MediaQuery.of(context).size.height * 0.07),
                 shrinkWrap: true,
                 itemCount: rates!.length,
                 itemBuilder: (context, index) {

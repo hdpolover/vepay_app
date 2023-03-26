@@ -54,7 +54,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
       child: Padding(
         padding: const EdgeInsets.all(4),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.12,
+          height: MediaQuery.of(context).size.height * 0.13,
           width: MediaQuery.of(context).size.width * 0.2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -63,8 +63,8 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
                 child: FancyShimmerImage(
-                  width: MediaQuery.of(context).size.width * 0.15,
-                  height: MediaQuery.of(context).size.height * 0.06,
+                  width: MediaQuery.of(context).size.width * 0.155,
+                  height: MediaQuery.of(context).size.height * 0.075,
                   boxFit: BoxFit.cover,
                   imageUrl: widget.rateModel.image!,
                   errorWidget: Image.network(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/models/rate_model.dart';
+import 'package:vepay_app/screens/rate/withdraw_alt.dart';
 
 import '../home/product_buy_detail.dart';
 import '../home/product_detail.dart';
@@ -20,19 +21,11 @@ class _RateItemWidgetState extends State<RateItemWidget> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (widget.rate.categories == "vcc") {
-          Map<String, dynamic> data = {
-            "akun_tujuan": null,
-            "jumlah": 1.toString(),
-            "blockchain_id": null,
-            "blockchain_name": null,
-          };
-
+        if (widget.rate.type!.toLowerCase() == "withdraw") {
           PersistentNavBarNavigator.pushNewScreen(
             context,
-            screen: ProductBuyDetail(
+            screen: WithdrawAlt(
               rateModel: widget.rate,
-              data: data,
             ),
             withNavBar: false,
           );

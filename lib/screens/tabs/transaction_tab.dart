@@ -21,6 +21,8 @@ class _TransactionTabState extends State<TransactionTab>
     with AutomaticKeepAliveClientMixin {
   List<TransactionModel>? transactionList;
 
+  var _result;
+
   @override
   void initState() {
     getTrans();
@@ -39,139 +41,200 @@ class _TransactionTabState extends State<TransactionTab>
     }
   }
 
+  int? selectedIndex;
+  List<FilterType> _chipsList = [
+    FilterType("Withdraw", "withdraw", Colors.green),
+    FilterType("Top up", "topup", Colors.blueGrey),
+  ];
+
+  List<Widget> techChips() {
+    List<Widget> chips = [];
+    for (int i = 0; i < _chipsList.length; i++) {
+      Widget item = Padding(
+        padding: const EdgeInsets.only(left: 10, right: 5),
+        child: ChoiceChip(
+          label: Text(_chipsList[i].label),
+          labelStyle: TextStyle(
+              color: selectedIndex == i ? ColorManager.primary : Colors.white),
+          backgroundColor:
+              selectedIndex == i ? ColorManager.primary : Colors.white,
+          selected: selectedIndex == i,
+          onSelected: (bool value) {
+            setState(() {
+              selectedIndex = i;
+            });
+          },
+        ),
+      );
+      chips.add(item);
+    }
+    return chips;
+  }
+
   void _showFilterPopup() {
-    showMaterialModalBottomSheet(
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-      // ),
+    showBarModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
       context: context,
       barrierColor: Colors.black45,
       bounce: false,
       builder: (builder) {
-        //return FilterBottomSheet();
-        return NestedScrollView(
-          controller: ScrollController(),
-          physics: const ScrollPhysics(parent: PageScrollPhysics()),
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 30, 30, 5),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "Filter",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+        return StatefulBuilder(
+          builder: (BuildContext context,
+              StateSetter setState /*You can rename this!*/) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: NestedScrollView(
+                controller: ScrollController(),
+                physics: const ScrollPhysics(parent: PageScrollPhysics()),
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  return <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 30, 30, 5),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    "Filter Transaksi",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1
+                                        ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.05,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.2,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Colors.white54, // background
+                                      foregroundColor:
+                                          ColorManager.primary, // foreground
+                                    ),
+                                    child: const Text('Reset'),
+                                    onPressed: () async {
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) => Login(),
+                                      //   ),
+                                      // );
+                                    },
+                                  ),
+                                ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     setState(() {
+                                //       // _priceValues = const SfRangeValues(0, 100);
+                                //     });
+                                //   },
+                                //   child: const Icon(
+                                //     Icons.refresh_rounded,
+                                //     size: 23,
+                                //   ),
+                                // ),
+                                // const SizedBox(
+                                //   width: 10,
+                                // ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     Navigator.of(context).pop();
+                                //   },
+                                //   child: const Icon(Icons.close),
+                                // ),
+                              ],
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                // _priceValues = const SfRangeValues(0, 100);
-                              });
-                            },
-                            child: const Icon(
-                              Icons.refresh_rounded,
-                              size: 23,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Icon(Icons.close),
-                          ),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 20),
+                          // const Divider(
+                          //   height: 1,
+                          //   thickness: 1,
+                          //   color: Colors.grey,
+                          // ),
                         ],
                       ),
                     ),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width, height: 20),
-                    const Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: Colors.grey,
-                    ),
-                  ],
-                ),
-              ),
-            ];
-          },
-          body: ListView(
-            controller: ModalScrollController.of(context),
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width, height: 20),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width, height: 20),
-                    const Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width, height: 20),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width, height: 20),
-                    const Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width, height: 20),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 30, right: 30),
-                          child: Text(
-                            "Services",
-                            style: Theme.of(context).textTheme.labelLarge,
+                  ];
+                },
+                body: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: ListView(
+                    controller: ModalScrollController.of(context),
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Filter Berdasarkan",
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                ?.copyWith(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
                           ),
-                        ),
-                        SizedBox(
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 20),
+                          Wrap(
+                            spacing: 6,
+                            direction: Axis.horizontal,
+                            children: techChips(),
+                          ),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 20),
+                          Text(
+                            "Tanggal",
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                ?.copyWith(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 20),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 30),
+                          Center(
+                            child: SizedBox(
+                              width: 276,
+                              height: 55,
+                              child: OutlinedButton(
+                                child: const Text('Apply'),
+                                onPressed: () {
+                                  //applyFilter();
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
                             width: MediaQuery.of(context).size.width,
-                            height: 15),
-                      ],
-                    ),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width, height: 30),
-                    Center(
-                      child: SizedBox(
-                        width: 276,
-                        height: 55,
-                        child: OutlinedButton(
-                          child: const Text('Apply'),
-                          onPressed: () {
-                            //applyFilter();
-                            Navigator.of(context).pop();
-                          },
-                        ),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -187,16 +250,16 @@ class _TransactionTabState extends State<TransactionTab>
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
-          InkWell(
-            onTap: _showFilterPopup,
-            child: const Padding(
-              padding: EdgeInsets.all(15),
-              child: FaIcon(
-                Icons.filter_list,
-                size: 30,
-              ),
-            ),
-          ),
+          // InkWell(
+          //   onTap: _showFilterPopup,
+          //   child: const Padding(
+          //     padding: EdgeInsets.all(15),
+          //     child: FaIcon(
+          //       Icons.filter_list,
+          //       size: 30,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
       body: RefreshIndicator(
@@ -264,4 +327,11 @@ class _TransactionTabState extends State<TransactionTab>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class FilterType {
+  String label;
+  String value;
+  Color color;
+  FilterType(this.label, this.value, this.color);
 }

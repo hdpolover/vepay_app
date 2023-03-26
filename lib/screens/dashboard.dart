@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
@@ -79,56 +80,145 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PersistentTabView(
-        context,
-        controller: _controller,
-        screens: _buildScreens(),
-        items: _navBarsItems(),
-        confineInSafeArea: true,
-        backgroundColor: Colors.white,
-        handleAndroidBackButtonPress: true,
-        resizeToAvoidBottomInset: true,
-        stateManagement: true,
-        navBarHeight: kBottomNavigationBarHeight * 1.2,
-        hideNavigationBarWhenKeyboardShows: true,
-        padding: const NavBarPadding.only(top: 15),
-        popActionScreens: PopActionScreensType.all,
-        bottomScreenMargin: 20,
-        // onWillPop: (context) async {
-        //   await showDialog(
-        //     context: context!,
-        //     useSafeArea: true,
-        //     builder: (context) => Container(
-        //       height: 50.0,
-        //       width: 50.0,
-        //       color: Colors.white,
-        //       child: ElevatedButton(
-        //         child: Text("Close"),
-        //         onPressed: () {
-        //           Navigator.pop(context);
-        //         },
-        //       ),
-        //     ),
-        //   );
-        //   return false;
-        // },
-        // selectedTabScreenContext: (context) {
-        //   var testContext = context;
-        // },
-        hideNavigationBar: _hideNavBar,
-        popAllScreensOnTapOfSelectedTab: true,
-        itemAnimationProperties: const ItemAnimationProperties(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.ease,
+    return WillPopScope(
+      onWillPop: () async {
+        bool shouldClose = await showBarModalBottomSheet(
+            barrierColor: Colors.black38,
+            context: context,
+            builder: (context) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height * 0.23,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      Text(
+                        "Keluar?",
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        "Yakin untuk keluar?",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            ?.copyWith(fontWeight: FontWeight.normal),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        ColorManager.primary.withOpacity(0.1),
+                                    foregroundColor:
+                                        ColorManager.primary, // foreground
+                                  ),
+                                  child: const Text('Tidak'),
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        ColorManager.primary, // background
+                                    foregroundColor: Colors.white, // foreground
+                                  ),
+                                  child: const Text('Ya'),
+                                  onPressed: () async {
+                                    // if (_formKey.currentState!.validate()) {
+                                    //   setState(() {
+                                    //     isLoading = true;
+                                    //   });
+
+                                    //   login();
+                                    // }
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            });
+        return shouldClose;
+      },
+      child: Scaffold(
+        body: PersistentTabView(
+          context,
+          controller: _controller,
+          screens: _buildScreens(),
+          items: _navBarsItems(),
+          confineInSafeArea: true,
+          backgroundColor: Colors.white,
+          handleAndroidBackButtonPress: true,
+          resizeToAvoidBottomInset: true,
+          stateManagement: true,
+          navBarHeight: kBottomNavigationBarHeight * 1.2,
+          hideNavigationBarWhenKeyboardShows: true,
+          padding: const NavBarPadding.only(top: 15),
+          popActionScreens: PopActionScreensType.all,
+          bottomScreenMargin: 20,
+          // onWillPop: (context) async {
+          //   await showDialog(
+          //     context: context!,
+          //     useSafeArea: true,
+          //     builder: (context) => Container(
+          //       height: 50.0,
+          //       width: 50.0,
+          //       color: Colors.white,
+          //       child: ElevatedButton(
+          //         child: Text("Close"),
+          //         onPressed: () {
+          //           Navigator.pop(context);
+          //         },
+          //       ),
+          //     ),
+          //   );
+          //   return false;
+          // },
+          selectedTabScreenContext: (context) {
+            var testContext = context;
+          },
+          hideNavigationBar: _hideNavBar,
+          popAllScreensOnTapOfSelectedTab: true,
+          itemAnimationProperties: const ItemAnimationProperties(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.ease,
+          ),
+          screenTransitionAnimation: const ScreenTransitionAnimation(
+            animateTabTransition: true,
+            curve: Curves.ease,
+            duration: Duration(milliseconds: 200),
+          ),
+          navBarStyle:
+              NavBarStyle.style6, // Choose the nav bar style with this property
         ),
-        screenTransitionAnimation: const ScreenTransitionAnimation(
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
-        ),
-        navBarStyle:
-            NavBarStyle.style6, // Choose the nav bar style with this property
       ),
     );
   }

@@ -57,7 +57,8 @@ class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonWidgets().buildCommonAppBar(widget.rateModel.name!),
+      appBar:
+          CommonWidgets().buildCommonAppBar("Top up ${widget.rateModel.name!}"),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Form(
@@ -240,29 +241,46 @@ class _ProductDetailState extends State<ProductDetail> {
                         child: const Text('Selanjutnya'),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            if (int.parse(totalController.text.trim()) == 0) {
+                            if ((widget.rateModel.name!.toLowerCase() ==
+                                        "paypal" ||
+                                    widget.rateModel.name!.toLowerCase() ==
+                                        "skrill") &&
+                                !isEmail(fieldController.text)) {
                               CommonDialog.buildOkDialog(
-                                  context, false, "Jumlah harus lebih dari 0");
+                                  context, false, "Harap isi email yang valid");
                             } else {
-                              Map<String, dynamic> data = {
-                                "akun_tujuan": fieldController.text.trim(),
-                                "jumlah": totalController.text.trim(),
-                                "blockchain_id": selectedChain == null
-                                    ? null
-                                    : selectedChain!.id,
-                                "blockchain_name": selectedChain == null
-                                    ? null
-                                    : selectedChain!.blockchain,
-                              };
+                              if (int.parse(totalController.text.trim()) == 0) {
+                                CommonDialog.buildOkDialog(context, false,
+                                    "Jumlah harus lebih dari 0");
+                              } else {
+                                if (widget.rateModel.categories!
+                                            .toLowerCase() ==
+                                        "crypto" &&
+                                    selectedChain == null) {
+                                  CommonDialog.buildOkDialog(context, false,
+                                      "Harap pilih blockchain terlebih dahulu");
+                                } else {
+                                  Map<String, dynamic> data = {
+                                    "akun_tujuan": fieldController.text.trim(),
+                                    "jumlah": totalController.text.trim(),
+                                    "blockchain_id": selectedChain == null
+                                        ? null
+                                        : selectedChain!.id,
+                                    "blockchain_name": selectedChain == null
+                                        ? null
+                                        : selectedChain!.blockchain,
+                                  };
 
-                              PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                                screen: ProductBuyDetail(
-                                  rateModel: widget.rateModel,
-                                  data: data,
-                                ),
-                                withNavBar: false,
-                              );
+                                  PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen: ProductBuyDetail(
+                                      rateModel: widget.rateModel,
+                                      data: data,
+                                    ),
+                                    withNavBar: false,
+                                  );
+                                }
+                              }
                             }
                           }
                         },
@@ -276,5 +294,20 @@ class _ProductDetailState extends State<ProductDetail> {
         ),
       ),
     );
+  }
+
+  bool isEmail(String string) {
+    // Null or empty string is invalid
+    if (string == null || string.isEmpty) {
+      return false;
+    }
+
+    const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    final regExp = RegExp(pattern);
+
+    if (!regExp.hasMatch(string)) {
+      return false;
+    }
+    return true;
   }
 }

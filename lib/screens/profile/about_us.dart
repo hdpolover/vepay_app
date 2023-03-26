@@ -35,9 +35,6 @@ class _AboutUsState extends State<AboutUs> {
 
   @override
   Widget build(BuildContext context) {
-    double? h = MediaQuery.of(context).size.height;
-    double? w = MediaQuery.of(context).size.width;
-
     return Scaffold(
       floatingActionButton: CommonWidgets().buildFloatingWaButton(),
       appBar: CommonWidgets().buildCommonAppBar("Tentang Kami"),
@@ -49,6 +46,7 @@ class _AboutUsState extends State<AboutUs> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,7 +67,7 @@ class _AboutUsState extends State<AboutUs> {
                         image: const AssetImage('assets/logo_white.png'),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 20),
                     Column(
                       children: [
                         Text(
@@ -90,13 +88,12 @@ class _AboutUsState extends State<AboutUs> {
                   ],
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
+                  height: MediaQuery.of(context).size.height * 0.03,
                 ),
                 Text(
                   "Vepay.id merupakan platform penyedia jasa jual dan beli saldo meliputi Skrill, Perfect Money, Paypal, Payeer, USDT, BUSD. Vepay.id menjual Virtual Credit Card dan juga melayani jasa pembayaran melalui Paypal, Perfect Money, Skrill, Kartu Kredit dan Crypto.\n\nVepay.id berkomitmen untuk memberikan pelayanan terbaik kepada setiap klien yang menggunakan jasanya. Anda memiliki kendala dalam transaksi? Memiliki pertanyaan terkait transaksi? Tim Vepay.id siap melayani anda selama 24 JAM!\n\nVepay.id telah dipercaya lebih dari 1000 klien dengan tingkat kepuasan mencapai 4,9/5. Dengan pengalaman selama 10 tahun dan bersama tim terbaik, Vepay.id memberikan pelayanan terbaik dan melayani customer seperti RAJA!\n\nJadi, tunggu apa lagi? Yuk mulai bertransaksi dan percayakan urusan jual beli mu kepada Vepay.id!",
                   textAlign: TextAlign.justify,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        letterSpacing: 0.5,
                         fontWeight: FontWeight.normal,
                       ),
                 ),
