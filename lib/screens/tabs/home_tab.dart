@@ -8,8 +8,10 @@ import 'package:vepay_app/screens/home/product_item_widget.dart';
 import 'package:vepay_app/screens/home/promo_item_widget.dart';
 import 'package:vepay_app/services/promo_service.dart';
 
+import '../../common/common_dialog.dart';
 import '../../models/rate_model.dart';
 import '../../models/transaction_model.dart';
+import '../../services/auth_service.dart';
 import '../../services/rate_service.dart';
 import '../../services/transaction_service.dart';
 import '../transaction/transaction_item_widget.dart';
@@ -23,17 +25,37 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  List<RateModel>? rates;
+  List<RateModel> rates = [];
   List<PromoModel>? promos;
   List<TransactionModel>? transactionList;
 
+  MemberModel? member;
+
   @override
   void initState() {
+    setMember();
+    _getAllData();
+
+    super.initState();
+  }
+
+  setMember() {
+    setState(() {
+      member = widget.member;
+    });
+  }
+
+  Future<void> _getAllData() async {
+    try {
+      member = await AuthService().getMemberDetail();
+      setState(() {});
+    } catch (e) {
+      CommonDialog.buildOkDialog(context, false, e.toString());
+    }
+
     getRates();
     getPromos();
     getTrans();
-
-    super.initState();
   }
 
   Future<void> getPromos() async {
@@ -48,7 +70,9 @@ class _HomeTabState extends State<HomeTab> {
 
   Future<void> getRates() async {
     try {
-      rates = await RateService().getRates("top_up");
+      List<RateModel> tempRates = await RateService().getRates("top_up");
+
+      rates = tempRates;
 
       setState(() {});
     } catch (e) {
@@ -73,15 +97,15 @@ class _HomeTabState extends State<HomeTab> {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: RefreshIndicator(
+          onRefresh: _getAllData,
+          color: ColorManager.primary,
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: w * 0.055,
               vertical: h * 0.04,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
               children: [
                 buildHeader(),
                 const SizedBox(height: 20),
@@ -140,7 +164,7 @@ class _HomeTabState extends State<HomeTab> {
 
   buildProductSection() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.3,
+      height: MediaQuery.of(context).size.height * 0.28,
       child: ResponsiveGridList(
         minItemsPerRow: 4,
         horizontalGridSpacing: 4,
@@ -148,15 +172,15 @@ class _HomeTabState extends State<HomeTab> {
         listViewBuilderOptions: ListViewBuilderOptions(
             physics: const NeverScrollableScrollPhysics()),
         minItemWidth: MediaQuery.of(context).size.width * 0.25,
-        children: rates == null
+        children: rates.isEmpty
             ? List.generate(
                 8,
                 (index) => CommonShimmer().buildProductItemShimmer(context),
                 growable: false,
               )
             : List.generate(
-                rates!.length,
-                (index) => buildProductItemWidget(rates![index]),
+                rates.length,
+                (index) => buildProductItemWidget(rates[index]),
                 growable: false,
               ),
       ),
@@ -229,7 +253,7 @@ class _HomeTabState extends State<HomeTab> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         CircleAvatar(
-          backgroundImage: NetworkImage(widget.member.photo ??
+          backgroundImage: NetworkImage(member!.photo ??
               "https://vectorified.com/images/user-icon-1.png"),
           radius: 30,
         ),
@@ -240,9 +264,14 @@ class _HomeTabState extends State<HomeTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text("Halo,"),
+              const SizedBox(height: 3),
               Text(
-                widget.member.name!,
-                style: Theme.of(context).textTheme.bodyText2,
+                "${member!.name}!",
+                softWrap: true,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ],
           ),

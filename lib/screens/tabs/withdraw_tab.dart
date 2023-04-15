@@ -13,6 +13,7 @@ import '../../common/common_method.dart';
 import '../../resources/color_manager.dart';
 import '../../services/rate_service.dart';
 import '../home/product_buy_detail.dart';
+import '../withdraw/withdraw_detail.dart';
 
 class WithdrawTab extends StatefulWidget {
   WithdrawTab({Key? key}) : super(key: key);
@@ -39,6 +40,8 @@ class _WithdrawTabState extends State<WithdrawTab> {
   final _akunValidator = MultiValidator([
     RequiredValidator(errorText: 'Harap masukan akun yang sesuai'),
   ]);
+
+  BlockchainModel? selectedChain;
 
   @override
   void initState() {
@@ -290,19 +293,49 @@ class _WithdrawTabState extends State<WithdrawTab> {
                         child: const Text('Selanjutnya'),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            Map<String, dynamic> data = {
-                              "account": fieldController.text.trim(),
-                              "jumlah": totalController.text.trim(),
-                            };
+                            if ((selectedRate!.name!.toLowerCase() ==
+                                        "paypal" ||
+                                    selectedRate!.name!.toLowerCase() ==
+                                        "skrill" ||
+                                    selectedRate!.name!.toLowerCase() ==
+                                        "neteller") &&
+                                !CommonMethods()
+                                    .isEmail(fieldController.text)) {
+                              CommonDialog.buildOkDialog(
+                                  context, false, "Harap isi email yang valid");
+                            } else {
+                              if (int.parse(totalController.text.trim()) == 0) {
+                                CommonDialog.buildOkDialog(context, false,
+                                    "Jumlah harus lebih dari 0");
+                              } else {
+                                if (selectedRate!.categories!.toLowerCase() ==
+                                        "crypto" &&
+                                    selectedChain == null) {
+                                  CommonDialog.buildOkDialog(context, false,
+                                      "Harap pilih blockchain terlebih dahulu");
+                                } else {
+                                  Map<String, dynamic> data = {
+                                    "akun_tujuan": fieldController.text.trim(),
+                                    "jumlah": totalController.text.trim(),
+                                    "blockchain_id": selectedChain == null
+                                        ? null
+                                        : selectedChain!.id,
+                                    "blockchain_name": selectedChain == null
+                                        ? null
+                                        : selectedChain!.blockchain,
+                                  };
 
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: ProductBuyDetail(
-                                rateModel: selectedRate!,
-                                data: data,
-                              ),
-                              withNavBar: false,
-                            );
+                                  PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen: WithdrawDetail(
+                                      rateModel: selectedRate!,
+                                      data: data,
+                                    ),
+                                    withNavBar: false,
+                                  );
+                                }
+                              }
+                            }
                           }
                         },
                       ),

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -119,8 +122,7 @@ class _DashboardState extends State<Dashboard> {
                                     MediaQuery.of(context).size.height * 0.06,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        ColorManager.primary.withOpacity(0.1),
+                                    backgroundColor: Colors.white,
                                     foregroundColor:
                                         ColorManager.primary, // foreground
                                   ),
@@ -147,13 +149,11 @@ class _DashboardState extends State<Dashboard> {
                                   ),
                                   child: const Text('Ya'),
                                   onPressed: () async {
-                                    // if (_formKey.currentState!.validate()) {
-                                    //   setState(() {
-                                    //     isLoading = true;
-                                    //   });
-
-                                    //   login();
-                                    // }
+                                    if (Platform.isAndroid) {
+                                      SystemNavigator.pop();
+                                    } else if (Platform.isIOS) {
+                                      exit(0);
+                                    }
                                   },
                                 ),
                               ),

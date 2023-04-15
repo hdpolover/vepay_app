@@ -9,6 +9,7 @@ import 'package:vepay_app/models/blockchain_model.dart';
 import 'package:vepay_app/models/payment_method_model.dart';
 import 'package:vepay_app/models/rate_model.dart';
 import 'package:vepay_app/screens/home/product_buy_detail.dart';
+import 'package:vepay_app/screens/withdraw/withdraw_detail.dart';
 import 'package:vepay_app/services/blockchain_service.dart';
 
 import '../../resources/color_manager.dart';
@@ -244,8 +245,11 @@ class _ProductDetailState extends State<ProductDetail> {
                             if ((widget.rateModel.name!.toLowerCase() ==
                                         "paypal" ||
                                     widget.rateModel.name!.toLowerCase() ==
-                                        "skrill") &&
-                                !isEmail(fieldController.text)) {
+                                        "skrill" ||
+                                    widget.rateModel.name!.toLowerCase() ==
+                                        "neteller") &&
+                                !CommonMethods()
+                                    .isEmail(fieldController.text)) {
                               CommonDialog.buildOkDialog(
                                   context, false, "Harap isi email yang valid");
                             } else {
@@ -289,25 +293,13 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  bool isEmail(String string) {
-    // Null or empty string is invalid
-    if (string == null || string.isEmpty) {
-      return false;
-    }
-
-    const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-    final regExp = RegExp(pattern);
-
-    if (!regExp.hasMatch(string)) {
-      return false;
-    }
-    return true;
   }
 }

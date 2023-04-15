@@ -57,44 +57,6 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
   }
 
   buildMetodePembayaranSection() {
-    // return ExpansionWidget(
-    //   initiallyExpanded: false,
-    //   titleBuilder: (double animationValue, _, bool isExpaned, toogleFunction) {
-    //     return GestureDetector(
-    //       onTap: () => toogleFunction(animated: true),
-    //       child: Row(
-    //         crossAxisAlignment: CrossAxisAlignment.center,
-    //         children: [
-    //           Expanded(
-    //             child: Text(
-    //               "Metode Pembayaran",
-    //               style: Theme.of(context)
-    //                   .textTheme
-    //                   .bodyText1
-    //                   ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-    //             ),
-    //           ),
-    //           Text(
-    //             "Lihat semua",
-    //             style: Theme.of(context)
-    //                 .textTheme
-    //                 .bodyText1
-    //                 ?.copyWith(color: ColorManager.primary),
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   },
-    //   content: Container(
-    //     width: double.infinity,
-    //     color: Colors.white,
-    //     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-    //     child: Padding(
-    //       padding: const EdgeInsets.symmetric(vertical: 10),
-    //       child: Text("dd"),
-    //     ),
-    //   ),
-    // );
     return Card(
       margin: EdgeInsets.zero,
       // shape: const RoundedRectangleBorder(
@@ -283,66 +245,65 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
           buildMetodePembayaranSection(),
           const SizedBox(height: 10),
           buildTotalSection(),
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: isLoading
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30),
-                      child: CircularProgressIndicator(
-                        color: ColorManager.primary,
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: ColorManager.primary, // background
-                            foregroundColor: Colors.white, // foreground
-                          ),
-                          child: const Text('Bayar'),
-                          onPressed: () async {
-                            if (selectedPaymentMethod == null) {
-                              CommonDialog.buildOkDialog(context, false,
-                                  "Harap pilih metode pembayaran terlebih dahulu.");
-                            } else {
-                              setState(() {
-                                isLoading = true;
-                              });
-
-                              var prefs = await SharedPreferences.getInstance();
-
-                              String? userId = prefs.getString("user_id");
-                              int metodeId =
-                                  int.parse(selectedPaymentMethod!.id!);
-                              int rateId = int.parse(widget.rateModel.id!);
-                              int jumlah = int.parse(widget.data['jumlah']);
-                              double bayar = widget.data['total'];
-                              double subtotal = widget.data['sub_total'];
-
-                              Map<String, dynamic> data = {
-                                'user_id': userId,
-                                'm_metode_id': metodeId,
-                                'm_rate_id': rateId,
-                                'jumlah': jumlah,
-                                'sub_total': subtotal,
-                                'total_bayar': bayar,
-                                'akun_tujuan': widget.data['akun_tujuan'],
-                                'blockchain': widget.data['blockchain_id'],
-                                'promo_id': widget.data['promo_id'],
-                              };
-
-                              doTransaction(data);
-                            }
-                          },
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: isLoading
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30),
+                    child: CircularProgressIndicator(
+                      color: ColorManager.primary,
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorManager.primary, // background
+                          foregroundColor: Colors.white, // foreground
                         ),
+                        child: const Text('Bayar'),
+                        onPressed: () async {
+                          if (selectedPaymentMethod == null) {
+                            CommonDialog.buildOkDialog(context, false,
+                                "Harap pilih metode pembayaran terlebih dahulu.");
+                          } else {
+                            setState(() {
+                              isLoading = true;
+                            });
+
+                            var prefs = await SharedPreferences.getInstance();
+
+                            String? userId = prefs.getString("user_id");
+                            int metodeId =
+                                int.parse(selectedPaymentMethod!.id!);
+                            int rateId = int.parse(widget.rateModel.id!);
+                            int jumlah = int.parse(widget.data['jumlah']);
+                            double bayar = widget.data['total'];
+                            double subtotal = widget.data['sub_total'];
+
+                            Map<String, dynamic> data = {
+                              'user_id': userId,
+                              'm_metode_id': metodeId,
+                              'm_rate_id': rateId,
+                              'jumlah': jumlah,
+                              'sub_total': subtotal,
+                              'total_bayar': bayar,
+                              'akun_tujuan': widget.data['akun_tujuan'],
+                              'blockchain': widget.data['blockchain_id'],
+                              'promo_id': widget.data['promo_id'],
+                            };
+
+                            doTransaction(data);
+                          }
+                        },
                       ),
                     ),
-            ),
+                  ),
           ),
         ],
       ),

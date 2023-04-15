@@ -29,6 +29,7 @@ class _MoreState extends State<More> {
       rates = await RateService().getRates("top_up");
 
       rates!.removeWhere((item) => item.name!.toLowerCase() == 'more');
+      rates!.removeWhere((item) => item.name!.toLowerCase() == 'jasa bayar');
 
       setState(() {});
     } catch (e) {
@@ -38,7 +39,7 @@ class _MoreState extends State<More> {
 
   buildProductSection() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.27,
+      height: MediaQuery.of(context).size.height * 0.8,
       child: ResponsiveGridList(
         minItemsPerRow: 4,
         horizontalGridSpacing: 4,
@@ -83,8 +84,11 @@ class _MoreState extends State<More> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonWidgets().buildCommonAppBar("Semua Kategori"),
-      body: SingleChildScrollView(
-        child: buildProductSection(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: SingleChildScrollView(
+          child: buildProductSection(),
+        ),
       ),
     );
   }

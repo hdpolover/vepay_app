@@ -453,49 +453,46 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
           buildMiddleSection(),
           const SizedBox(height: 10),
           buildBottomSection(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.06),
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.06,
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorManager.primary, // background
-                      foregroundColor: Colors.white, // foreground
-                    ),
-                    child: const Text('Pilih Metode Pembayaran'),
-                    onPressed: () async {
-                      // if (_formKey.currentState!.validate()) {
-                      //   Map<String, dynamic> data = {
-                      //     "email": emailController.text.trim(),
-                      //     "jumlah": totalController.text.trim(),
-                      //   };
-
-                      widget.data['sub_total'] = subtotal!;
-                      widget.data['total'] = total!;
-                      widget.data['fee'] = feeFinal;
-                      widget.data['total_promo'] = totalPromo;
-
-                      if (selectedPromo != null) {
-                        widget.data['promo_id'] = selectedPromo!.id;
-                      }
-
-                      PersistentNavBarNavigator.pushNewScreen(
-                        context,
-                        screen: ProductPaymentMethod(
-                          rateModel: widget.rateModel,
-                          data: widget.data,
-                        ),
-                        withNavBar: false,
-                      );
-                      // }
-                    },
+          SizedBox(height: MediaQuery.of(context).size.height * 0.15),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.06,
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorManager.primary, // background
+                    foregroundColor: Colors.white, // foreground
                   ),
+                  child: const Text('Pilih Metode Pembayaran'),
+                  onPressed: () async {
+                    // if (_formKey.currentState!.validate()) {
+                    //   Map<String, dynamic> data = {
+                    //     "email": emailController.text.trim(),
+                    //     "jumlah": totalController.text.trim(),
+                    //   };
+
+                    widget.data['sub_total'] = subtotal!;
+                    widget.data['total'] = total!;
+                    widget.data['fee'] = feeFinal;
+                    widget.data['total_promo'] = totalPromo;
+
+                    if (selectedPromo != null) {
+                      widget.data['promo_id'] = selectedPromo!.id;
+                    }
+
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: ProductPaymentMethod(
+                        rateModel: widget.rateModel,
+                        data: widget.data,
+                      ),
+                      withNavBar: false,
+                    );
+                    // }
+                  },
                 ),
               ),
             ),

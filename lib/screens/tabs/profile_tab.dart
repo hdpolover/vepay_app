@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/intro.dart';
@@ -9,6 +10,7 @@ import 'package:vepay_app/screens/profile/about_us.dart';
 import 'package:vepay_app/screens/profile/contact_us.dart';
 import 'package:vepay_app/screens/profile/edit_profile.dart';
 import 'package:vepay_app/screens/profile/vcc.dart';
+import 'package:vepay_app/services/auth_service.dart';
 
 import '../../resources/color_manager.dart';
 import '../../services/fb_service.dart';
@@ -22,24 +24,43 @@ class ProfileTab extends StatefulWidget {
 }
 
 class _ProfileTabState extends State<ProfileTab> {
+  MemberModel? currentMember;
+
+  @override
+  void initState() {
+    super.initState();
+
+    setMember();
+  }
+
+  setMember() {
+    setState(() {
+      currentMember = widget.member;
+    });
+  }
+
+  Future<void> loadProfile() async {
+    try {
+      currentMember = await AuthService().getMemberDetail();
+      setState(() {});
+    } catch (e) {
+      CommonDialog.buildOkDialog(context, false, e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    double? h = MediaQuery.of(context).size.height;
-    double? w = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
+        child: RefreshIndicator(
+          onRefresh: loadProfile,
+          color: ColorManager.primary,
+          child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                buildHeader(),
-                buildBody(),
-              ],
-            ),
+            children: [
+              buildHeader(),
+              buildBody(),
+            ],
           ),
         ),
       ),
@@ -189,7 +210,7 @@ class _ProfileTabState extends State<ProfileTab> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(widget.member.photo ??
+            backgroundImage: NetworkImage(currentMember!.photo ??
                 "https://vectorified.com/images/user-icon-1.png"),
             radius: 30,
           ),
@@ -202,7 +223,8 @@ class _ProfileTabState extends State<ProfileTab> {
                 const Text("Nama"),
                 const SizedBox(height: 5),
                 Text(
-                  widget.member.name!,
+                  currentMember!.name!,
+                  softWrap: true,
                   style: Theme.of(context).textTheme.bodyText1?.copyWith(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -211,12 +233,13 @@ class _ProfileTabState extends State<ProfileTab> {
               ],
             ),
           ),
+          const SizedBox(width: 20),
           IconButton(
             onPressed: () {
               PersistentNavBarNavigator.pushNewScreen(
                 context,
                 screen: EditProfile(
-                  member: widget.member,
+                  member: currentMember!,
                 ),
                 withNavBar: false,
               );

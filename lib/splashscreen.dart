@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
+import 'package:vepay_app/common/global_member.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/intro.dart';
 import 'package:vepay_app/screens/auth/login.dart';
@@ -66,7 +67,9 @@ class _SplashScreenState extends State<SplashScreen> {
           true,
         );
 
-        _goToPage(Dashboard(member: res));
+        currentMemberGlobal.value = res;
+
+        _goToPage(Dashboard(member: currentMemberGlobal.value));
       } catch (e) {
         buildError(e);
       }

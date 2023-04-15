@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_widgets.dart';
+import 'package:vepay_app/common/global_member.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/login.dart';
 import 'package:vepay_app/screens/dashboard.dart';
@@ -102,11 +103,13 @@ class _RegisterState extends State<Register> {
                 isLoading = false;
               });
 
+              currentMemberGlobal.value = m;
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => Dashboard(
-                    member: m,
+                    member: currentMemberGlobal.value,
                   ),
                 ),
               );
@@ -138,18 +141,16 @@ class _RegisterState extends State<Register> {
         setState(() {
           isLoading = false;
         });
+
         CommonDialog.buildOkRegister(context, true,
             "Pendaftaran berhasil. Silakan cek email untuk verifikasi lalu lakukan login.");
       }
     } catch (e) {
-      Navigator.of(context).pop();
-
       setState(() {
         isLoading = false;
       });
 
-      CommonDialog.buildOkDialog(
-          context, false, "Terjadi kesalahan. Coba lagi.");
+      CommonDialog.buildOkDialog(context, false, e.toString());
     }
   }
 
@@ -456,77 +457,64 @@ class _RegisterState extends State<Register> {
                             UserCredential? result =
                                 await FbService.signInWithGoogle();
 
-                            if (result != null) {
-                              if (result.additionalUserInfo!.isNewUser) {
-                                // Close the dialog programmatically
-                                Navigator.of(context).pop();
+                            if (result.additionalUserInfo!.isNewUser) {
+                              // Close the dialog programmatically
+                              Navigator.of(context).pop();
 
-                                regist(
-                                  result.user!.email!,
-                                  result.user!.displayName!,
-                                  "",
-                                  true,
-                                );
-                              } else {
+                              regist(
+                                result.user!.email!,
+                                result.user!.displayName!,
+                                "",
+                                true,
+                              );
+                            } else {
+                              try {
+                                Map<String, dynamic> data = {
+                                  "is_google": true,
+                                  "email": result.user!.email!,
+                                };
+
                                 try {
-                                  Map<String, dynamic> data = {
-                                    "is_google": true,
-                                    "email": result.user!.email!,
-                                  };
+                                  MemberModel m =
+                                      await AuthService().login(data);
 
-                                  try {
-                                    MemberModel m =
-                                        await AuthService().login(data);
-
-                                    CommonMethods().saveUserLoginsDetails(
-                                        m.userId!, m.name!, m.email!, "", true);
-
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-
-                                    Navigator.of(context).pop();
-
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Dashboard(
-                                          member: m,
-                                        ),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-
-                                    CommonDialog.buildOkDialog(
-                                        context, false, e.toString());
-                                  }
-                                } catch (e) {
-                                  Navigator.of(context).pop();
+                                  CommonMethods().saveUserLoginsDetails(
+                                      m.userId!, m.name!, m.email!, "", true);
 
                                   setState(() {
                                     isLoading = false;
                                   });
 
-                                  CommonDialog.buildOkDialog(context, false,
-                                      "Something wrong with your account. Please contact admin for info.");
+                                  currentMemberGlobal.value = m;
+
+                                  Navigator.of(context).pop();
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Dashboard(
+                                        member: currentMemberGlobal.value,
+                                      ),
+                                    ),
+                                  );
+                                } catch (e) {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+
+                                  CommonDialog.buildOkDialog(
+                                      context, false, e.toString());
                                 }
+                              } catch (e) {
+                                Navigator.of(context).pop();
+
+                                setState(() {
+                                  isLoading = false;
+                                });
+
+                                CommonDialog.buildOkDialog(
+                                    context, false, e.toString());
                               }
-                            } else {
-                              Navigator.of(context).pop();
-
-                              setState(() {
-                                isLoading = false;
-                              });
-                              SnackBar _snackBar = SnackBar(
-                                content: Text("Terjadi kesalahan. Coba lagi."),
-                                duration: const Duration(seconds: 2),
-                              );
-
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(_snackBar);
                             }
                           } catch (e) {
                             Navigator.of(context).pop();
@@ -534,13 +522,16 @@ class _RegisterState extends State<Register> {
                             setState(() {
                               isLoading = false;
                             });
-                            SnackBar _snackBar = SnackBar(
-                              content: Text("Terjadi kesalahan. Coba lagi."),
-                              duration: const Duration(seconds: 2),
-                            );
 
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(_snackBar);
+                            if (e is FirebaseAuthException) {
+                              SnackBar snackBar = SnackBar(
+                                content: Text(e.message!),
+                                duration: const Duration(seconds: 2),
+                              );
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
                           }
                         },
                       ),
@@ -571,6 +562,7 @@ class _RegisterState extends State<Register> {
                               text: 'Masuk',
                               style: TextStyle(
                                 color: ColorManager.primary,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
+import 'package:vepay_app/common/global_member.dart';
 import 'package:vepay_app/screens/auth/forgot_password.dart';
 import 'package:vepay_app/screens/auth/register.dart';
 import 'package:vepay_app/screens/dashboard.dart';
@@ -56,11 +57,13 @@ class _LoginState extends State<Login> {
           isLoading = false;
         });
 
+        currentMemberGlobal.value = m;
+
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Dashboard(
-              member: m,
+              member: currentMemberGlobal.value,
             ),
           ),
         );
@@ -291,6 +294,7 @@ class _LoginState extends State<Login> {
                               text: 'Daftar',
                               style: TextStyle(
                                 color: ColorManager.primary,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],

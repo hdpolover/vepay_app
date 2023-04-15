@@ -20,12 +20,15 @@ class PromoModel {
     this.expired,
     this.quota,
     this.jenis,
+    this.jenisPengguna,
+    this.desc,
     this.status,
     this.createdAt,
     this.createdBy,
     this.modifiedAt,
     this.modifiedBy,
     this.isDeleted,
+    this.jenisPenggunaTxt,
   });
 
   String? id;
@@ -33,16 +36,19 @@ class PromoModel {
   String? nama;
   String? image;
   String? value;
-  int? maksimalPromo;
+  dynamic maksimalPromo;
   String? expired;
   String? quota;
   String? jenis;
+  String? jenisPengguna;
+  String? desc;
   String? status;
   String? createdAt;
   String? createdBy;
   String? modifiedAt;
   String? modifiedBy;
   String? isDeleted;
+  String? jenisPenggunaTxt;
 
   factory PromoModel.fromJson(Map<String, dynamic> json) => PromoModel(
         id: json["id"],
@@ -54,12 +60,15 @@ class PromoModel {
         expired: json["expired"],
         quota: json["quota"],
         jenis: json["jenis"],
+        jenisPengguna: json["jenis_pengguna"],
+        desc: json["desc"],
         status: json["status"],
         createdAt: json["created_at"],
         createdBy: json["created_by"],
         modifiedAt: json["modified_at"],
         modifiedBy: json["modified_by"],
         isDeleted: json["is_deleted"],
+        jenisPenggunaTxt: json["jenis_pengguna_txt"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -72,11 +81,14 @@ class PromoModel {
         "expired": expired,
         "quota": quota,
         "jenis": jenis,
+        "jenis_pengguna": jenisPengguna,
+        "desc": desc,
         "status": status,
         "created_at": createdAt,
         "created_by": createdBy,
         "modified_at": modifiedAt,
         "modified_by": modifiedBy,
         "is_deleted": isDeleted,
+        "jenis_pengguna_txt": jenisPenggunaTxt,
       };
 }

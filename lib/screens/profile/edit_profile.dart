@@ -70,8 +70,6 @@ class _EditProfileState extends State<EditProfile> {
     try {
       final XFile? pickedFile = await _picker.pickImage(
         source: source,
-        maxWidth: 100,
-        maxHeight: 100,
         imageQuality: 100,
       );
       setState(() {
@@ -111,7 +109,7 @@ class _EditProfileState extends State<EditProfile> {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      "Pick image from",
+                      "Pilih gambar dari",
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
@@ -146,7 +144,7 @@ class _EditProfileState extends State<EditProfile> {
                                 const SizedBox(height: 10),
                                 Align(
                                   alignment: Alignment.center,
-                                  child: Text('Camera',
+                                  child: Text('Kamera',
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
@@ -182,7 +180,7 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text('Gallery',
+                              Text('Galeri',
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
@@ -221,6 +219,7 @@ class _EditProfileState extends State<EditProfile> {
       emailController!.text = widget.member.email ?? "";
       birthController!.text = widget.member.birthdate ?? "";
       phoneController!.text = widget.member.phone ?? "";
+      _result = widget.member.gender;
     });
   }
 
@@ -230,7 +229,7 @@ class _EditProfileState extends State<EditProfile> {
       appBar: CommonWidgets().buildCommonAppBar("Edit Profil"),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
@@ -337,6 +336,8 @@ class _EditProfileState extends State<EditProfile> {
                     children: [
                       Expanded(
                         child: RadioListTile(
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: -10),
                             title: const Text('Laki-laki'),
                             value: "laki-laki",
                             groupValue: _result,
@@ -349,6 +350,8 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                       Expanded(
                         child: RadioListTile(
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: -10),
                             title: const Text('Perempuan'),
                             value: "perempuan",
                             groupValue: _result,
@@ -394,6 +397,7 @@ class _EditProfileState extends State<EditProfile> {
                     controller: emailController,
                     validator: _emailValidator,
                     keyboardType: TextInputType.emailAddress,
+                    readOnly: true,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       hintText: 'Email',
@@ -470,7 +474,8 @@ class _EditProfileState extends State<EditProfile> {
                                 CommonDialog.buildOkDialog(context, false,
                                     "Silakan pilih jenis kelamin");
                               } else {
-                                if (_selectedDate == null) {
+                                if (_selectedDate == null &&
+                                    birthController!.text.isEmpty) {
                                   CommonDialog.buildOkDialog(context, false,
                                       "Silakan pilih tanggal lahir");
                                 } else {
@@ -515,8 +520,8 @@ class _EditProfileState extends State<EditProfile> {
             _isLoading = false;
           });
 
-          CommonDialog.buildOkDialog(
-              context, true, "Berhasil memperbarui profil.");
+          CommonDialog.buildOkUpdateDialog(context, true,
+              "Berhasil memperbarui profil. Silakan refresh halaman.");
         } else {
           setState(() {
             _isLoading = false;

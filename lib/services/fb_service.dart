@@ -45,19 +45,6 @@ class FbService {
     await _auth.signOut().then((_) {
       _googleSignIn.signOut();
       currentUser = null;
-
-      // CommonSharedMethods.saveUserLoginsDetails("", "", "", "", false);
-
-      Navigator.of(context, rootNavigator: true).pop();
-
-      print("signedout");
-
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (ctx) => const LoginWidget(),
-      //   ),
-      // );
     });
   }
 }

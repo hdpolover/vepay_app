@@ -80,7 +80,7 @@ class _AboutUsState extends State<AboutUs> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          version == null ? "v -" : "v $version",
+                          version == null ? "v -" : "v$version",
                           style: Theme.of(context).textTheme.caption,
                         ),
                       ],

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/app_constants.dart';
 import 'package:vepay_app/models/member_model.dart';
 
@@ -27,11 +28,9 @@ class AuthService {
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         var result = json.decode(response.body)['data'];
-        print(result);
         return MemberModel.fromJson(result);
       } else {
-        print(jsonDecode(response.body));
-        return jsonDecode(response.body);
+        throw jsonDecode(response.body)['message'];
       }
     } catch (e) {
       print(e);
@@ -161,6 +160,34 @@ class AuthService {
         print(response.body);
 
         return jsonDecode(response.body)['status'];
+      }
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<MemberModel> getMemberDetail() async {
+    var prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString("user_id");
+
+    String url = "${AppConstants.apiUrl}get_detail_member?user_id=$userId";
+
+    print(url);
+
+    try {
+      final http.Response response = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        var result = json.decode(response.body)['data'];
+        return MemberModel.fromJson(result);
+      } else {
+        throw jsonDecode(response.body)['message'];
       }
     } catch (e) {
       print(e);

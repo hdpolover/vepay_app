@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -41,7 +42,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
     _imageFile = value;
   }
 
-  buildTextItem(String title, String value) {
+  buildTextItem(String title, String value, bool isToCopy) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -55,6 +56,21 @@ class _PaymentDetailState extends State<PaymentDetail> {
               .bodyText1
               ?.copyWith(fontWeight: FontWeight.bold),
         )),
+        isToCopy
+            ? InkWell(
+                onTap: () {
+                  Clipboard.setData(ClipboardData(text: value)).then((_) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Berhasil menyalin text ke clipboard")));
+                  });
+                },
+                child: Icon(
+                  Icons.copy,
+                  size: 17,
+                  color: ColorManager.primary,
+                ),
+              )
+            : Container()
       ],
     );
   }
@@ -108,14 +124,14 @@ class _PaymentDetailState extends State<PaymentDetail> {
                 height: 1,
               ),
               const SizedBox(height: 10),
-              buildTextItem(
-                  "ID Pembayaran", widget.transactionModel.kodeTransaksi!),
+              buildTextItem("ID Pembayaran",
+                  widget.transactionModel.kodeTransaksi!, false),
               const SizedBox(height: 10),
               buildTextItem(
-                "Tanggal",
-                CommonMethods()
-                    .formatDate(widget.transactionModel.createdAt!, "l"),
-              ),
+                  "Tanggal",
+                  CommonMethods()
+                      .formatDate(widget.transactionModel.createdAt!, "l"),
+                  false),
             ],
           ),
         ),
@@ -132,7 +148,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
       //   ),
       // ),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.26,
+        height: MediaQuery.of(context).size.height * 0.24,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -244,10 +260,11 @@ class _PaymentDetailState extends State<PaymentDetail> {
               ),
               const SizedBox(height: 10),
               buildTextItem(
-                  "Nomor Rekening", widget.transactionModel.noRekening!),
+                  "Nomor Rekening", widget.transactionModel.noRekening!, true),
               const SizedBox(height: 10),
-              buildTextItem("Atas Nama", widget.transactionModel.atasNama!),
-              const SizedBox(height: 10),
+              buildTextItem(
+                  "Atas Nama", widget.transactionModel.atasNama!, false),
+              const SizedBox(height: 20),
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.14,
@@ -464,8 +481,6 @@ class _PaymentDetailState extends State<PaymentDetail> {
     try {
       final XFile? pickedFile = await _picker.pickImage(
         source: source,
-        // maxWidth: 100,
-        // maxHeight: 100,
         imageQuality: 100,
       );
       setState(() {
@@ -505,7 +520,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      "Pick image from",
+                      "Pilih gambar dari",
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
@@ -540,7 +555,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                 const SizedBox(height: 10),
                                 Align(
                                   alignment: Alignment.center,
-                                  child: Text('Camera',
+                                  child: Text('Kamera',
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
@@ -576,7 +591,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text('Gallery',
+                              Text('Galeri',
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme

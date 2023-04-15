@@ -95,6 +95,20 @@ class _PromoDetailState extends State<PromoDetail> {
                   CommonMethods().formatDate(widget.promo.expired!, "s"),
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
+                const SizedBox(height: 20),
+                Text(
+                  "Keterangan",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      ?.copyWith(fontSize: 15),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  widget.promo.desc!,
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

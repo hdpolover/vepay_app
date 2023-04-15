@@ -57,7 +57,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
           height: MediaQuery.of(context).size.height * 0.13,
           width: MediaQuery.of(context).size.width * 0.2,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipRRect(
