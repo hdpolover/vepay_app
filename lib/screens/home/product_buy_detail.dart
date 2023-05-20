@@ -76,10 +76,10 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
   }
 
   countPromo(PromoModel p) {
-    double maksPromo = p.maksimalPromo!.toDouble();
+    double maksPromo = p.maksimalPromo!;
 
     if (p.jenis == "2") {
-      double nilaiPromo = (total! * double.parse(p.value!)) / 100;
+      double nilaiPromo = (total! * p.value!) / 100;
 
       if (nilaiPromo > maksPromo) {
         setState(() {
@@ -105,7 +105,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
       }
     } else {
       setState(() {
-        totalPromo = double.parse(p.value!);
+        totalPromo = p.value!;
       });
 
       countAll(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../app_constants.dart';
 import '../models/promo_model.dart';
@@ -41,7 +42,11 @@ class PromoService {
   }
 
   Future<PromoModel> check(String kode) async {
-    String url = "${AppConstants.apiUrl}get_detail_promo?kode=$kode";
+    var prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString("user_id");
+
+    String url =
+        "${AppConstants.apiUrl}get_detail_promo?kode=$kode&user_id=$userId";
 
     print(url);
 

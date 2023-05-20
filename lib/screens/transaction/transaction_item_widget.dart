@@ -98,7 +98,7 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
                           ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     const SizedBox(height: 5),
-                    Text(widget.transaction.email!),
+                    Text(widget.transaction.akunTujuan ?? "-"),
                     const SizedBox(height: 20),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

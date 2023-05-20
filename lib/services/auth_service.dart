@@ -11,19 +11,27 @@ class AuthService {
 
     print(url);
 
+    bool isGoogle = data['is_google'];
+
     try {
       final http.Response response = await http.post(
         Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, String>{
-          'is_google': data['is_google'].toString(),
-          'nama': data['nama'],
-          'email': data['email'],
-          'phone': data['phone'],
-          'password': data['password'],
-        }),
+        body: isGoogle
+            ? jsonEncode(<String, dynamic>{
+                'is_google': data['is_google'],
+                'email': data['email'],
+                'nama': data['nama'],
+              })
+            : jsonEncode(<String, dynamic>{
+                'is_google': data['is_google'],
+                'nama': data['nama'],
+                'email': data['email'],
+                'phone': data['phone'],
+                'password': data['password'],
+              }),
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
@@ -33,8 +41,7 @@ class AuthService {
         throw jsonDecode(response.body)['message'];
       }
     } catch (e) {
-      print(e);
-      rethrow;
+      throw Exception(e);
     }
   }
 
@@ -43,7 +50,7 @@ class AuthService {
 
     print(url);
 
-    print(data['is_google']);
+    bool isGoogle = data['is_google'];
 
     try {
       final http.Response response = await http.post(
@@ -51,23 +58,26 @@ class AuthService {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, String>{
-          'is_google': data['is_google'].toString(),
-          'email': data['email'],
-          'password': data['password'],
-        }),
+        body: isGoogle
+            ? jsonEncode(<String, dynamic>{
+                'is_google': isGoogle,
+                'email': data['email'],
+              })
+            : jsonEncode(<String, dynamic>{
+                'is_google': isGoogle,
+                'email': data['email'],
+                'password': data['password'],
+              }),
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         var result = json.decode(response.body)['data'];
-        print(result['is_google']);
         return MemberModel.fromJson(result);
       } else {
-        throw jsonDecode(response.body)['message'];
+        throw jsonDecode(response.body)['data'];
       }
     } catch (e) {
-      print(e);
-      rethrow;
+      throw Exception(e);
     }
   }
 

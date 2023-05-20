@@ -22,13 +22,14 @@ class CommonMethods {
   }
 
   Future saveUserLoginsDetails(String id, String name, String email,
-      String password, bool loginStatus) async {
+      String password, bool loginStatus, bool isGoogle) async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setString("user_id", id);
     prefs.setString("name", name);
     prefs.setString("email", email);
     prefs.setString("password", password);
     prefs.setBool("loginStatus", loginStatus);
+    prefs.setBool("isGoogle", isGoogle);
   }
 
   String getFieldName(String productName) {

@@ -50,8 +50,8 @@ class _LoginState extends State<Login> {
       MemberModel m = await AuthService().login(data);
 
       if (m.status == "1") {
-        CommonMethods().saveUserLoginsDetails(
-            m.userId!, m.name!, m.email!, passwordController.text.trim(), true);
+        CommonMethods().saveUserLoginsDetails(m.userId!, m.name!, m.email!,
+            passwordController.text.trim(), true, false);
 
         setState(() {
           isLoading = false;

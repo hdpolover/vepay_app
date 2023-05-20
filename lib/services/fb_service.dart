@@ -28,16 +28,7 @@ class FbService {
       // Once signed in, return the UserCredential
       return _auth.signInWithCredential(credential);
     } catch (signUpError) {
-      // if (signUpError is PlatformException) {
-      //   if (signUpError.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-      //     rethrow;
-      //   }
-      // } else {
-      //   print(signUpError);
-      //   rethrow;
-      // }
-      print(signUpError);
-      rethrow;
+      throw Exception(signUpError);
     }
   }
 

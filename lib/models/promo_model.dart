@@ -10,6 +10,25 @@ PromoModel promoModelFromJson(String str) =>
 String promoModelToJson(PromoModel data) => json.encode(data.toJson());
 
 class PromoModel {
+  String? id;
+  String? kode;
+  String? nama;
+  String? image;
+  double? value;
+  double? maksimalPromo;
+  String? expired;
+  int? quota;
+  String? jenis;
+  String? jenisPengguna;
+  String? desc;
+  String? status;
+  String? createdAt;
+  String? createdBy;
+  String? modifiedAt;
+  String? modifiedBy;
+  String? isDeleted;
+  String? jenisPenggunaTxt;
+
   PromoModel({
     this.id,
     this.kode,
@@ -31,34 +50,15 @@ class PromoModel {
     this.jenisPenggunaTxt,
   });
 
-  String? id;
-  String? kode;
-  String? nama;
-  String? image;
-  String? value;
-  dynamic maksimalPromo;
-  String? expired;
-  String? quota;
-  String? jenis;
-  String? jenisPengguna;
-  String? desc;
-  String? status;
-  String? createdAt;
-  String? createdBy;
-  String? modifiedAt;
-  String? modifiedBy;
-  String? isDeleted;
-  String? jenisPenggunaTxt;
-
   factory PromoModel.fromJson(Map<String, dynamic> json) => PromoModel(
         id: json["id"],
         kode: json["kode"],
         nama: json["nama"],
         image: json["image"],
-        value: json["value"],
-        maksimalPromo: json["maksimal_promo"],
+        value: double.parse(json["value"].toString()),
+        maksimalPromo: double.parse(json["maksimal_promo"].toString()),
         expired: json["expired"],
-        quota: json["quota"],
+        quota: int.parse(json["quota"]),
         jenis: json["jenis"],
         jenisPengguna: json["jenis_pengguna"],
         desc: json["desc"],

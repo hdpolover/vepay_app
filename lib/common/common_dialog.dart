@@ -114,7 +114,7 @@ class CommonDialog {
         return Align(
           alignment: Alignment.center,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.of(context).size.height * 0.45,
             padding: const EdgeInsets.all(20),
             margin: const EdgeInsets.only(top: 150, left: 32, right: 32),
             decoration: BoxDecoration(
@@ -295,8 +295,216 @@ class CommonDialog {
     );
   }
 
-  buildOkWaDialog(BuildContext context, bool status, String message,
+  buildOkWaJasaBayarDialog(BuildContext context, bool status, String message) {
+    showGeneralDialog(
+      barrierLabel: "Barrier",
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 100),
+      context: context,
+      pageBuilder: (_, __, ___) {
+        return Align(
+          alignment: Alignment.center,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.4,
+            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.only(top: 150, left: 32, right: 32),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: SizedBox.expand(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 10),
+                  status
+                      ? Container(
+                          decoration: BoxDecoration(
+                            color: ColorManager.primary,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
+                        ),
+                  const SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          ?.copyWith(fontWeight: FontWeight.normal),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Center(
+                    child: SizedBox(
+                      width: 213,
+                      height: 55,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                            backgroundColor: ColorManager.primary),
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.of(context, rootNavigator: true).pop();
+
+                          CommonMethods().launchWhatsAppUri(
+                              "Halo, Admin.\n\nSaya ingin melakukan jasa pembayaran. Mohon bantuannya. \n\nTerima kasih.");
+                        },
+                        child: const Text(
+                          'OK',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  buildOkWaWithdrawDialog(BuildContext context, bool status, String message,
       PayTransactionModel transactionModel) {
+    showGeneralDialog(
+      barrierLabel: "Barrier",
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 100),
+      context: context,
+      pageBuilder: (_, __, ___) {
+        return Align(
+          alignment: Alignment.center,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.4,
+            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.only(top: 150, left: 32, right: 32),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: SizedBox.expand(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 10),
+                  status
+                      ? Container(
+                          decoration: BoxDecoration(
+                            color: ColorManager.primary,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
+                        ),
+                  const SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          ?.copyWith(fontWeight: FontWeight.normal),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Center(
+                    child: SizedBox(
+                      width: 213,
+                      height: 55,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                            backgroundColor: ColorManager.primary),
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.of(context, rootNavigator: true).pop();
+
+                          String currency = '';
+                          String saldoYangDiterima = '';
+                          if (transactionModel.type!.toLowerCase() ==
+                              'withdraw') {
+                            currency = "\$";
+                            saldoYangDiterima =
+                                CommonMethods.formatCompleteCurrency(
+                                    double.parse(transactionModel.subTotal!));
+                          } else {
+                            currency = "Rp.";
+                            saldoYangDiterima =
+                                "\$${double.parse(transactionModel.total!).toStringAsFixed(2)}";
+                          }
+
+                          CommonMethods().launchWhatsAppUri(
+                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detaill sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima: $saldoYangDiterima \n\nTerima kasih.");
+                        },
+                        child: const Text(
+                          'OK',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  buildOkWaDialog(BuildContext context, bool status, String message,
+      PayTransactionModel transactionModel, dynamic jumlah) {
     showGeneralDialog(
       barrierLabel: "Barrier",
       barrierDismissible: false,
@@ -375,8 +583,21 @@ class CommonDialog {
                           Navigator.of(context, rootNavigator: true).pop();
                           Navigator.of(context, rootNavigator: true).pop();
 
+                          String currency = '';
+                          String saldoYangDiterima = '';
+                          if (transactionModel.type!.toLowerCase() ==
+                              'withdraw') {
+                            currency = "\$";
+                            saldoYangDiterima =
+                                CommonMethods.formatCompleteCurrency(
+                                    double.parse(transactionModel.subTotal!));
+                          } else {
+                            currency = "Rp.";
+                            saldoYangDiterima = "\$$jumlah";
+                          }
+
                           CommonMethods().launchWhatsAppUri(
-                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detaill sebagai berikut:\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: Rp.${transactionModel.total} \n\nTerima kasih.");
+                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detaill sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima: $saldoYangDiterima \n\nTerima kasih.");
                         },
                         child: const Text(
                           'OK',

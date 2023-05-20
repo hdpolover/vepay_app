@@ -156,7 +156,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     FbService.signOut(context);
 
                     CommonMethods()
-                        .saveUserLoginsDetails("", "", "", "", false);
+                        .saveUserLoginsDetails("", "", "", "", false, false);
 
                     Navigator.of(context, rootNavigator: true).pop();
 
@@ -167,7 +167,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     );
                   } else {
                     CommonMethods()
-                        .saveUserLoginsDetails("", "", "", "", false);
+                        .saveUserLoginsDetails("", "", "", "", false, false);
 
                     Navigator.of(context, rootNavigator: true).pop();
 
@@ -223,7 +223,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 const Text("Nama"),
                 const SizedBox(height: 5),
                 Text(
-                  currentMember!.name!,
+                  currentMember!.name ?? currentMember!.email!,
                   softWrap: true,
                   style: Theme.of(context).textTheme.bodyText1?.copyWith(
                         fontSize: 18,

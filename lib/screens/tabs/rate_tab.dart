@@ -7,6 +7,8 @@ import 'package:vepay_app/services/rate_service.dart';
 
 import '../../common/common_shimmer.dart';
 import '../../models/rate_model.dart';
+import '../../models/withdraw_model.dart';
+import '../../services/withdraw_service.dart';
 
 class RateTab extends StatefulWidget {
   RateTab({Key? key}) : super(key: key);
@@ -33,11 +35,29 @@ class _RateTabState extends State<RateTab> with AutomaticKeepAliveClientMixin {
 
       withdrawRates = await RateService().getRates("withdraw");
 
-      rates!.addAll(withdrawRates);
+      List<WithdrawModel> tempWithdraws =
+          await WithdrawService().getWithdraws();
+
+      List<RateModel> withdraws = [];
+
+      for (RateModel item1 in withdrawRates) {
+        for (WithdrawModel item2 in tempWithdraws) {
+          if (item2.withdraw!
+              .toLowerCase()
+              .contains(item1.name!.toLowerCase())) {
+            withdraws.add(item1);
+            break;
+          }
+        }
+      }
+
+      rates!.addAll(withdraws);
 
       rates!.removeWhere((item) => item.price! == "0");
 
       rates!.removeWhere((item) => item.categories!.toLowerCase() == "vcc");
+
+      rates!.removeWhere((item) => item.name!.toLowerCase().contains("jasa"));
 
       rates!.sort(((a, b) => a.name!.compareTo(b.name!)));
 

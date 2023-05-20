@@ -22,6 +22,22 @@
           }
         },
         {
+          "client_id": "721643785078-ffqp1l84vh5efplvg6hi9m7uv9gnp50i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.vepay.vepay",
+            "certificate_hash": "15a5cf17bd4d1f37dc3774814e0643087828e684"
+          }
+        },
+        {
+          "client_id": "721643785078-khetmfljgttgkhu30ojnrt7kmre7hrpk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.vepay.vepay",
+            "certificate_hash": "abaa693f21f60d3898f39b65ab53463edbae035a"
+          }
+        },
+        {
           "client_id": "721643785078-ua03fno7rh3iff81etgkktgsdnackos7.apps.googleusercontent.com",
           "client_type": 3
         }

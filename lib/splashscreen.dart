@@ -49,22 +49,36 @@ class _SplashScreenState extends State<SplashScreen> {
       var prefs = await SharedPreferences.getInstance();
 
       String? email = prefs.getString("email");
-      String? password = prefs.getString("password");
+      String? password = prefs.getString("password") ?? "";
+      bool? isGoogle = prefs.getBool("isGoogle") ?? false;
 
-      Map<String, dynamic> data = {
-        'email': email,
-        'password': password,
-      };
+      print(isGoogle);
+
+      Map<String, dynamic> data;
+
+      if (isGoogle) {
+        data = {
+          'is_google': isGoogle,
+          'email': email,
+        };
+      } else {
+        data = {
+          'is_google': isGoogle,
+          'email': email,
+          'password': password,
+        };
+      }
 
       try {
         MemberModel? res = await AuthService().login(data);
 
         CommonMethods().saveUserLoginsDetails(
           res.userId!,
-          res.name!,
+          res.name ?? res.email!,
           res.email!,
-          password!,
+          password,
           true,
+          isGoogle,
         );
 
         currentMemberGlobal.value = res;

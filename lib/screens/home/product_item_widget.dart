@@ -6,6 +6,8 @@ import 'package:vepay_app/screens/home/product_buy_detail.dart';
 import 'package:vepay_app/screens/home/product_detail.dart';
 import 'package:vepay_app/screens/tabs/more.dart';
 
+import '../../common/common_dialog.dart';
+
 class ProductItemWidget extends StatefulWidget {
   RateModel rateModel;
   ProductItemWidget({required this.rateModel, Key? key}) : super(key: key);
@@ -41,6 +43,9 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
             screen: More(),
             withNavBar: false,
           );
+        } else if (widget.rateModel.name!.toLowerCase() == "jasa bayar") {
+          CommonDialog().buildOkWaJasaBayarDialog(context, true,
+              "Buka WhatsApp sekarang untuk hubungi Admin mengenai jasa bayar.");
         } else {
           PersistentNavBarNavigator.pushNewScreen(
             context,

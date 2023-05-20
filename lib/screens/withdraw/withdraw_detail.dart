@@ -2,17 +2,28 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:vepay_app/common/common_widgets.dart';
+import 'package:vepay_app/models/blockchain_model.dart';
+import 'package:vepay_app/screens/withdraw/withdraw_pembayaran.dart';
 
 import '../../common/common_dialog.dart';
 import '../../common/common_method.dart';
 import '../../models/rate_model.dart';
+import '../../models/transaction_model.dart';
+import '../../models/withdraw_model.dart';
 import '../../resources/color_manager.dart';
-import '../home/product_payment_method.dart';
+import '../../services/transaction_service.dart';
 
 class WithdrawDetail extends StatefulWidget {
   RateModel rateModel;
+  WithdrawModel withdrawModel;
+  BlockchainModel? blockchainModel;
   Map<String, dynamic> data;
-  WithdrawDetail({required this.rateModel, required this.data, Key? key})
+  WithdrawDetail(
+      {required this.rateModel,
+      required this.withdrawModel,
+      this.blockchainModel,
+      required this.data,
+      Key? key})
       : super(key: key);
 
   @override
@@ -29,12 +40,43 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
 
   double? biayaTransaksi;
 
+  bool isLoading = false;
+
   @override
   void initState() {
+    double fee = 0;
+
+    print(widget.rateModel.fee!);
+
+    // if (widget.rateModel.categories!.toLowerCase() == "crypto") {
+    //   double tempFeeRp = double.parse(widget.blockchainModel!.fee!);
+
+    //   double rt = double.parse(widget.rateModel.price!);
+
+    //   fee = tempFeeRp / rt;
+    // } else {
+    if (double.parse(widget.rateModel.fee!) == 0) {
+      fee = 0;
+    } else {
+      double p = double.parse(widget.rateModel.price!);
+      double juml = double.parse(widget.data['jumlah']) * p;
+
+      double f = (juml * double.parse(widget.rateModel.fee!) / 100);
+
+      double tempFeeRp = f;
+
+      fee = tempFeeRp / p;
+    }
+    //}
+
+    biayaTransaksi = fee;
+
+    setState(() {});
+
     countAll(
       double.parse(widget.rateModel.price!),
       double.parse(widget.data['jumlah']),
-      double.parse(widget.rateModel.fee!),
+      fee,
       totalPromo!,
     );
 
@@ -164,7 +206,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
               const SizedBox(height: 10),
               buildTextItem(
                 "Biaya Transaksi",
-                "\$${widget.rateModel.fee}",
+                "\$${biayaTransaksi!.toStringAsFixed(2)}",
               ),
             ],
           ),
@@ -200,7 +242,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
               const SizedBox(height: 20),
               buildTextItem2(
                 "Subtotal Tagihan",
-                "\$${total!.toInt()}",
+                "\$${total!.toStringAsFixed(2)}",
               ),
               const SizedBox(height: 10),
               buildTextItem2(
@@ -243,7 +285,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
                 ),
               ),
               Text(
-                "\$${total!.toInt()}",
+                "\$${total!.toStringAsFixed(2)}",
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1
@@ -283,26 +325,29 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
                   ),
                   child: const Text('Bayar'),
                   onPressed: () async {
-                    // if (_formKey.currentState!.validate()) {
-                    //   Map<String, dynamic> data = {
-                    //     "email": emailController.text.trim(),
-                    //     "jumlah": totalController.text.trim(),
-                    //   };
-
+                    print(total);
                     widget.data['sub_total'] = subtotal!;
                     widget.data['total'] = total!;
-                    widget.data['fee'] = feeFinal;
+                    widget.data['fee'] = biayaTransaksi;
                     widget.data['total_promo'] = totalPromo;
 
-                    // PersistentNavBarNavigator.pushNewScreen(
-                    //   context,
-                    //   screen: ProductPaymentMethod(
-                    //     rateModel: widget.rateModel,
-                    //     data: widget.data,
-                    //   ),
-                    //   withNavBar: false,
-                    // );
-                    // }
+                    Map<String, dynamic> data = {
+                      'm_metode_id': null,
+                      'm_rate_id': widget.rateModel.id,
+                      'jumlah': widget.data['jumlah'],
+                      'sub_total': subtotal,
+                      'total_bayar': total,
+                      'akun_tujuan': widget.data['akun_tujuan'],
+                      'no_rek': widget.data['no_rek'],
+                      'blockchain': widget.data['blockchain_id'],
+                      'promo_id': widget.data['promo_id'],
+                    };
+
+                    setState(() {
+                      isLoading = true;
+                    });
+
+                    doTransaction(data);
                   },
                 ),
               ),
@@ -311,5 +356,30 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
         ],
       ),
     );
+  }
+
+  doTransaction(Map<String, dynamic> data) async {
+    try {
+      TransactionModel t = await TransactionService().createTransaction(data);
+
+      setState(() {
+        isLoading = false;
+      });
+
+      PersistentNavBarNavigator.pushNewScreen(
+        context,
+        screen: WithdrawPayment(
+          trData: widget.data,
+          transactionModel: t,
+          withdrawModel: widget.withdrawModel,
+        ),
+        withNavBar: false,
+      );
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      CommonDialog.buildOkDialog(context, false, e.toString());
+    }
   }
 }

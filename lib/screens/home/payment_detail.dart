@@ -6,16 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/models/pay_transaction_model.dart';
-import 'package:vepay_app/models/payment_method_model.dart';
 import 'package:vepay_app/models/transaction_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/services/transaction_service.dart';
-import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 import '../../common/common_method.dart';
 
@@ -272,10 +268,10 @@ class _PaymentDetailState extends State<PaymentDetail> {
                   borderRadius: const BorderRadius.all(Radius.circular(15)),
                   color: ColorManager.primary.withOpacity(0.2),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(13),
+                child: Padding(
+                  padding: const EdgeInsets.all(13),
                   child: Text(
-                      "Transfer total pembayaran sesuai dengan rincian diatas ke nomor rekening atas nama VEPAY TEKNOLOGI INDONESIA. Biaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur dibawah ini."),
+                      "Transfer total pembayaran sesuai dengan rincian diatas ke nomor rekening atas nama ${widget.transactionModel.atasNama}. Biaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur dibawah ini."),
                 ),
               )
             ],
@@ -453,11 +449,14 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                 });
 
                                 CommonDialog().buildOkWaDialog(
-                                    context,
-                                    true,
-                                    "Pembuatan Pesanan berhasil. Buka WhatsApp sekarang untuk hubungi Admin.",
-                                    p);
+                                  context,
+                                  true,
+                                  "Pembuatan Pesanan berhasil. Buka WhatsApp sekarang untuk hubungi Admin.",
+                                  p,
+                                  widget.trData['jumlah'],
+                                );
                               } catch (e) {
+                                print(e);
                                 setState(() {
                                   isLoading = false;
                                 });

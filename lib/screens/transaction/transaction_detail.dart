@@ -132,9 +132,11 @@ class _TransactionDetailState extends State<TransactionDetail> {
               CommonWidgets().buildTextItem(
                 context,
                 "Total",
-                CommonMethods.formatCompleteCurrency(
-                  double.parse(widget.transaction.total!),
-                ),
+                widget.transaction.type!.toLowerCase() == "withdraw"
+                    ? "\$${widget.transaction.total}"
+                    : CommonMethods.formatCompleteCurrency(
+                        double.parse(widget.transaction.total!),
+                      ),
               ),
               const SizedBox(height: 10),
             ],
@@ -164,9 +166,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     ),
               ),
               const SizedBox(height: 20),
-              CommonWidgets().buildTextItem(
-                  context, "Metode Pembayaran", widget.transaction.metode!),
-              const SizedBox(height: 10),
+              widget.transaction.type!.toLowerCase() == "withdraw"
+                  ? Container()
+                  : CommonWidgets().buildTextItem(
+                      context, "Metode Pembayaran", widget.transaction.metode!),
+              widget.transaction.type!.toLowerCase() == "withdraw"
+                  ? Container()
+                  : const SizedBox(height: 10),
               CommonWidgets().buildTextItem(
                   context,
                   "Status Pembayaran",
@@ -188,9 +194,11 @@ class _TransactionDetailState extends State<TransactionDetail> {
               CommonWidgets().buildTextItem(
                   context,
                   "Total Bayar",
-                  CommonMethods.formatCompleteCurrency(
-                    double.parse(widget.transaction.total!),
-                  )),
+                  widget.transaction.type!.toLowerCase() == "withdraw"
+                      ? "\$${widget.transaction.total}"
+                      : CommonMethods.formatCompleteCurrency(
+                          double.parse(widget.transaction.total!),
+                        )),
               // const SizedBox(height: 10),
               // CommonWidgets().buildTextItem(
               //     context,
@@ -214,9 +222,11 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         ),
                   ),
                   Text(
-                    CommonMethods.formatCompleteCurrency(
-                      double.parse(widget.transaction.total!),
-                    ),
+                    widget.transaction.type!.toLowerCase() == "withdraw"
+                        ? "\$${widget.transaction.total}"
+                        : CommonMethods.formatCompleteCurrency(
+                            double.parse(widget.transaction.total!),
+                          ),
                     style: Theme.of(context).textTheme.bodyText1?.copyWith(
                           fontSize: 18,
                         ),
@@ -241,6 +251,30 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 ),
               ),
               const SizedBox(height: 10),
+              widget.transaction.buktiVerif == ""
+                  ? Container()
+                  : SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green, // background
+                          foregroundColor: Colors.white, // foreground
+                        ),
+                        child: const Text('Lihat Bukti Proses Admin'),
+                        onPressed: () async {
+                          showImageViewer(
+                              context,
+                              Image.network(widget.transaction.buktiVerif!)
+                                  .image,
+                              swipeDismissible: true,
+                              doubleTapZoomable: true);
+                        },
+                      ),
+                    ),
+              widget.transaction.buktiVerif == ""
+                  ? Container()
+                  : const SizedBox(height: 10),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.06,
                 width: double.infinity,

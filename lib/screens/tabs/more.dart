@@ -29,7 +29,6 @@ class _MoreState extends State<More> {
       rates = await RateService().getRates("top_up");
 
       rates!.removeWhere((item) => item.name!.toLowerCase() == 'more');
-      rates!.removeWhere((item) => item.name!.toLowerCase() == 'jasa bayar');
 
       setState(() {});
     } catch (e) {

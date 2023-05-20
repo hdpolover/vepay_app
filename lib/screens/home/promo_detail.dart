@@ -66,7 +66,7 @@ class _PromoDetailState extends State<PromoDetail> {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  widget.promo.quota!,
+                  widget.promo.quota!.toString(),
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 const SizedBox(height: 20),

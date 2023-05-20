@@ -10,9 +10,12 @@ import 'package:vepay_app/services/payment_method_service.dart';
 
 import '../../common/common_dialog.dart';
 import '../../common/common_method.dart';
+import '../../models/withdraw_model.dart';
 import '../../resources/color_manager.dart';
 import '../../services/rate_service.dart';
+import '../../services/withdraw_service.dart';
 import '../home/product_buy_detail.dart';
+import '../withdraw/withdraw_detail.dart';
 
 class WithdrawAlt extends StatefulWidget {
   RateModel rateModel;
@@ -25,14 +28,17 @@ class WithdrawAlt extends StatefulWidget {
 
 class _WithdrawAltState extends State<WithdrawAlt> {
   List<RateModel> rates = [];
-  List<PaymentMethodModel> methods = [];
+  List<WithdrawModel> withdraws = [];
+  List<PaymentMethodModel>? methods;
   RateModel? selectedRate;
+  WithdrawModel? selectedWithdraw;
   PaymentMethodModel? selectedMethod;
 
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController fieldController = TextEditingController();
   TextEditingController totalController = TextEditingController();
+  TextEditingController norekController = TextEditingController();
 
   final _totalValidator = MultiValidator([
     RequiredValidator(errorText: 'Harap masukan jumlah'),
@@ -42,16 +48,35 @@ class _WithdrawAltState extends State<WithdrawAlt> {
     RequiredValidator(errorText: 'Harap masukan akun yang sesuai'),
   ]);
 
+  BlockchainModel? selectedChain;
+  List<BlockchainModel>? blockchains;
+
   @override
   void initState() {
+    setState(() {
+      selectedRate = widget.rateModel;
+    });
+
     getRates();
     super.initState();
   }
 
   getRates() async {
     try {
-      //rates = await RateService().getRates("withdraw");
+      blockchains = await BlockchainService().getChains();
       methods = await PaymentMethodService().getMethods();
+      withdraws = await WithdrawService().getWithdraws();
+
+      for (WithdrawModel item2 in withdraws) {
+        if (selectedRate!.name!.toLowerCase() ==
+            item2.withdraw!.toLowerCase()) {
+          setState(() {
+            selectedWithdraw = item2;
+          });
+
+          break;
+        }
+      }
 
       setState(() {});
     } catch (e) {
@@ -68,7 +93,7 @@ class _WithdrawAltState extends State<WithdrawAlt> {
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            hintText: CommonMethods().getFieldName(widget.rateModel.name!),
+            hintText: CommonMethods().getFieldName(selectedRate!.name!),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorManager.primary,
@@ -76,6 +101,72 @@ class _WithdrawAltState extends State<WithdrawAlt> {
             ),
           ),
         ),
+        selectedRate!.categories!.toLowerCase() != "crypto"
+            ? Container()
+            : const SizedBox(height: 10),
+        blockchains == null || selectedRate == null
+            ? Container()
+            : selectedRate!.categories!.toLowerCase() == "crypto"
+                ? Container(
+                    height: 55,
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: DropdownButton<BlockchainModel>(
+                              iconSize: 0.0,
+                              underline: const SizedBox(),
+                              value: selectedChain,
+                              hint: const Text("Blockchain"),
+                              items: blockchains!
+                                  .map<DropdownMenuItem<BlockchainModel>>(
+                                      (value) {
+                                return DropdownMenuItem<BlockchainModel>(
+                                  value: value,
+                                  child: Text(value.blockchain!),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    selectedChain = value;
+                                  },
+                                );
+
+                                for (WithdrawModel item2 in withdraws) {
+                                  if (item2.withdraw!.toLowerCase().contains(
+                                          selectedChain!.blockchain!
+                                              .toLowerCase()) &&
+                                      item2.withdraw!.toLowerCase().contains(
+                                          selectedRate!.name!.toLowerCase())) {
+                                    setState(() {
+                                      selectedWithdraw = item2;
+                                    });
+
+                                    break;
+                                  }
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        Container(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: const Icon(Icons.arrow_drop_down)),
+                      ],
+                    ),
+                  )
+                : Container(),
         Container(
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: TextFormField(
@@ -160,52 +251,69 @@ class _WithdrawAltState extends State<WithdrawAlt> {
             ),
           ),
         ),
-        Container(
-          height: 55,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey,
-            ),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DropdownButton<PaymentMethodModel>(
-                    iconSize: 0.0,
-                    underline: const SizedBox(),
-                    value: selectedMethod,
-                    hint: const Text("Metode Pencairan"),
-                    items: methods
-                        .map<DropdownMenuItem<PaymentMethodModel>>((value) {
-                      return DropdownMenuItem<PaymentMethodModel>(
-                        value: value,
-                        child: Text(value.metode!),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(
-                        () {
-                          selectedMethod = value;
-                        },
-                      );
-
-                      //showFields();
-                    },
+        methods == null
+            ? Container()
+            : Container(
+                height: 55,
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                  ),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: DropdownButton<PaymentMethodModel>(
+                          iconSize: 0.0,
+                          underline: const SizedBox(),
+                          value: selectedMethod,
+                          hint: const Text("Metode Pencairan"),
+                          items: methods!
+                              .map<DropdownMenuItem<PaymentMethodModel>>(
+                                  (value) {
+                            return DropdownMenuItem<PaymentMethodModel>(
+                              value: value,
+                              child: Text(value.metode!),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(
+                              () {
+                                selectedMethod = value;
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    Container(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: const Icon(Icons.arrow_drop_down)),
+                  ],
+                ),
+              ),
+        selectedMethod == null ? Container() : const SizedBox(height: 10),
+        selectedMethod == null
+            ? Container()
+            : TextFormField(
+                controller: norekController,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: "Nomor rekening/E-Wallet",
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: ColorManager.primary,
+                    ),
                   ),
                 ),
               ),
-              Container(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: const Icon(Icons.arrow_drop_down)),
-            ],
-          ),
-        ),
       ],
     );
   }
@@ -224,60 +332,12 @@ class _WithdrawAltState extends State<WithdrawAlt> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Form(
           key: _formKey,
-          child: Column(
-            children: [
-              // Container(
-              //   height: 55,
-              //   width: MediaQuery.of(context).size.width,
-              //   padding: const EdgeInsets.all(8.0),
-              //   decoration: BoxDecoration(
-              //     border: Border.all(
-              //       color: Colors.grey,
-              //     ),
-              //     borderRadius: BorderRadius.circular(5),
-              //   ),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.start,
-              //     children: [
-              //       Expanded(
-              //         child: Padding(
-              //           padding: const EdgeInsets.all(8.0),
-              //           child: DropdownButton<RateModel>(
-              //             iconSize: 0.0,
-              //             underline: const SizedBox(),
-              //             value: selectedRate,
-              //             hint: const Text("Pilih Jenis Produk"),
-              //             items:
-              //                 rates.map<DropdownMenuItem<RateModel>>((value) {
-              //               return DropdownMenuItem<RateModel>(
-              //                 value: value,
-              //                 child: Text(value.name!),
-              //               );
-              //             }).toList(),
-              //             onChanged: (value) {
-              //               setState(
-              //                 () {
-              //                   selectedRate = value;
-              //                 },
-              //               );
-
-              //               //showFields();
-              //             },
-              //           ),
-              //         ),
-              //       ),
-              //       Container(
-              //           padding: const EdgeInsets.only(right: 20),
-              //           child: const Icon(Icons.arrow_drop_down)),
-              //     ],
-              //   ),
-              // ),
-
-              const SizedBox(height: 10),
-              buildBottom(),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Align(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                buildBottom(),
+                const SizedBox(height: 10),
+                Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -293,27 +353,73 @@ class _WithdrawAltState extends State<WithdrawAlt> {
                         child: const Text('Selanjutnya'),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            Map<String, dynamic> data = {
-                              "account": fieldController.text.trim(),
-                              "jumlah": totalController.text.trim(),
-                            };
+                            if ((selectedRate!.name!.toLowerCase() ==
+                                        "paypal" ||
+                                    selectedRate!.name!.toLowerCase() ==
+                                        "skrill" ||
+                                    selectedRate!.name!.toLowerCase() ==
+                                        "neteller") &&
+                                !CommonMethods()
+                                    .isEmail(fieldController.text)) {
+                              CommonDialog.buildOkDialog(
+                                  context, false, "Harap isi email yang valid");
+                            } else {
+                              if (selectedRate!.categories!.toLowerCase() ==
+                                      "crypto" &&
+                                  selectedChain == null) {
+                                CommonDialog.buildOkDialog(context, false,
+                                    "Harap pilih blockchain terlebih dahulu");
+                              } else {
+                                if (int.parse(totalController.text.trim()) ==
+                                    0) {
+                                  CommonDialog.buildOkDialog(context, false,
+                                      "Jumlah harus lebih dari 0");
+                                } else {
+                                  if (selectedMethod == null) {
+                                    CommonDialog.buildOkDialog(context, false,
+                                        "Harap pilih metode pencairan terlebih dahulu");
+                                  } else {
+                                    if (norekController.text.trim().isEmpty) {
+                                      CommonDialog.buildOkDialog(context, false,
+                                          "Harap isi nomor rekening atau e-wallet tujuan.");
+                                    } else {
+                                      Map<String, dynamic> data = {
+                                        "akun_tujuan":
+                                            fieldController.text.trim(),
+                                        'no_rek': norekController.text.trim(),
+                                        "jumlah": totalController.text.trim(),
+                                        "blockchain_id": selectedChain == null
+                                            ? null
+                                            : selectedChain!.id,
+                                        "blockchain_name": selectedChain == null
+                                            ? null
+                                            : selectedChain!.blockchain,
+                                      };
 
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: ProductBuyDetail(
-                                rateModel: selectedRate!,
-                                data: data,
-                              ),
-                              withNavBar: false,
-                            );
+                                      PersistentNavBarNavigator.pushNewScreen(
+                                        context,
+                                        screen: WithdrawDetail(
+                                          rateModel: selectedRate!,
+                                          withdrawModel: selectedWithdraw!,
+                                          blockchainModel:
+                                              selectedChain ?? null,
+                                          data: data,
+                                        ),
+                                        withNavBar: false,
+                                      );
+                                    }
+                                  }
+                                }
+                              }
+                            }
                           }
                         },
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

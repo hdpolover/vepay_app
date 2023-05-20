@@ -66,14 +66,14 @@ class _RegisterState extends State<Register> {
       data = {
         'is_google': true,
         "email": e,
-        "nama": n,
+        'mama': n,
       };
     } else {
       data = {
         'is_google': false,
         "email": e,
         "nama": n,
-        //"phone": phoneController.text.trim(),
+        "phone": "08",
         "password": p,
       };
     }
@@ -95,32 +95,23 @@ class _RegisterState extends State<Register> {
           try {
             MemberModel m = await AuthService().login(data);
 
-            if (m.status == "1") {
-              CommonMethods().saveUserLoginsDetails(
-                  m.userId!, m.name!, m.email!, "", true);
+            CommonMethods().saveUserLoginsDetails(
+                m.userId!, m.name!, m.email!, "", true, true);
 
-              setState(() {
-                isLoading = false;
-              });
+            setState(() {
+              isLoading = false;
+            });
 
-              currentMemberGlobal.value = m;
+            currentMemberGlobal.value = m;
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Dashboard(
-                    member: currentMemberGlobal.value,
-                  ),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Dashboard(
+                  member: currentMemberGlobal.value,
                 ),
-              );
-            } else {
-              setState(() {
-                isLoading = false;
-              });
-
-              CommonDialog.buildOkDialog(context, false,
-                  "Akun Anda belum diverifikasi. Silakan cek email.");
-            }
+              ),
+            );
           } catch (e) {
             setState(() {
               isLoading = false;
@@ -457,6 +448,8 @@ class _RegisterState extends State<Register> {
                             UserCredential? result =
                                 await FbService.signInWithGoogle();
 
+                            print(result.additionalUserInfo!.isNewUser);
+
                             if (result.additionalUserInfo!.isNewUser) {
                               // Close the dialog programmatically
                               Navigator.of(context).pop();
@@ -479,7 +472,12 @@ class _RegisterState extends State<Register> {
                                       await AuthService().login(data);
 
                                   CommonMethods().saveUserLoginsDetails(
-                                      m.userId!, m.name!, m.email!, "", true);
+                                      m.userId!,
+                                      m.email!,
+                                      m.email!,
+                                      "",
+                                      true,
+                                      true);
 
                                   setState(() {
                                     isLoading = false;
@@ -523,15 +521,8 @@ class _RegisterState extends State<Register> {
                               isLoading = false;
                             });
 
-                            if (e is FirebaseAuthException) {
-                              SnackBar snackBar = SnackBar(
-                                content: Text(e.message!),
-                                duration: const Duration(seconds: 2),
-                              );
-
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            }
+                            CommonDialog.buildOkDialog(
+                                context, false, e.toString());
                           }
                         },
                       ),

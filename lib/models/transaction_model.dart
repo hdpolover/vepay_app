@@ -20,6 +20,7 @@ class TransactionModel {
     this.subTotal,
     this.status,
     this.bukti,
+    this.buktiVerif,
     this.name,
     this.phone,
     this.email,
@@ -45,6 +46,7 @@ class TransactionModel {
   String? subTotal;
   String? status;
   String? bukti;
+  String? buktiVerif;
   String? name;
   String? phone;
   String? email;
@@ -71,6 +73,7 @@ class TransactionModel {
         subTotal: json["sub_total"],
         status: json["status"],
         bukti: json["bukti"],
+        buktiVerif: json["bukti_verif"] == null ? "" : json["bukti_verif"],
         name: json["name"],
         phone: json["phone"],
         email: json["email"],
