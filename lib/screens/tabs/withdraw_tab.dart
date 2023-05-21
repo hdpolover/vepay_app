@@ -47,6 +47,7 @@ class _WithdrawTabState extends State<WithdrawTab> {
 
   BlockchainModel? selectedChain;
   List<BlockchainModel>? blockchains;
+  List<BlockchainModel> newBlockchains = [];
 
   @override
   void initState() {
@@ -82,6 +83,27 @@ class _WithdrawTabState extends State<WithdrawTab> {
     }
   }
 
+  adjustBlockchains(RateModel rate) {
+    setState(() {
+      newBlockchains.clear();
+    });
+
+    for (WithdrawModel item1 in withdraws) {
+      if (item1.withdraw!.toLowerCase().contains(rate.name!.toLowerCase())) {
+        print(item1.withdraw!.toLowerCase() + "#1");
+        for (BlockchainModel item2 in blockchains!) {
+          if (item1.withdraw!
+              .toLowerCase()
+              .contains(item2.blockchain!.toLowerCase())) {
+            print(item2.blockchain!.toLowerCase() + "#2");
+            newBlockchains.add(item2);
+            break;
+          }
+        }
+      }
+    }
+  }
+
   buildBottom() {
     return Column(
       children: [
@@ -105,65 +127,53 @@ class _WithdrawTabState extends State<WithdrawTab> {
         blockchains == null || selectedRate == null
             ? Container()
             : selectedRate!.categories!.toLowerCase() == "crypto"
-                ? Container(
-                    height: 55,
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: DropdownButton<BlockchainModel>(
-                              iconSize: 0.0,
-                              underline: const SizedBox(),
-                              value: selectedChain,
-                              hint: const Text("Blockchain"),
-                              items: blockchains!
-                                  .map<DropdownMenuItem<BlockchainModel>>(
-                                      (value) {
-                                return DropdownMenuItem<BlockchainModel>(
-                                  value: value,
-                                  child: Text(value.blockchain!),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(
-                                  () {
-                                    selectedChain = value;
-                                  },
-                                );
-
-                                for (WithdrawModel item2 in withdraws) {
-                                  if (item2.withdraw!.toLowerCase().contains(
-                                          selectedChain!.blockchain!
-                                              .toLowerCase()) &&
-                                      item2.withdraw!.toLowerCase().contains(
-                                          selectedRate!.name!.toLowerCase())) {
-                                    setState(() {
-                                      selectedWithdraw = item2;
-                                    });
-
-                                    break;
-                                  }
-                                }
-                              },
-                            ),
+                ? newBlockchains.isEmpty
+                    ? Container()
+                    : Container(
+                        height: 55,
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
                           ),
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                        Container(
-                            padding: const EdgeInsets.only(right: 20),
-                            child: const Icon(Icons.arrow_drop_down)),
-                      ],
-                    ),
-                  )
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: DropdownButton<BlockchainModel>(
+                                  iconSize: 0.0,
+                                  underline: const SizedBox(),
+                                  value: selectedChain,
+                                  hint: const Text("Blockchain"),
+                                  items: newBlockchains
+                                      .map<DropdownMenuItem<BlockchainModel>>(
+                                          (value) {
+                                    return DropdownMenuItem<BlockchainModel>(
+                                      value: value,
+                                      child: Text(value.blockchain!),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(
+                                      () {
+                                        selectedChain = value;
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                            Container(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: const Icon(Icons.arrow_drop_down)),
+                          ],
+                        ),
+                      )
                 : Container(),
         Container(
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -365,6 +375,12 @@ class _WithdrawTabState extends State<WithdrawTab> {
                                 },
                               );
 
+                              selectedChain = null;
+
+                              adjustBlockchains(selectedRate!);
+
+                              setState(() {});
+
                               //showFields();
                             },
                           ),
@@ -431,6 +447,42 @@ class _WithdrawTabState extends State<WithdrawTab> {
                                             false,
                                             "Harap isi nomor rekening atau e-wallet tujuan.");
                                       } else {
+                                        if (selectedChain != null) {
+                                          for (WithdrawModel item2
+                                              in withdraws) {
+                                            if (item2.withdraw!
+                                                    .toLowerCase()
+                                                    .contains(selectedChain!
+                                                        .blockchain!
+                                                        .toLowerCase()) &&
+                                                item2.withdraw!
+                                                    .toLowerCase()
+                                                    .contains(selectedRate!
+                                                        .name!
+                                                        .toLowerCase())) {
+                                              setState(() {
+                                                selectedWithdraw = item2;
+                                              });
+
+                                              break;
+                                            }
+                                          }
+                                        } else {
+                                          for (WithdrawModel item2
+                                              in withdraws) {
+                                            if (item2.withdraw!
+                                                .toLowerCase()
+                                                .contains(selectedRate!.name!
+                                                    .toLowerCase())) {
+                                              setState(() {
+                                                selectedWithdraw = item2;
+                                              });
+
+                                              break;
+                                            }
+                                          }
+                                        }
+
                                         Map<String, dynamic> data = {
                                           "akun_tujuan":
                                               fieldController.text.trim(),
@@ -445,13 +497,24 @@ class _WithdrawTabState extends State<WithdrawTab> {
                                                   : selectedChain!.blockchain,
                                         };
 
+                                        RateModel chosenRate = selectedRate!;
+                                        WithdrawModel chosenWd =
+                                            selectedWithdraw!;
+                                        BlockchainModel? chosenbc =
+                                            selectedChain ?? null;
+
+                                        setState(() {
+                                          selectedRate == null;
+                                          selectedWithdraw = null;
+                                          selectedChain = null;
+                                        });
+
                                         PersistentNavBarNavigator.pushNewScreen(
                                           context,
                                           screen: WithdrawDetail(
-                                            rateModel: selectedRate!,
-                                            withdrawModel: selectedWithdraw!,
-                                            blockchainModel:
-                                                selectedChain ?? null,
+                                            rateModel: chosenRate,
+                                            withdrawModel: chosenWd,
+                                            blockchainModel: chosenbc,
                                             data: data,
                                           ),
                                           withNavBar: false,
