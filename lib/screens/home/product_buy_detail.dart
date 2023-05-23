@@ -9,12 +9,18 @@ import 'package:vepay_app/screens/home/product_payment_method.dart';
 import 'package:vepay_app/services/promo_service.dart';
 
 import '../../common/common_widgets.dart';
+import '../../models/blockchain_model.dart';
 import '../../resources/color_manager.dart';
 
 class ProductBuyDetail extends StatefulWidget {
   RateModel rateModel;
+  BlockchainModel? blockchainModel;
   Map<String, dynamic> data;
-  ProductBuyDetail({required this.rateModel, required this.data, Key? key})
+  ProductBuyDetail(
+      {required this.rateModel,
+      this.blockchainModel,
+      required this.data,
+      Key? key})
       : super(key: key);
 
   @override
@@ -120,7 +126,12 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
   countAll(double price, double amount, double fee, double promo) {
     subtotal = price * amount;
 
-    feeFinal = (fee * subtotal!) / 100;
+    if (widget.blockchainModel == null) {
+      feeFinal = (fee * subtotal!) / 100;
+    } else {
+      feeFinal = double.parse(widget.blockchainModel!.fee!);
+    }
+
     double tempTotal = (subtotal! + feeFinal!);
 
     total = tempTotal - promo;

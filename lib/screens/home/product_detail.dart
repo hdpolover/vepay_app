@@ -275,14 +275,27 @@ class _ProductDetailState extends State<ProductDetail> {
                                         : selectedChain!.blockchain,
                                   };
 
-                                  PersistentNavBarNavigator.pushNewScreen(
-                                    context,
-                                    screen: ProductBuyDetail(
-                                      rateModel: widget.rateModel,
-                                      data: data,
-                                    ),
-                                    withNavBar: false,
-                                  );
+                                  if (selectedChain == null) {
+                                    PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen: ProductBuyDetail(
+                                        rateModel: widget.rateModel,
+                                        blockchainModel: null,
+                                        data: data,
+                                      ),
+                                      withNavBar: false,
+                                    );
+                                  } else {
+                                    PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen: ProductBuyDetail(
+                                        rateModel: widget.rateModel,
+                                        blockchainModel: selectedChain,
+                                        data: data,
+                                      ),
+                                      withNavBar: false,
+                                    );
+                                  }
                                 }
                               }
                             }
