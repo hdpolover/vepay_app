@@ -110,6 +110,7 @@ class _PromoDetailState extends State<PromoDetail> {
                 const SizedBox(height: 5),
                 Text(
                   widget.promo.desc!,
+                  textAlign: TextAlign.justify,
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 const SizedBox(height: 20),

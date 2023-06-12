@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/models/pay_transaction_model.dart';
@@ -28,6 +29,8 @@ class PaymentDetail extends StatefulWidget {
 
 class _PaymentDetailState extends State<PaymentDetail> {
   bool isLoading = false;
+
+  TextEditingController fieldController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
   dynamic _pickImageError;
@@ -210,7 +213,9 @@ class _PaymentDetailState extends State<PaymentDetail> {
       //   ),
       // ),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.39,
+        height: widget.transactionModel.type!.toLowerCase() == "withdraw"
+            ? MediaQuery.of(context).size.height * 0.5
+            : MediaQuery.of(context).size.height * 0.38,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -273,7 +278,37 @@ class _PaymentDetailState extends State<PaymentDetail> {
                   child: Text(
                       "Transfer total pembayaran sesuai dengan rincian diatas ke nomor rekening atas nama ${widget.transactionModel.atasNama}. Biaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur dibawah ini."),
                 ),
-              )
+              ),
+              widget.transactionModel.type!.toLowerCase() == "withdraw"
+                  ? Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Text(
+                          "${CommonMethods().getWithdrawFieldName(widget.transactionModel.product!.toLowerCase())} ${widget.transactionModel.product!}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: fieldController,
+                          // validator: _akunValidator,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            hintText: CommonMethods().getWithdrawFieldName(
+                                widget.transactionModel.product!.toLowerCase()),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: ColorManager.primary,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
             ],
           ),
         ),
@@ -424,44 +459,111 @@ class _PaymentDetailState extends State<PaymentDetail> {
                               CommonDialog.buildOkDialog(context, false,
                                   "Harap pilih bukti pembayaran Anda");
                             } else {
-                              setState(() {
-                                isLoading = true;
-                              });
+                              if (widget.transactionModel.type!.toLowerCase() ==
+                                  "withdraw") {
+                                if (fieldController.text.trim().isEmpty) {
+                                  CommonDialog.buildOkDialog(
+                                      context, false, "Harap isi field ini");
+                                } else {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
 
-                              final bytes =
-                                  File(_imageFile!.path).readAsBytesSync();
+                                  final bytes =
+                                      File(_imageFile!.path).readAsBytesSync();
 
-                              String img64 = base64Encode(bytes);
+                                  String img64 = base64Encode(bytes);
 
-                              print(img64);
+                                  print(img64);
 
-                              Map<String, dynamic> data = {
-                                'id': widget.transactionModel.id,
-                                'bukti': "data:image/jpeg;base64,$img64",
-                              };
+                                  Map<String, dynamic> data = {
+                                    'id': widget.transactionModel.id,
+                                    'bukti': "data:image/jpeg;base64,$img64",
+                                  };
 
-                              try {
-                                PayTransactionModel p =
-                                    await TransactionService().pay(data);
+                                  try {
+                                    PayTransactionModel p =
+                                        await TransactionService().pay(data);
 
+                                    try {
+                                      widget.trData['akun_tujuan'] =
+                                          fieldController.text.trim();
+
+                                      await TransactionService()
+                                          .updateTransaction(widget.trData);
+
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+
+                                      sendEmail(p, widget.trData['jumlah']);
+
+                                      CommonDialog().buildOkWaDialog(
+                                        context,
+                                        true,
+                                        "Pembuatan Pesanan berhasil. Buka WhatsApp sekarang untuk hubungi Admin.",
+                                        p,
+                                        widget.trData['jumlah'],
+                                      );
+                                    } catch (e) {
+                                      print(e);
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      CommonDialog.buildOkDialog(context, false,
+                                          "Terjadi kesalahan saat upload bukti. Coba lagi.");
+                                    }
+                                  } catch (e) {
+                                    print(e);
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    CommonDialog.buildOkDialog(context, false,
+                                        "Terjadi kesalahan saat upload bukti. Coba lagi.");
+                                  }
+                                }
+                              } else {
                                 setState(() {
-                                  isLoading = false;
+                                  isLoading = true;
                                 });
 
-                                CommonDialog().buildOkWaDialog(
-                                  context,
-                                  true,
-                                  "Pembuatan Pesanan berhasil. Buka WhatsApp sekarang untuk hubungi Admin.",
-                                  p,
-                                  widget.trData['jumlah'],
-                                );
-                              } catch (e) {
-                                print(e);
-                                setState(() {
-                                  isLoading = false;
-                                });
-                                CommonDialog.buildOkDialog(context, false,
-                                    "Terjadi kesalahan saat upload bukti. Coba lagi.");
+                                final bytes =
+                                    File(_imageFile!.path).readAsBytesSync();
+
+                                String img64 = base64Encode(bytes);
+
+                                print(img64);
+
+                                Map<String, dynamic> data = {
+                                  'id': widget.transactionModel.id,
+                                  'bukti': "data:image/jpeg;base64,$img64",
+                                };
+
+                                try {
+                                  PayTransactionModel p =
+                                      await TransactionService().pay(data);
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+
+                                  sendEmail(p, widget.trData['jumlah']);
+
+                                  CommonDialog().buildOkWaDialog(
+                                    context,
+                                    true,
+                                    "Pembuatan Pesanan berhasil. Buka WhatsApp sekarang untuk hubungi Admin.",
+                                    p,
+                                    widget.trData['jumlah'],
+                                  );
+                                } catch (e) {
+                                  print(e);
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  CommonDialog.buildOkDialog(context, false,
+                                      "Terjadi kesalahan saat upload bukti. Coba lagi.");
+                                }
                               }
                             }
                           },
@@ -473,6 +575,37 @@ class _PaymentDetailState extends State<PaymentDetail> {
         )),
       ),
     );
+  }
+
+  void sendEmail(PayTransactionModel transactionModel, dynamic jumlah) async {
+    String currency = '';
+    String saldoYangDiterima = '';
+    if (transactionModel.type!.toLowerCase() == 'withdraw') {
+      currency = "\$";
+      saldoYangDiterima = CommonMethods.formatCompleteCurrency(
+          double.parse(transactionModel.subTotal!));
+    } else {
+      currency = "Rp.";
+      saldoYangDiterima = "\$$jumlah";
+    }
+
+    String body =
+        "Transaksi Baru #${transactionModel.kodeTransaksi}\n\nSilakan proses pesanan dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima: $saldoYangDiterima \n\nPastikan untuk membuka website admin untuk melihat detail transaksi.";
+
+    final Uri params = Uri(
+      scheme: 'mailto',
+      path: 'order@vepay.id',
+      query:
+          'subject=Transaksi Baru #${transactionModel.kodeTransaksi}&body=$body',
+    );
+
+    final String url = params.toString();
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   Future<void> _onImageButtonPressed(ImageSource source,

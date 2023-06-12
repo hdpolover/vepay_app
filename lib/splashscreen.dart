@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
-import 'package:vepay_app/common/global_member.dart';
+import 'package:vepay_app/common/global_values.dart';
+import 'package:vepay_app/models/app_info_model.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/intro.dart';
-import 'package:vepay_app/screens/auth/login.dart';
 import 'package:vepay_app/screens/dashboard.dart';
+import 'package:vepay_app/services/app_info_service.dart';
 import 'package:vepay_app/services/auth_service.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -45,55 +46,63 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _goNext() async {
-    if (await _checkUserLoginStatus()) {
-      var prefs = await SharedPreferences.getInstance();
+    try {
+      List<AppInfoModel> temp = await AppInfoService().getAppInfo();
 
-      String? email = prefs.getString("email");
-      String? password = prefs.getString("password") ?? "";
-      bool? isGoogle = prefs.getBool("isGoogle") ?? false;
+      setState(() {
+        appInfoGlobal.value = temp;
+      });
 
-      print(isGoogle);
+      if (await _checkUserLoginStatus()) {
+        var prefs = await SharedPreferences.getInstance();
 
-      Map<String, dynamic> data;
+        String? email = prefs.getString("email");
+        String? password = prefs.getString("password") ?? "";
+        bool? isGoogle = prefs.getBool("isGoogle") ?? false;
 
-      if (isGoogle) {
-        data = {
-          'is_google': isGoogle,
-          'email': email,
-        };
+        Map<String, dynamic> data;
+
+        if (isGoogle) {
+          data = {
+            'is_google': isGoogle,
+            'email': email,
+          };
+        } else {
+          data = {
+            'is_google': isGoogle,
+            'email': email,
+            'password': password,
+          };
+        }
+
+        try {
+          MemberModel? res = await AuthService().login(data);
+
+          CommonMethods().saveUserLoginsDetails(
+            res.userId!,
+            res.name ?? res.email!,
+            res.email!,
+            password,
+            true,
+            isGoogle,
+          );
+
+          currentMemberGlobal.value = res;
+
+          _goToPage(Dashboard(member: currentMemberGlobal.value));
+        } catch (e) {
+          buildError(e);
+        }
       } else {
-        data = {
-          'is_google': isGoogle,
-          'email': email,
-          'password': password,
-        };
-      }
-
-      try {
-        MemberModel? res = await AuthService().login(data);
-
-        CommonMethods().saveUserLoginsDetails(
-          res.userId!,
-          res.name ?? res.email!,
-          res.email!,
-          password,
-          true,
-          isGoogle,
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => Intro(),
+          ),
         );
-
-        currentMemberGlobal.value = res;
-
-        _goToPage(Dashboard(member: currentMemberGlobal.value));
-      } catch (e) {
-        buildError(e);
       }
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (ctx) => Intro(),
-        ),
-      );
+    } catch (e) {
+      CommonDialog.buildWrongWithAuth(context, false, e.toString());
     }
   }
 

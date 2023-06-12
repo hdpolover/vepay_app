@@ -597,7 +597,7 @@ class CommonDialog {
                           }
 
                           CommonMethods().launchWhatsAppUri(
-                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detaill sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima: $saldoYangDiterima \n\nTerima kasih.");
+                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima: $saldoYangDiterima \n\nTerima kasih.");
                         },
                         child: const Text(
                           'OK',

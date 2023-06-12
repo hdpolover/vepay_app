@@ -1,6 +1,9 @@
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:vepay_app/common/global_values.dart';
 import 'package:vepay_app/screens/auth/login.dart';
 import 'package:vepay_app/screens/auth/register.dart';
+import 'package:vepay_app/services/app_info_service.dart';
 
 import '../../resources/color_manager.dart';
 
@@ -28,9 +31,13 @@ class _IntroState extends State<Intro> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image(
-                    width: w * 0.6,
-                    image: const AssetImage('assets/intro_img.png'),
+                  FancyShimmerImage(
+                    boxFit: BoxFit.cover,
+                    height: h * 0.3,
+                    imageUrl:
+                        AppInfoService().getValueByKey('web_splash_image')!,
+                    errorWidget: Image.network(
+                        'https://vectorified.com/images/user-icon-1.png'),
                   ),
                   SizedBox(
                     height: h * 0.05,
@@ -38,7 +45,8 @@ class _IntroState extends State<Intro> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: w * 0.07),
                     child: Text(
-                      "Jasa Top Up Paling Terpercaya!",
+                      AppInfoService().removeHtmlTags(
+                          AppInfoService().getValueByKey('web_splash_title')!),
                       softWrap: true,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headline4?.copyWith(
@@ -53,7 +61,8 @@ class _IntroState extends State<Intro> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: w * 0.1),
                     child: Text(
-                      "Top Up Saldo Skrill, PayPal, Perfect Money, Payeer, USDT & BUSD Murah hanya di Vepay!",
+                      AppInfoService().removeHtmlTags(
+                          AppInfoService().getValueByKey('web_splash_desc')!),
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme

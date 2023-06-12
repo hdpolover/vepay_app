@@ -3,6 +3,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 
+import '../../services/app_info_service.dart';
+
 class AboutUs extends StatefulWidget {
   AboutUs({Key? key}) : super(key: key);
 
@@ -71,7 +73,8 @@ class _AboutUsState extends State<AboutUs> {
                     Column(
                       children: [
                         Text(
-                          appName == null ? "-" : appName!,
+                          AppInfoService().removeHtmlTags(
+                              AppInfoService().getValueByKey('web_app_name')!),
                           style:
                               Theme.of(context).textTheme.bodyText1?.copyWith(
                                     fontSize: 20,
@@ -91,7 +94,8 @@ class _AboutUsState extends State<AboutUs> {
                   height: MediaQuery.of(context).size.height * 0.03,
                 ),
                 Text(
-                  "Vepay.id merupakan platform penyedia jasa jual dan beli saldo meliputi Skrill, Perfect Money, Paypal, Payeer, USDT, BUSD. Vepay.id menjual Virtual Credit Card dan juga melayani jasa pembayaran melalui Paypal, Perfect Money, Skrill, Kartu Kredit dan Crypto.\n\nVepay.id berkomitmen untuk memberikan pelayanan terbaik kepada setiap klien yang menggunakan jasanya. Anda memiliki kendala dalam transaksi? Memiliki pertanyaan terkait transaksi? Tim Vepay.id siap melayani anda selama 24 JAM!\n\nVepay.id telah dipercaya lebih dari 1000 klien dengan tingkat kepuasan mencapai 4,9/5. Dengan pengalaman selama 10 tahun dan bersama tim terbaik, Vepay.id memberikan pelayanan terbaik dan melayani customer seperti RAJA!\n\nJadi, tunggu apa lagi? Yuk mulai bertransaksi dan percayakan urusan jual beli mu kepada Vepay.id!",
+                  AppInfoService().removeHtmlTags(
+                      AppInfoService().getValueByKey('web_desc')!),
                   textAlign: TextAlign.justify,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.normal,

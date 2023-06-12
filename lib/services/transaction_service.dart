@@ -144,6 +144,52 @@ class TransactionService {
     }
   }
 
+  Future<TransactionModel> updateTransaction(Map<String, dynamic> data) async {
+    String url = "${AppConstants.apiUrl}create_transaction";
+
+    var prefs = await SharedPreferences.getInstance();
+
+    String? userId = prefs.getString("user_id");
+
+    print(url);
+
+    try {
+      final http.Response response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'user_id': userId,
+          'm_metode_id': data['m_metode_id'],
+          'm_rate_id': data['m_rate_id'],
+          'jumlah': data['jumlah'],
+          'total_bayar': data['total_bayar'],
+          'sub_total': data['sub_total'],
+          "akun_tujuan": data['akun_tujuan'],
+          "no_rek": data['no_rek'],
+          "blockchain": data['blockchain'],
+          "no_tujuan": data['no_tujuan'],
+          "id_vcc": data['id_vcc'],
+          "m_promo_id": data['promo_id'],
+          "jenis_transaksi_vcc": data['jenis_transaksi_vcc'],
+        }),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        var result = json.decode(response.body)['data'];
+        print(result);
+        return TransactionModel.fromJson(result);
+      } else {
+        print(jsonDecode(response.body));
+        return null!;
+      }
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   Future<bool> delete(int id) async {
     String url = "${AppConstants.apiUrl}delete_transaction/$id";
 

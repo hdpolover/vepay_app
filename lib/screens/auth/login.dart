@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
-import 'package:vepay_app/common/global_member.dart';
+import 'package:vepay_app/common/global_values.dart';
 import 'package:vepay_app/screens/auth/forgot_password.dart';
 import 'package:vepay_app/screens/auth/register.dart';
 import 'package:vepay_app/screens/dashboard.dart';
@@ -10,6 +11,7 @@ import 'package:vepay_app/screens/dashboard.dart';
 import '../../models/member_model.dart';
 import '../../resources/color_manager.dart';
 import '../../services/auth_service.dart';
+import '../../services/fb_service.dart';
 
 class Login extends StatefulWidget {
   Login({Key? key}) : super(key: key);
@@ -38,6 +40,91 @@ class _LoginState extends State<Login> {
     RequiredValidator(errorText: 'Harap masukan email'),
     EmailValidator(errorText: "Harap masukan email yang valid")
   ]);
+
+  regist(String e, String n, String p, bool isGoogle) async {
+    Map<String, dynamic> data;
+    if (isGoogle) {
+      data = {
+        'is_google': true,
+        "email": e,
+        'mama': n,
+      };
+    } else {
+      data = {
+        'is_google': false,
+        "email": e,
+        "nama": n,
+        "phone": "08",
+        "password": p,
+      };
+    }
+
+    try {
+      MemberModel m = await AuthService().register(data);
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (isGoogle) {
+        try {
+          Map<String, dynamic> data = {
+            "is_google": true,
+            "email": m.email,
+          };
+
+          try {
+            MemberModel m = await AuthService().login(data);
+
+            CommonMethods().saveUserLoginsDetails(
+                m.userId!, m.name!, m.email!, "", true, true);
+
+            setState(() {
+              isLoading = false;
+            });
+
+            currentMemberGlobal.value = m;
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Dashboard(
+                  member: currentMemberGlobal.value,
+                ),
+              ),
+            );
+          } catch (e) {
+            setState(() {
+              isLoading = false;
+            });
+            CommonDialog.buildOkDialog(context, false, e.toString());
+          }
+        } catch (e) {
+          Navigator.of(context).pop();
+
+          setState(() {
+            isLoading = false;
+          });
+
+          CommonDialog.buildOkDialog(
+              context, false, "Terjadi kesalahan. Coba lagi.");
+        }
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+
+        CommonDialog.buildOkRegister(context, true,
+            "Pendaftaran berhasil. Silakan cek email untuk verifikasi lalu lakukan login.");
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+
+      CommonDialog.buildOkDialog(context, false, e.toString());
+    }
+  }
 
   login() async {
     Map<String, dynamic> data = {
@@ -299,6 +386,144 @@ class _LoginState extends State<Login> {
                             ),
                           ],
                         ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text("atau"),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.02),
+                    child: SizedBox(
+                      height: h * 0.06,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0.2,
+                          backgroundColor: Colors.white, // background
+                          foregroundColor: ColorManager.primary, // foreground
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Image(
+                              width: 30,
+                              image: AssetImage('assets/google.png'),
+                            ),
+                            Text(
+                              '   Masuk dengan Google',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ],
+                        ),
+                        onPressed: () async {
+                          showDialog(
+                              // The user CANNOT close this dialog  by pressing outsite it
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (_) {
+                                return Dialog(
+                                  // The background color
+                                  backgroundColor: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 50),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        // The loading indicator
+                                        CircularProgressIndicator(
+                                          color: ColorManager.primary,
+                                        ),
+                                        const SizedBox(height: 15),
+                                        const Text("Menyambungkan")
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
+
+                          try {
+                            UserCredential? result =
+                                await FbService.signInWithGoogle();
+
+                            print(result.additionalUserInfo!.isNewUser);
+
+                            if (result.additionalUserInfo!.isNewUser) {
+                              // Close the dialog programmatically
+                              Navigator.of(context).pop();
+
+                              regist(
+                                result.user!.email!,
+                                result.user!.displayName!,
+                                "",
+                                true,
+                              );
+                            } else {
+                              try {
+                                Map<String, dynamic> data = {
+                                  "is_google": true,
+                                  "email": result.user!.email!,
+                                };
+
+                                try {
+                                  MemberModel m =
+                                      await AuthService().login(data);
+
+                                  CommonMethods().saveUserLoginsDetails(
+                                      m.userId!,
+                                      m.email!,
+                                      m.email!,
+                                      "",
+                                      true,
+                                      true);
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+
+                                  currentMemberGlobal.value = m;
+
+                                  Navigator.of(context).pop();
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Dashboard(
+                                        member: currentMemberGlobal.value,
+                                      ),
+                                    ),
+                                  );
+                                } catch (e) {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+
+                                  CommonDialog.buildOkDialog(
+                                      context, false, e.toString());
+                                }
+                              } catch (e) {
+                                Navigator.of(context).pop();
+
+                                setState(() {
+                                  isLoading = false;
+                                });
+
+                                CommonDialog.buildOkDialog(
+                                    context, false, e.toString());
+                              }
+                            }
+                          } catch (e) {
+                            Navigator.of(context).pop();
+
+                            setState(() {
+                              isLoading = false;
+                            });
+
+                            CommonDialog.buildOkDialog(
+                                context, false, e.toString());
+                          }
+                        },
                       ),
                     ),
                   ),

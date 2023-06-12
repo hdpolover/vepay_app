@@ -32,6 +32,34 @@ class CommonMethods {
     prefs.setBool("isGoogle", isGoogle);
   }
 
+  String getWithdrawFieldName(String productName) {
+    String name = productName.toLowerCase();
+    String value = "";
+
+    switch (name) {
+      case "paypal":
+
+      case "skrill":
+      case "perfect money":
+      case "neteller":
+        value = "Nama Pengirim";
+
+        break;
+      case "payeer":
+        value = "ID Pengirim";
+
+        break;
+      case "usdt":
+
+      case "busd":
+        value = "Hash";
+
+        break;
+    }
+
+    return value;
+  }
+
   String getFieldName(String productName) {
     String name = productName.toLowerCase();
     String value = "";

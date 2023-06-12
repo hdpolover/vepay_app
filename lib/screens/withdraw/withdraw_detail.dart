@@ -323,32 +323,37 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
                     backgroundColor: ColorManager.primary, // background
                     foregroundColor: Colors.white, // foreground
                   ),
-                  child: const Text('Bayar'),
-                  onPressed: () async {
-                    print(total);
-                    widget.data['sub_total'] = subtotal!;
-                    widget.data['total'] = total!;
-                    widget.data['fee'] = biayaTransaksi;
-                    widget.data['total_promo'] = totalPromo;
+                  onPressed: isLoading
+                      ? () {}
+                      : () async {
+                          setState(() {
+                            isLoading = true;
+                          });
 
-                    Map<String, dynamic> data = {
-                      'm_metode_id': null,
-                      'm_rate_id': widget.rateModel.id,
-                      'jumlah': widget.data['jumlah'],
-                      'sub_total': subtotal,
-                      'total_bayar': total,
-                      'akun_tujuan': widget.data['akun_tujuan'],
-                      'no_rek': widget.data['no_rek'],
-                      'blockchain': widget.data['blockchain_id'],
-                      'promo_id': widget.data['promo_id'],
-                    };
+                          widget.data['sub_total'] = subtotal!;
+                          widget.data['total'] = total!;
+                          widget.data['fee'] = biayaTransaksi;
+                          widget.data['total_promo'] = totalPromo;
 
-                    setState(() {
-                      isLoading = true;
-                    });
+                          Map<String, dynamic> data = {
+                            'm_metode_id': null,
+                            'm_rate_id': widget.rateModel.id,
+                            'jumlah': widget.data['jumlah'],
+                            'sub_total': subtotal,
+                            'total_bayar': total,
+                            'akun_tujuan': widget.data['akun_tujuan'],
+                            'no_rek': widget.data['no_rek'],
+                            'blockchain': widget.data['blockchain_id'],
+                            'promo_id': widget.data['promo_id'],
+                          };
 
-                    doTransaction(data);
-                  },
+                          doTransaction(data);
+                        },
+                  child: isLoading
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : const Text('Bayar'),
                 ),
               ),
             ),

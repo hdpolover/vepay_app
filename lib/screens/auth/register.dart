@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_widgets.dart';
-import 'package:vepay_app/common/global_member.dart';
+import 'package:vepay_app/common/global_values.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/login.dart';
 import 'package:vepay_app/screens/dashboard.dart';
@@ -412,7 +412,7 @@ class _RegisterState extends State<Register> {
                               image: AssetImage('assets/google.png'),
                             ),
                             Text(
-                              '   Daftar/Masuk dengan Google',
+                              '   Daftar dengan Google',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ],

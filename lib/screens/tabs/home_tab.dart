@@ -72,7 +72,14 @@ class _HomeTabState extends State<HomeTab> {
     try {
       List<RateModel> tempRates = await RateService().getRates("top_up");
 
-      rates = tempRates;
+      if (tempRates.length <= 9) {
+        tempRates
+            .removeWhere((element) => element.name!.toLowerCase() == "more");
+
+        rates = tempRates;
+      } else {
+        rates = tempRates;
+      }
 
       setState(() {});
     } catch (e) {
@@ -109,6 +116,17 @@ class _HomeTabState extends State<HomeTab> {
               children: [
                 buildHeader(),
                 const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    "Top up/Beli",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 15),
                 buildProductSection(),
                 transactionList != null && transactionList!.isEmpty
                     ? Container()

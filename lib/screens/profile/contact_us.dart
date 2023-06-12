@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 
 import '../../resources/color_manager.dart';
+import '../../services/app_info_service.dart';
 
 class ContactUs extends StatefulWidget {
   ContactUs({Key? key}) : super(key: key);
@@ -63,7 +64,8 @@ class _ContactUsState extends State<ContactUs> {
                         children: [
                           Center(
                             child: Text(
-                              "Vepay.Id",
+                              AppInfoService().removeHtmlTags(
+                                  AppInfoService().getValueByKey('web_title')!),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1
@@ -78,7 +80,8 @@ class _ContactUsState extends State<ContactUs> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Perum Green Semanggi Mangrove F1-29 Cluster Osbornia, Wonorejo, Rungkut, Surabaya",
+                            AppInfoService().removeHtmlTags(
+                                AppInfoService().getValueByKey('web_alamat')!),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1
@@ -91,7 +94,8 @@ class _ContactUsState extends State<ContactUs> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "admin@vepay.id",
+                            AppInfoService().removeHtmlTags(
+                                AppInfoService().getValueByKey('web_email')!),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1
@@ -104,7 +108,8 @@ class _ContactUsState extends State<ContactUs> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "0882 9697 3558",
+                            AppInfoService().removeHtmlTags(
+                                AppInfoService().getValueByKey('web_telepon')!),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1
@@ -117,7 +122,8 @@ class _ContactUsState extends State<ContactUs> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "www.vepay.id",
+                            AppInfoService().removeHtmlTags(
+                                AppInfoService().getValueByKey('web_website')!),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1
@@ -126,7 +132,8 @@ class _ContactUsState extends State<ContactUs> {
                           const SizedBox(height: 30),
                           Center(
                             child: Text(
-                              "Kami siap membantu dan melayani Anda dengan sepenuh hati. Vepay melayani customer seperti raja!",
+                              AppInfoService().removeHtmlTags(AppInfoService()
+                                  .getValueByKey('web_info_desc')!),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1
