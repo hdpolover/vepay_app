@@ -22,106 +22,104 @@ class _IntroState extends State<Intro> {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: 2 * 0.1, vertical: h * 0.1),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FancyShimmerImage(
-                    boxFit: BoxFit.cover,
-                    height: h * 0.3,
-                    imageUrl:
-                        AppInfoService().getValueByKey('web_splash_image')!,
-                    errorWidget: Image.network(
-                        'https://vectorified.com/images/user-icon-1.png'),
+        child: Center(
+          child: Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: 2 * 0.1, vertical: h * 0.05),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FancyShimmerImage(
+                  boxFit: BoxFit.cover,
+                  height: h * 0.25,
+                  width: w * 0.5,
+                  imageUrl: AppInfoService().getValueByKey('web_splash_image')!,
+                  errorWidget: Image.network(
+                      'https://vectorified.com/images/user-icon-1.png'),
+                ),
+                SizedBox(
+                  height: h * 0.05,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: w * 0.07),
+                  child: Text(
+                    AppInfoService().removeHtmlTags(
+                        AppInfoService().getValueByKey('web_splash_title')!),
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                   ),
-                  SizedBox(
-                    height: h * 0.05,
+                ),
+                SizedBox(
+                  height: h * 0.03,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: w * 0.1),
+                  child: Text(
+                    AppInfoService().removeHtmlTags(
+                        AppInfoService().getValueByKey('web_splash_desc')!),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        ?.copyWith(color: Colors.grey),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.07),
-                    child: Text(
-                      AppInfoService().removeHtmlTags(
-                          AppInfoService().getValueByKey('web_splash_title')!),
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline4?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                ),
+                SizedBox(
+                  height: h * 0.1,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: w * 0.07),
+                  child: SizedBox(
+                    height: h * 0.06,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorManager.primary, // background
+                        foregroundColor: Colors.white, // foreground
+                      ),
+                      child: const Text('Daftar'),
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Register(),
                           ),
+                        );
+                      },
                     ),
                   ),
-                  SizedBox(
-                    height: h * 0.03,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.1),
-                    child: Text(
-                      AppInfoService().removeHtmlTags(
-                          AppInfoService().getValueByKey('web_splash_desc')!),
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2
-                          ?.copyWith(color: Colors.grey),
-                    ),
-                  ),
-                  SizedBox(
-                    height: h * 0.15,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.07),
-                    child: SizedBox(
-                      height: h * 0.06,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorManager.primary, // background
-                          foregroundColor: Colors.white, // foreground
-                        ),
-                        child: const Text('Daftar'),
-                        onPressed: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Register(),
-                            ),
-                          );
-                        },
+                ),
+                SizedBox(
+                  height: h * 0.02,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: w * 0.07),
+                  child: SizedBox(
+                    height: h * 0.06,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white54, // background
+                        foregroundColor: ColorManager.primary, // foreground
                       ),
+                      child: const Text('Masuk'),
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Login(),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  SizedBox(
-                    height: h * 0.02,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.07),
-                    child: SizedBox(
-                      height: h * 0.06,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white54, // background
-                          foregroundColor: ColorManager.primary, // foreground
-                        ),
-                        child: const Text('Masuk'),
-                        onPressed: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Login(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

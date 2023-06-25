@@ -150,7 +150,9 @@ class _WithdrawAltState extends State<WithdrawAlt> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: DropdownButton<BlockchainModel>(
-                                  iconSize: 0.0,
+                                  isExpanded: true,
+                                  icon: const FaIcon(FontAwesomeIcons.sortDown),
+                                  iconSize: 16,
                                   underline: const SizedBox(),
                                   value: selectedChain,
                                   hint: const Text("Blockchain"),
@@ -172,9 +174,6 @@ class _WithdrawAltState extends State<WithdrawAlt> {
                                 ),
                               ),
                             ),
-                            Container(
-                                padding: const EdgeInsets.only(right: 20),
-                                child: const Icon(Icons.arrow_drop_down)),
                           ],
                         ),
                       )

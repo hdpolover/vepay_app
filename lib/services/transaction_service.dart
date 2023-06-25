@@ -144,8 +144,9 @@ class TransactionService {
     }
   }
 
-  Future<TransactionModel> updateTransaction(Map<String, dynamic> data) async {
-    String url = "${AppConstants.apiUrl}create_transaction";
+  Future<TransactionModel> updateTransaction(
+      Map<String, dynamic> data, int id) async {
+    String url = "${AppConstants.apiUrl}update_transaction";
 
     var prefs = await SharedPreferences.getInstance();
 
@@ -154,12 +155,13 @@ class TransactionService {
     print(url);
 
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await http.put(
         Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, dynamic>{
+          'id': id,
           'user_id': userId,
           'm_metode_id': data['m_metode_id'],
           'm_rate_id': data['m_rate_id'],

@@ -45,10 +45,10 @@ class _RateItemWidgetState extends State<RateItemWidget> {
             Radius.circular(15),
           ),
         ),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.1,
-          width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

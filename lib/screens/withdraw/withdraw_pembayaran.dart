@@ -87,57 +87,54 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
       //     Radius.circular(15),
       //   ),
       // ),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.2,
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: FancyShimmerImage(
-                        width: MediaQuery.of(context).size.width * 0.15,
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        boxFit: BoxFit.cover,
-                        imageUrl: widget.withdrawModel.image!,
-                        errorWidget: Image.network(
-                            'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
-                      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: FancyShimmerImage(
+                      width: MediaQuery.of(context).size.width * 0.15,
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      boxFit: BoxFit.cover,
+                      imageUrl: widget.withdrawModel.image!,
+                      errorWidget: Image.network(
+                          'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
                     ),
                   ),
-                  Expanded(
-                    child: Text(
-                      widget.withdrawModel.withdraw!,
-                      style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                            fontSize: 17,
-                          ),
-                    ),
+                ),
+                Expanded(
+                  child: Text(
+                    widget.withdrawModel.withdraw!,
+                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                          fontSize: 17,
+                        ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              const Divider(
-                color: Colors.grey,
-                height: 1,
-              ),
-              const SizedBox(height: 10),
-              buildTextItem("ID Pembayaran",
-                  widget.transactionModel.kodeTransaksi!, false),
-              const SizedBox(height: 10),
-              buildTextItem(
-                  "Tanggal",
-                  CommonMethods()
-                      .formatDate(widget.transactionModel.createdAt!, "l"),
-                  false),
-            ],
-          ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            const Divider(
+              color: Colors.grey,
+              height: 1,
+            ),
+            const SizedBox(height: 10),
+            buildTextItem(
+                "ID Pembayaran", widget.transactionModel.kodeTransaksi!, false),
+            const SizedBox(height: 10),
+            buildTextItem(
+                "Tanggal",
+                CommonMethods()
+                    .formatDate(widget.transactionModel.createdAt!, "l"),
+                false),
+          ],
         ),
       ),
     );
@@ -151,44 +148,41 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
       //     Radius.circular(15),
       //   ),
       // ),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.22,
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Detail Pembayaran",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              const SizedBox(height: 20),
-              buildTextItem2(
-                "Subtotal Tagihan",
-                "\$${widget.trData['jumlah']}",
-              ),
-              const SizedBox(height: 10),
-              buildTextItem2(
-                "Biaya Transaksi",
-                "\$${widget.trData['fee'].toStringAsFixed(2)}",
-              ),
-              const SizedBox(height: 15),
-              const Divider(
-                color: Colors.grey,
-                height: 1,
-              ),
-              const SizedBox(height: 15),
-              buildTextItem2(
-                "Total",
-                "\$${(double.parse(widget.trData['jumlah']) + widget.trData['fee']).toStringAsFixed(2)}",
-              ),
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Detail Pembayaran",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            const SizedBox(height: 20),
+            buildTextItem2(
+              "Subtotal Tagihan",
+              "\$${widget.trData['jumlah']}",
+            ),
+            const SizedBox(height: 10),
+            buildTextItem2(
+              "Biaya Transaksi",
+              "\$${widget.trData['fee'].toStringAsFixed(2)}",
+            ),
+            const SizedBox(height: 15),
+            const Divider(
+              color: Colors.grey,
+              height: 1,
+            ),
+            const SizedBox(height: 15),
+            buildTextItem2(
+              "Total",
+              "\$${(double.parse(widget.trData['jumlah']) + widget.trData['fee']).toStringAsFixed(2)}",
+            ),
+          ],
         ),
       ),
     );
@@ -202,96 +196,95 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
       //     Radius.circular(15),
       //   ),
       // ),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.515,
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              Text(
-                "Silakan Transfer ke",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: FancyShimmerImage(
-                        width: MediaQuery.of(context).size.width * 0.15,
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        boxFit: BoxFit.cover,
-                        imageUrl: widget.withdrawModel.image!,
-                        errorWidget: Image.network(
-                            'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
-                      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Silakan Transfer ke",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: FancyShimmerImage(
+                      width: MediaQuery.of(context).size.width * 0.15,
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      boxFit: BoxFit.cover,
+                      imageUrl: widget.withdrawModel.image!,
+                      errorWidget: Image.network(
+                          'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
                     ),
                   ),
-                  Expanded(
-                    child: Text(
-                      widget.withdrawModel.withdraw!,
-                      style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                            fontSize: 17,
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              buildTextItem(
-                  "Nomor Rekening", widget.withdrawModel.noRekening!, true),
-              const SizedBox(height: 10),
-              buildTextItem("Atas Nama", widget.withdrawModel.atasNama!, false),
-              const SizedBox(height: 20),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.14,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                  color: ColorManager.primary.withOpacity(0.2),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(13),
+                Expanded(
                   child: Text(
-                      "Transfer total pembayaran sesuai dengan rincian diatas ke nomor rekening atas nama ${widget.withdrawModel.atasNama}. Biaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur dibawah ini."),
+                    widget.withdrawModel.withdraw!,
+                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                          fontSize: 17,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            buildTextItem(
+                "Nomor Rekening", widget.withdrawModel.noRekening!, true),
+            const SizedBox(height: 10),
+            buildTextItem("Atas Nama", widget.withdrawModel.atasNama!, false),
+            const SizedBox(height: 20),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                color: ColorManager.primary.withOpacity(0.2),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(13),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                        "Transfer total pembayaran sesuai dengan rincian diatas ke nomor rekening atas nama ${widget.withdrawModel.atasNama}. Biaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur dibawah ini."),
+                  ],
                 ),
               ),
-              const SizedBox(height: 20),
-              Text(
-                "${CommonMethods().getWithdrawFieldName(widget.transactionModel.product!.toLowerCase())} ${widget.transactionModel.product!}",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: fieldController,
-                // validator: _akunValidator,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  hintText: CommonMethods().getWithdrawFieldName(
-                      widget.transactionModel.product!.toLowerCase()),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: ColorManager.primary,
-                    ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "${CommonMethods().getWithdrawFieldName(widget.transactionModel.product!.toLowerCase())} ${widget.transactionModel.product!}",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: fieldController,
+              // validator: _akunValidator,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                hintText: CommonMethods().getWithdrawFieldName(
+                    widget.transactionModel.product!.toLowerCase()),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: ColorManager.primary,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -305,66 +298,63 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
       //     Radius.circular(15),
       //   ),
       // ),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.37,
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Upload Bukti Pembayaran",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              const SizedBox(height: 10),
-              InkWell(
-                onTap: () {
-                  showPickImageDialog(context);
-                },
-                child: _imageFile == null
-                    ? Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(15)),
-                          color: ColorManager.primary.withOpacity(0.2),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(13),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.image,
-                                size: 50,
-                              ),
-                              const SizedBox(height: 10),
-                              const Text("Format Gambar: JPG, JPEG, PNG"),
-                            ],
-                          ),
-                        ),
-                      )
-                    : Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        child: Image.file(
-                          File(_imageFile!.path),
-                          fit: BoxFit.cover,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Upload Bukti Pembayaran",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: () {
+                showPickImageDialog(context);
+              },
+              child: _imageFile == null
+                  ? Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
+                        color: ColorManager.primary.withOpacity(0.2),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(13),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.image,
+                              size: 50,
+                            ),
+                            const SizedBox(height: 10),
+                            const Text("Format Gambar: JPG, JPEG, PNG"),
+                          ],
                         ),
                       ),
-              )
-            ],
-          ),
+                    )
+                  : Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      child: Image.file(
+                        File(_imageFile!.path),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+            )
+          ],
         ),
       ),
     );
@@ -441,8 +431,8 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
                                   "Harap pilih bukti pembayaran Anda");
                             } else {
                               if (fieldController.text.trim().isEmpty) {
-                                CommonDialog.buildOkDialog(
-                                    context, false, "Harap isi field ini");
+                                CommonDialog.buildOkDialog(context, false,
+                                    "Harap isi ${CommonMethods().getWithdrawFieldName(widget.transactionModel.product!.toLowerCase()).toLowerCase()} ${widget.transactionModel.product!}");
                               } else {
                                 setState(() {
                                   isLoading = true;
@@ -469,13 +459,17 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
                                         fieldController.text.trim();
 
                                     await TransactionService()
-                                        .updateTransaction(widget.trData);
+                                        .updateTransaction(
+                                            widget.trData,
+                                            int.parse(
+                                                widget.transactionModel.id!));
 
                                     setState(() {
                                       isLoading = false;
                                     });
 
-                                    sendEmail(p, widget.trData['jumlah']);
+                                    CommonMethods()
+                                        .sendEmail(p, widget.trData['jumlah']);
 
                                     CommonDialog().buildOkWaDialog(
                                       context,
@@ -511,37 +505,6 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
         )),
       ),
     );
-  }
-
-  void sendEmail(PayTransactionModel transactionModel, dynamic jumlah) async {
-    String currency = '';
-    String saldoYangDiterima = '';
-    if (transactionModel.type!.toLowerCase() == 'withdraw') {
-      currency = "\$";
-      saldoYangDiterima = CommonMethods.formatCompleteCurrency(
-          double.parse(transactionModel.subTotal!));
-    } else {
-      currency = "Rp.";
-      saldoYangDiterima = "\$$jumlah";
-    }
-
-    String body =
-        "Transaksi Baru #${transactionModel.kodeTransaksi}\n\nSilakan proses pesanan dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima: $saldoYangDiterima \n\nPastikan untuk membuka website admin untuk melihat detail transaksi.";
-
-    final Uri params = Uri(
-      scheme: 'mailto',
-      path: 'order@vepay.id',
-      query:
-          'subject=Transaksi Baru #${transactionModel.kodeTransaksi}&body=$body',
-    );
-
-    final String url = params.toString();
-
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 
   Future<void> _onImageButtonPressed(ImageSource source,

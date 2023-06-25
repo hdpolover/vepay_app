@@ -1,7 +1,12 @@
 import 'package:intl/intl.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
+
+import '../models/pay_transaction_model.dart';
 
 class CommonMethods {
   static String formatCompleteCurrency(double price) {
@@ -167,5 +172,54 @@ class CommonMethods {
       return false;
     }
     return true;
+  }
+
+  void sendEmail(PayTransactionModel transactionModel, dynamic jumlah) async {
+    String currency = '';
+    String saldoYangDiterima = '';
+    if (transactionModel.type!.toLowerCase() == 'withdraw') {
+      currency = "\$";
+      saldoYangDiterima = CommonMethods.formatCompleteCurrency(
+          double.parse(transactionModel.subTotal!));
+    } else {
+      currency = "Rp.";
+      saldoYangDiterima = "\$$jumlah";
+    }
+
+    String subject = 'Transaksi Baru #${transactionModel.kodeTransaksi}';
+
+    String body =
+        "Transaksi Baru #${transactionModel.kodeTransaksi}\n\nSilakan proses pesanan dengan detail sebagai berikut:\n\n${transactionModel.type}\n\nKode Transaksi: ${transactionModel.kodeTransaksi}\nProduk: ${transactionModel.product}\nNama Pengguna: ${transactionModel.name}\nTotal: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\nSaldo yang akan diterima: $saldoYangDiterima \n\nPastikan untuk membuka website admin untuk melihat detail transaksi.";
+
+    String username = 'sent@vepay.id';
+    String password = 'asemjawa123';
+
+    final smtpServer = SmtpServer('mail.vepay.id',
+        allowInsecure: true, username: username, password: password);
+    //final smtpServer = gmail(username, password);
+    // Use the SmtpServer class to configure an SMTP server:
+    // final smtpServer = SmtpServer('smtp.domain.com');
+    // See the named arguments of SmtpServer for further configuration
+    // options.
+
+    // Create our message.
+    final message = Message()
+      ..from = Address(username, 'Vepay Multipayment')
+      ..recipients.add('order@vepay.id')
+      //..ccRecipients.addAll(['destCc1@example.com',])
+      //..bccRecipients.add(Address('hendrapolover@gmail.com'))
+      ..subject = subject
+      ..text = body;
+    //..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } on MailerException catch (e) {
+      print('Message not sent.' + e.toString());
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    }
   }
 }

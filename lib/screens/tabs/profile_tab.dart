@@ -166,6 +166,8 @@ class _ProfileTabState extends State<ProfileTab> {
                       withNavBar: false,
                     );
                   } else {
+                    FbService.signOut(context);
+
                     CommonMethods()
                         .saveUserLoginsDetails("", "", "", "", false, false);
 

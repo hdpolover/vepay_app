@@ -168,52 +168,49 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
       //     Radius.circular(15),
       //   ),
       // ),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.23,
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Jumlah yang harus dibayarkan",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Jumlah yang harus dibayarkan",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            const SizedBox(height: 20),
+            buildTextItem2(
+              "Subtotal Tagihan",
+              CommonMethods.formatCompleteCurrency(
+                widget.data['sub_total'],
               ),
-              const SizedBox(height: 20),
-              buildTextItem2(
-                "Subtotal Tagihan",
-                CommonMethods.formatCompleteCurrency(
-                  widget.data['sub_total'],
-                ),
+            ),
+            const SizedBox(height: 10),
+            buildTextItem2(
+              "Potongan Promosi",
+              CommonMethods.formatCompleteCurrency(
+                widget.data['total_promo'],
               ),
-              const SizedBox(height: 10),
-              buildTextItem2(
-                "Potongan Promosi",
-                CommonMethods.formatCompleteCurrency(
-                  widget.data['total_promo'],
-                ),
+            ),
+            const SizedBox(height: 10),
+            buildTextItem2(
+              "Biaya Transaksi",
+              CommonMethods.formatCompleteCurrency(
+                widget.data['fee'],
               ),
-              const SizedBox(height: 10),
-              buildTextItem2(
-                "Biaya Transaksi",
-                CommonMethods.formatCompleteCurrency(
-                  widget.data['fee'],
-                ),
+            ),
+            const SizedBox(height: 10),
+            buildTextItem2(
+              "Total",
+              CommonMethods.formatCompleteCurrency(
+                widget.data['total'],
               ),
-              const SizedBox(height: 10),
-              buildTextItem2(
-                "Total",
-                CommonMethods.formatCompleteCurrency(
-                  widget.data['total'],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -526,7 +526,7 @@ class _TransactionTabState extends State<TransactionTab>
                       ),
                     )
                   : ListView.builder(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      //padding: const EdgeInsets.symmetric(vertical: 10),
                       shrinkWrap: true,
                       itemCount: transactionList!.length,
                       itemBuilder: (context, index) {

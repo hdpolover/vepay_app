@@ -77,7 +77,7 @@ class AuthService {
         throw jsonDecode(response.body)['data'];
       }
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 

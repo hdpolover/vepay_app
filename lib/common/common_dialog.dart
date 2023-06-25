@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/models/pay_transaction_model.dart';
-import 'package:vepay_app/models/transaction_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/screens/auth/login.dart';
-import 'package:vepay_app/services/transaction_service.dart';
-import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 class CommonDialog {
   static void buildOkUpdateDialog(
@@ -114,80 +110,79 @@ class CommonDialog {
         return Align(
           alignment: Alignment.center,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.45,
-            padding: const EdgeInsets.all(20),
+            // height: MediaQuery.of(context).size.height * 0.45,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
             margin: const EdgeInsets.only(top: 150, left: 32, right: 32),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: SizedBox.expand(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  status
-                      ? Container(
-                          decoration: BoxDecoration(
-                            color: ColorManager.primary,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 30,
-                            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 10),
+                status
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: ColorManager.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 30,
                           ),
                         ),
-                  const SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(fontWeight: FontWeight.normal),
-                    ),
+                      )
+                    : Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                const SizedBox(height: 25),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(fontWeight: FontWeight.normal),
                   ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: SizedBox(
-                      width: 213,
-                      height: 55,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            backgroundColor: ColorManager.primary),
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true).pop();
-                        },
-                        child: const Text(
-                          'OK',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                ),
+                const SizedBox(height: 30),
+                Center(
+                  child: SizedBox(
+                    width: 213,
+                    height: 55,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          backgroundColor: ColorManager.primary),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      },
+                      child: const Text(
+                        'OK',
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-                ],
-              ),
+                ),
+                const SizedBox(height: 15),
+              ],
             ),
           ),
         );
@@ -597,7 +592,7 @@ class CommonDialog {
                           }
 
                           CommonMethods().launchWhatsAppUri(
-                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima: $saldoYangDiterima \n\nTerima kasih.");
+                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.");
                         },
                         child: const Text(
                           'OK',
