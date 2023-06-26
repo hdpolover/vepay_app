@@ -505,6 +505,7 @@ class _WithdrawTabState extends State<WithdrawTab> {
                                           withdrawModel: chosenWd,
                                           blockchainModel: chosenbc,
                                           data: data,
+                                          wdSource: "tab",
                                         ),
                                         withNavBar: false,
                                       );

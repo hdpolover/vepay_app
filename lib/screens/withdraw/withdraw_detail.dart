@@ -18,11 +18,14 @@ class WithdrawDetail extends StatefulWidget {
   WithdrawModel withdrawModel;
   BlockchainModel? blockchainModel;
   Map<String, dynamic> data;
+  String wdSource;
+
   WithdrawDetail(
       {required this.rateModel,
       required this.withdrawModel,
       this.blockchainModel,
       required this.data,
+      required this.wdSource,
       Key? key})
       : super(key: key);
 
@@ -365,6 +368,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
           trData: widget.data,
           transactionModel: t,
           withdrawModel: widget.withdrawModel,
+          wdSource: widget.wdSource,
         ),
         withNavBar: false,
       );

@@ -17,81 +17,80 @@ class CommonDialog {
         return Align(
           alignment: Alignment.center,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            padding: const EdgeInsets.all(20),
+            //height: MediaQuery.of(context).size.height * 0.4,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
             margin: const EdgeInsets.only(top: 150, left: 32, right: 32),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: SizedBox.expand(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  status
-                      ? Container(
-                          decoration: BoxDecoration(
-                            color: ColorManager.primary,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 30,
-                            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 10),
+                status
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: ColorManager.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 30,
                           ),
                         ),
-                  const SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(fontWeight: FontWeight.normal),
-                    ),
+                      )
+                    : Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                const SizedBox(height: 25),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(fontWeight: FontWeight.normal),
                   ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: SizedBox(
-                      width: 213,
-                      height: 55,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            backgroundColor: ColorManager.primary),
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
-                        },
-                        child: const Text(
-                          'OK',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                ),
+                const SizedBox(height: 30),
+                Center(
+                  child: SizedBox(
+                    width: 213,
+                    height: 55,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          backgroundColor: ColorManager.primary),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        Navigator.of(context, rootNavigator: true).pop();
+                      },
+                      child: const Text(
+                        'OK',
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-                ],
-              ),
+                ),
+                const SizedBox(height: 15),
+              ],
             ),
           ),
         );
@@ -202,8 +201,8 @@ class CommonDialog {
         return Align(
           alignment: Alignment.center,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.43,
-            padding: const EdgeInsets.all(25),
+            //height: MediaQuery.of(context).size.height * 0.43,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
             margin: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height * 0.1,
                 left: 32,
@@ -212,77 +211,76 @@ class CommonDialog {
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: SizedBox.expand(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 10),
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 30,
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 30,
+                  ),
+                ),
+                const SizedBox(height: 25),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(fontWeight: FontWeight.normal),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Center(
+                  child: SizedBox(
+                    width: 213,
+                    height: 55,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          backgroundColor: ColorManager.primary),
+                      onPressed: funct,
+                      child: Text(
+                        yesStr,
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(fontWeight: FontWeight.normal),
+                ),
+                const SizedBox(height: 15),
+                Center(
+                  child: SizedBox(
+                    width: 213,
+                    height: 55,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                              width: 1.0, color: ColorManager.primary),
+                          backgroundColor: Colors.transparent),
+                      child: Text(noStr,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2
+                              ?.copyWith(color: ColorManager.primary)),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      },
                     ),
                   ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: SizedBox(
-                      width: 213,
-                      height: 55,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            backgroundColor: ColorManager.primary),
-                        onPressed: funct,
-                        child: Text(
-                          yesStr,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  Center(
-                    child: SizedBox(
-                      width: 213,
-                      height: 55,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            side: BorderSide(
-                                width: 1.0, color: ColorManager.primary),
-                            backgroundColor: Colors.transparent),
-                        child: Text(noStr,
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle2
-                                ?.copyWith(color: ColorManager.primary)),
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true).pop();
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                ],
-              ),
+                ),
+                const SizedBox(height: 15),
+              ],
             ),
           ),
         );
@@ -301,84 +299,83 @@ class CommonDialog {
         return Align(
           alignment: Alignment.center,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            padding: const EdgeInsets.all(20),
+            //height: MediaQuery.of(context).size.height * 0.4,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
             margin: const EdgeInsets.only(top: 150, left: 32, right: 32),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: SizedBox.expand(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  status
-                      ? Container(
-                          decoration: BoxDecoration(
-                            color: ColorManager.primary,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 30,
-                            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 10),
+                status
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: ColorManager.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 30,
                           ),
                         ),
-                  const SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(fontWeight: FontWeight.normal),
-                    ),
+                      )
+                    : Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                const SizedBox(height: 25),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(fontWeight: FontWeight.normal),
                   ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: SizedBox(
-                      width: 213,
-                      height: 55,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            backgroundColor: ColorManager.primary),
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
+                ),
+                const SizedBox(height: 30),
+                Center(
+                  child: SizedBox(
+                    width: 213,
+                    height: 55,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          backgroundColor: ColorManager.primary),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        Navigator.of(context, rootNavigator: true).pop();
 
-                          CommonMethods().launchWhatsAppUri(
-                              "Halo, Admin.\n\nSaya ingin melakukan jasa pembayaran. Mohon bantuannya. \n\nTerima kasih.");
-                        },
-                        child: const Text(
-                          'OK',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        CommonMethods().launchWhatsAppUri(
+                            "Halo, Admin.\n\nSaya ingin melakukan jasa pembayaran. Mohon bantuannya. \n\nTerima kasih.");
+                      },
+                      child: const Text(
+                        'OK',
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-                ],
-              ),
+                ),
+                const SizedBox(height: 15),
+              ],
             ),
           ),
         );
@@ -386,8 +383,13 @@ class CommonDialog {
     );
   }
 
-  buildOkWaWithdrawDialog(BuildContext context, bool status, String message,
-      PayTransactionModel transactionModel) {
+  buildOkWaDialog(
+      BuildContext context,
+      bool status,
+      String message,
+      PayTransactionModel transactionModel,
+      dynamic jumlah,
+      String withdrawSourceType) {
     showGeneralDialog(
       barrierLabel: "Barrier",
       barrierDismissible: false,
@@ -398,212 +400,110 @@ class CommonDialog {
         return Align(
           alignment: Alignment.center,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            padding: const EdgeInsets.all(20),
+            //height: MediaQuery.of(context).size.height * 0.4,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
             margin: const EdgeInsets.only(top: 150, left: 32, right: 32),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: SizedBox.expand(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  status
-                      ? Container(
-                          decoration: BoxDecoration(
-                            color: ColorManager.primary,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 30,
-                            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 10),
+                status
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: ColorManager.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 30,
                           ),
                         ),
-                  const SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(fontWeight: FontWeight.normal),
-                    ),
+                      )
+                    : Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                const SizedBox(height: 25),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(fontWeight: FontWeight.normal),
                   ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: SizedBox(
-                      width: 213,
-                      height: 55,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            backgroundColor: ColorManager.primary),
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
+                ),
+                const SizedBox(height: 30),
+                Center(
+                  child: SizedBox(
+                    width: 213,
+                    height: 55,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          backgroundColor: ColorManager.primary),
+                      onPressed: () {
+                        String currency = '';
+                        String saldoYangDiterima = '';
+                        if (transactionModel.type!.toLowerCase() ==
+                            'withdraw') {
+                          currency = "\$";
+                          saldoYangDiterima =
+                              CommonMethods.formatCompleteCurrency(
+                                  double.parse(transactionModel.subTotal!));
 
-                          String currency = '';
-                          String saldoYangDiterima = '';
-                          if (transactionModel.type!.toLowerCase() ==
-                              'withdraw') {
-                            currency = "\$";
-                            saldoYangDiterima =
-                                CommonMethods.formatCompleteCurrency(
-                                    double.parse(transactionModel.subTotal!));
+                          if (withdrawSourceType == "tab") {
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
                           } else {
-                            currency = "Rp.";
-                            saldoYangDiterima =
-                                "\$${double.parse(transactionModel.total!).toStringAsFixed(2)}";
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
                           }
+                        } else {
+                          currency = "Rp.";
+                          saldoYangDiterima = "\$$jumlah";
 
-                          CommonMethods().launchWhatsAppUri(
-                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detaill sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima: $saldoYangDiterima \n\nTerima kasih.");
-                        },
-                        child: const Text(
-                          'OK',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.of(context, rootNavigator: true).pop();
+                        }
+
+                        CommonMethods().launchWhatsAppUri(
+                            "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.");
+                      },
+                      child: const Text(
+                        'OK',
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  buildOkWaDialog(BuildContext context, bool status, String message,
-      PayTransactionModel transactionModel, dynamic jumlah) {
-    showGeneralDialog(
-      barrierLabel: "Barrier",
-      barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: const Duration(milliseconds: 100),
-      context: context,
-      pageBuilder: (_, __, ___) {
-        return Align(
-          alignment: Alignment.center,
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            padding: const EdgeInsets.all(20),
-            margin: const EdgeInsets.only(top: 150, left: 32, right: 32),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: SizedBox.expand(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  status
-                      ? Container(
-                          decoration: BoxDecoration(
-                            color: ColorManager.primary,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                        ),
-                  const SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(fontWeight: FontWeight.normal),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: SizedBox(
-                      width: 213,
-                      height: 55,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            backgroundColor: ColorManager.primary),
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
-
-                          String currency = '';
-                          String saldoYangDiterima = '';
-                          if (transactionModel.type!.toLowerCase() ==
-                              'withdraw') {
-                            currency = "\$";
-                            saldoYangDiterima =
-                                CommonMethods.formatCompleteCurrency(
-                                    double.parse(transactionModel.subTotal!));
-                          } else {
-                            currency = "Rp.";
-                            saldoYangDiterima = "\$$jumlah";
-                          }
-
-                          CommonMethods().launchWhatsAppUri(
-                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.");
-                        },
-                        child: const Text(
-                          'OK',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                ],
-              ),
+                ),
+                const SizedBox(height: 15),
+              ],
             ),
           ),
         );
@@ -623,88 +523,87 @@ class CommonDialog {
         return Align(
           alignment: Alignment.center,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            padding: const EdgeInsets.all(20),
+            //height: MediaQuery.of(context).size.height * 0.4,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
             margin: const EdgeInsets.only(top: 150, left: 32, right: 32),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: SizedBox.expand(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  status
-                      ? Container(
-                          decoration: BoxDecoration(
-                            color: ColorManager.primary,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 30,
-                            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 10),
+                status
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: ColorManager.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 30,
                           ),
                         ),
-                  const SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(fontWeight: FontWeight.normal),
-                    ),
+                      )
+                    : Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                const SizedBox(height: 25),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(fontWeight: FontWeight.normal),
                   ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: SizedBox(
-                      width: 213,
-                      height: 55,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            backgroundColor: ColorManager.primary),
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
+                ),
+                const SizedBox(height: 30),
+                Center(
+                  child: SizedBox(
+                    width: 213,
+                    height: 55,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          backgroundColor: ColorManager.primary),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        Navigator.of(context, rootNavigator: true).pop();
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Login(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'OK',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Login(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'OK',
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-                ],
-              ),
+                ),
+                const SizedBox(height: 15),
+              ],
             ),
           ),
         );
@@ -724,87 +623,86 @@ class CommonDialog {
         return Align(
           alignment: Alignment.center,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            padding: const EdgeInsets.all(20),
+            //height: MediaQuery.of(context).size.height * 0.4,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
             margin: const EdgeInsets.only(top: 150, left: 32, right: 32),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: SizedBox.expand(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  status
-                      ? Container(
-                          decoration: BoxDecoration(
-                            color: ColorManager.primary,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          decoration: BoxDecoration(
-                            color: ColorManager.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 30,
-                            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 10),
+                status
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: ColorManager.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 30,
                           ),
                         ),
-                  const SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(fontWeight: FontWeight.normal),
-                    ),
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                          color: ColorManager.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                const SizedBox(height: 25),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(fontWeight: FontWeight.normal),
                   ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: SizedBox(
-                      width: 213,
-                      height: 55,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            backgroundColor: ColorManager.primary),
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true).pop();
+                ),
+                const SizedBox(height: 30),
+                Center(
+                  child: SizedBox(
+                    width: 213,
+                    height: 55,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          backgroundColor: ColorManager.primary),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop();
 
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (ctx) => Login(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'OK',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => Login(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'OK',
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-                ],
-              ),
+                ),
+                const SizedBox(height: 15),
+              ],
             ),
           ),
         );

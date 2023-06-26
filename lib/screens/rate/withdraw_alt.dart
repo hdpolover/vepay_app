@@ -455,6 +455,7 @@ class _WithdrawAltState extends State<WithdrawAlt> {
                                         withdrawModel: chosenWd,
                                         blockchainModel: chosenbc,
                                         data: data,
+                                        wdSource: "alt",
                                       ),
                                       withNavBar: false,
                                     );

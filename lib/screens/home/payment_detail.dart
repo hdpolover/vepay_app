@@ -264,8 +264,35 @@ class _PaymentDetailState extends State<PaymentDetail> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                        "Transfer total pembayaran sesuai dengan rincian diatas ke nomor rekening atas nama ${widget.transactionModel.atasNama}. Biaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur dibawah ini."),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          const TextSpan(
+                            text:
+                                "Transfer total pembayaran sesuai dengan rincian di atas ke nomor rekening atas nama ",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: widget.transactionModel.atasNama,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const TextSpan(
+                            text:
+                                ". \n\nBiaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur di bawah ini.",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Text(
+                    //     "Transfer total pembayaran sesuai dengan rincian di atas ke nomor rekening atas nama ${widget.withdrawModel.atasNama}. \n\nBiaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur di bawah ini."),
                   ],
                 ),
               ),
@@ -495,6 +522,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                         "Pembuatan Pesanan berhasil. Buka WhatsApp sekarang untuk hubungi Admin.",
                                         p,
                                         widget.trData['jumlah'],
+                                        "",
                                       );
                                     } catch (e) {
                                       print(e);
@@ -547,6 +575,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                     "Pembuatan Pesanan berhasil. Buka WhatsApp sekarang untuk hubungi Admin.",
                                     p,
                                     widget.trData['jumlah'],
+                                    "",
                                   );
                                 } catch (e) {
                                   print(e);

@@ -21,10 +21,13 @@ class WithdrawPayment extends StatefulWidget {
   Map<String, dynamic> trData;
   TransactionModel transactionModel;
   WithdrawModel withdrawModel;
+  String wdSource;
+
   WithdrawPayment(
       {required this.trData,
       required this.transactionModel,
       required this.withdrawModel,
+      required this.wdSource,
       Key? key})
       : super(key: key);
 
@@ -254,8 +257,35 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                        "Transfer total pembayaran sesuai dengan rincian diatas ke nomor rekening atas nama ${widget.withdrawModel.atasNama}. Biaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur dibawah ini."),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          const TextSpan(
+                            text:
+                                "Transfer total pembayaran sesuai dengan rincian di atas ke nomor rekening atas nama ",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: widget.withdrawModel.atasNama,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const TextSpan(
+                            text:
+                                ". \n\nBiaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur di bawah ini.",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Text(
+                    //     "Transfer total pembayaran sesuai dengan rincian di atas ke nomor rekening atas nama ${widget.withdrawModel.atasNama}. \n\nBiaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur di bawah ini."),
                   ],
                 ),
               ),
@@ -477,6 +507,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
                                       "Pembuatan Pesanan berhasil. Buka WhatsApp sekarang untuk hubungi Admin.",
                                       p,
                                       widget.trData['jumlah'],
+                                      widget.wdSource,
                                     );
                                   } catch (e) {
                                     print(e);
