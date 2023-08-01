@@ -9,7 +9,9 @@ import 'package:vepay_app/screens/auth/login.dart';
 import 'package:vepay_app/screens/profile/about_us.dart';
 import 'package:vepay_app/screens/profile/contact_us.dart';
 import 'package:vepay_app/screens/profile/edit_profile.dart';
+import 'package:vepay_app/screens/profile/faq.dart';
 import 'package:vepay_app/screens/profile/vcc.dart';
+import 'package:vepay_app/screens/referral/referral_home.dart';
 import 'package:vepay_app/services/auth_service.dart';
 
 import '../../resources/color_manager.dart';
@@ -99,6 +101,56 @@ class _ProfileTabState extends State<ProfileTab> {
                   ),
                 ),
                 title: const Text("Virtual Credit Card (VCC)"),
+              ),
+              ListTile(
+                onTap: () {
+                  PersistentNavBarNavigator.pushNewScreen(
+                    context,
+                    screen: ReferralHome(),
+                    withNavBar: false,
+                  );
+                },
+                contentPadding: const EdgeInsets.fromLTRB(15, 5, 5, 5),
+                leading: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: ColorManager.primary.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12)),
+                  padding: const EdgeInsets.all(10),
+                  child: Center(
+                    child: FaIcon(
+                      FontAwesomeIcons.ticket,
+                      color: ColorManager.primary,
+                    ),
+                  ),
+                ),
+                title: const Text("Kode Referral"),
+              ),
+              ListTile(
+                onTap: () {
+                  PersistentNavBarNavigator.pushNewScreen(
+                    context,
+                    screen: Faq(),
+                    withNavBar: false,
+                  );
+                },
+                contentPadding: const EdgeInsets.fromLTRB(15, 5, 5, 5),
+                leading: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: ColorManager.primary.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12)),
+                  padding: const EdgeInsets.all(10),
+                  child: Center(
+                    child: FaIcon(
+                      FontAwesomeIcons.question,
+                      color: ColorManager.primary,
+                    ),
+                  ),
+                ),
+                title: const Text("FAQ (Frequently Asked Questions)"),
               ),
               ListTile(
                 onTap: () {

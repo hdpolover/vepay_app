@@ -327,7 +327,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
                           widget.data['total_promo'] = totalPromo;
 
                           Map<String, dynamic> data = {
-                            'm_metode_id': null,
+                            'm_metode_id': widget.data["m_metode_id"],
                             'm_rate_id': widget.rateModel.id,
                             'jumlah': widget.data['jumlah'],
                             'sub_total': subtotal,

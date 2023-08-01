@@ -24,8 +24,8 @@ class _PromoDetailState extends State<PromoDetail> {
         children: [
           FancyShimmerImage(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.3,
-            boxFit: BoxFit.cover,
+            height: MediaQuery.of(context).size.height * 0.2,
+            boxFit: BoxFit.fill,
             imageUrl: widget.promo.image!,
             errorWidget: Image.network(
                 'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
@@ -81,7 +81,7 @@ class _PromoDetailState extends State<PromoDetail> {
                 Text(
                   widget.promo.jenis! == "1"
                       ? CommonMethods.formatCompleteCurrency(
-                          widget.promo.value!,
+                          widget.promo.value!.toDouble(),
                         )
                       : "${widget.promo.value!}%",
                   style: Theme.of(context).textTheme.bodyText2,

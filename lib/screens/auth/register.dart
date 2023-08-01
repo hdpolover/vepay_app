@@ -6,6 +6,7 @@ import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/common/global_values.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/login.dart';
+import 'package:vepay_app/screens/auth/referral.dart';
 import 'package:vepay_app/screens/dashboard.dart';
 import 'package:vepay_app/screens/webview_page.dart';
 import 'package:vepay_app/services/auth_service.dart';
@@ -38,13 +39,13 @@ class _RegisterState extends State<Register> {
     MinLengthValidator(3, errorText: "Panjang nama minimal 3 karakter"),
   ]);
 
-  // final _phoneValidator = MultiValidator([
-  //   RequiredValidator(errorText: 'Harap masukan nomor telepon'),
-  //   MinLengthValidator(10,
-  //       errorText: "Panjang nomor telepon minimal 10 karakter"),
-  //   MaxLengthValidator(15,
-  //       errorText: "Panjang nomor telepon maksimal 15 karakter"),
-  // ]);
+  final _phoneValidator = MultiValidator([
+    RequiredValidator(errorText: 'Harap masukan nomor telepon'),
+    MinLengthValidator(9,
+        errorText: "Panjang nomor telepon minimal 10 karakter"),
+    MaxLengthValidator(15,
+        errorText: "Panjang nomor telepon maksimal 15 karakter"),
+  ]);
 
   final _passwordValidator = MultiValidator([
     RequiredValidator(errorText: "Harap masukan password"),
@@ -60,20 +61,21 @@ class _RegisterState extends State<Register> {
 
   bool checkValue = false;
 
-  regist(String e, String n, String p, bool isGoogle) async {
+  regist(String e, String n, String p, String phone, bool isGoogle) async {
     Map<String, dynamic> data;
     if (isGoogle) {
       data = {
         'is_google': true,
         "email": e,
-        'mama': n,
+        'nama': n,
+        'phone': phone,
       };
     } else {
       data = {
         'is_google': false,
         "email": e,
         "nama": n,
-        "phone": "08",
+        "phone": phone,
         "password": p,
       };
     }
@@ -107,9 +109,7 @@ class _RegisterState extends State<Register> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Dashboard(
-                  member: currentMemberGlobal.value,
-                ),
+                builder: (context) => Referral(),
               ),
             );
           } catch (e) {
@@ -137,6 +137,9 @@ class _RegisterState extends State<Register> {
             "Pendaftaran berhasil. Silakan cek email untuk verifikasi lalu lakukan login.");
       }
     } catch (e) {
+      FirebaseAuth.instance.currentUser!.delete();
+      await FirebaseAuth.instance.signOut();
+
       setState(() {
         isLoading = false;
       });
@@ -202,23 +205,24 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                   ),
-                  // Container(
-                  //   padding: const EdgeInsets.all(10),
-                  //   child: TextFormField(
-                  //     controller: phoneController,
-                  //     validator: _phoneValidator,
-                  //     keyboardType: TextInputType.phone,
-                  //     decoration: InputDecoration(
-                  //       border: const OutlineInputBorder(),
-                  //       hintText: 'Telepon',
-                  //       focusedBorder: OutlineInputBorder(
-                  //         borderSide: BorderSide(
-                  //           color: ColorManager.primary,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: TextFormField(
+                      controller: phoneController,
+                      validator: _phoneValidator,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        prefix: const Text("+62"),
+                        border: const OutlineInputBorder(),
+                        hintText: 'Nomor Telepon (WhatsApp)',
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: ColorManager.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: TextFormField(
@@ -382,6 +386,7 @@ class _RegisterState extends State<Register> {
                                       emailController.text.trim(),
                                       nameController.text.trim(),
                                       passwordController.text.trim(),
+                                      phoneController.text.trim(),
                                       false,
                                     );
                                   }
@@ -448,8 +453,6 @@ class _RegisterState extends State<Register> {
                             UserCredential? result =
                                 await FbService.signInWithGoogle();
 
-                            print(result.additionalUserInfo!.isNewUser);
-
                             if (result.additionalUserInfo!.isNewUser) {
                               // Close the dialog programmatically
                               Navigator.of(context).pop();
@@ -458,6 +461,7 @@ class _RegisterState extends State<Register> {
                                 result.user!.email!,
                                 result.user!.displayName!,
                                 "",
+                                "8123",
                                 true,
                               );
                             } else {
@@ -473,7 +477,7 @@ class _RegisterState extends State<Register> {
 
                                   CommonMethods().saveUserLoginsDetails(
                                       m.userId!,
-                                      m.email!,
+                                      m.name!,
                                       m.email!,
                                       "",
                                       true,
@@ -496,6 +500,8 @@ class _RegisterState extends State<Register> {
                                     ),
                                   );
                                 } catch (e) {
+                                  Navigator.of(context).pop();
+
                                   setState(() {
                                     isLoading = false;
                                   });

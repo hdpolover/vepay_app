@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:vepay_app/common/common_dialog.dart';
-import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/screens/auth/check_email.dart';
 

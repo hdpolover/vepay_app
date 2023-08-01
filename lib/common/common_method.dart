@@ -1,7 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-import 'package:mailer/smtp_server/gmail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
@@ -43,7 +42,6 @@ class CommonMethods {
 
     switch (name) {
       case "paypal":
-
       case "skrill":
       case "perfect money":
       case "neteller":
@@ -55,7 +53,6 @@ class CommonMethods {
 
         break;
       case "usdt":
-
       case "busd":
         value = "Hash";
 

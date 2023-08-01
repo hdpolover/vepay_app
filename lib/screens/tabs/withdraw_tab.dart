@@ -484,6 +484,7 @@ class _WithdrawTabState extends State<WithdrawTab> {
                                         "blockchain_name": selectedChain == null
                                             ? null
                                             : selectedChain!.blockchain,
+                                        "m_metode_id": selectedMethod!.id!,
                                       };
 
                                       RateModel chosenRate = selectedRate!;

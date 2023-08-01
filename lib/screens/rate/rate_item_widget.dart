@@ -5,7 +5,6 @@ import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/models/rate_model.dart';
 import 'package:vepay_app/screens/rate/withdraw_alt.dart';
 
-import '../home/product_buy_detail.dart';
 import '../home/product_detail.dart';
 
 class RateItemWidget extends StatefulWidget {

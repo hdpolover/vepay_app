@@ -163,18 +163,7 @@ class TransactionService {
         body: jsonEncode(<String, dynamic>{
           'id': id,
           'user_id': userId,
-          'm_metode_id': data['m_metode_id'],
-          'm_rate_id': data['m_rate_id'],
-          'jumlah': data['jumlah'],
-          'total_bayar': data['total_bayar'],
-          'sub_total': data['sub_total'],
           "akun_tujuan": data['akun_tujuan'],
-          "no_rek": data['no_rek'],
-          "blockchain": data['blockchain'],
-          "no_tujuan": data['no_tujuan'],
-          "id_vcc": data['id_vcc'],
-          "m_promo_id": data['promo_id'],
-          "jenis_transaksi_vcc": data['jenis_transaksi_vcc'],
         }),
       );
 

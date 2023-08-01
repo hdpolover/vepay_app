@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as modalSheet;
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
@@ -85,7 +85,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        bool shouldClose = await showBarModalBottomSheet(
+        bool shouldClose = await modalSheet.showBarModalBottomSheet(
             barrierColor: Colors.black38,
             context: context,
             builder: (context) {

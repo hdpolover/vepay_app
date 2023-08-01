@@ -32,8 +32,7 @@ class PromoService {
 
         return promos;
       } else {
-        print(response.statusCode);
-        throw Exception("ehe");
+        return [];
       }
     } catch (e) {
       print(e);

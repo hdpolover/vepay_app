@@ -132,7 +132,9 @@ class _HomeTabState extends State<HomeTab> {
                     ? Container()
                     : buildTransSection(),
                 const SizedBox(height: 10),
-                buildPromotionSection(),
+                promos != null && promos!.isEmpty
+                    ? Container()
+                    : buildPromotionSection(),
                 const SizedBox(height: 20),
               ],
             ),
@@ -229,7 +231,7 @@ class _HomeTabState extends State<HomeTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Promosi",
+          "Promo",
           style: Theme.of(context).textTheme.bodyText1?.copyWith(
                 fontSize: 18,
               ),

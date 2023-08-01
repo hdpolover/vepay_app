@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as modalSheet;
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/screens/transaction/transaction_item_widget.dart';
@@ -100,7 +100,7 @@ class _TransactionTabState extends State<TransactionTab>
   int? selectedIndex;
 
   void _showFilterPopup() {
-    showBarModalBottomSheet(
+    modalSheet.showBarModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
       ),
@@ -175,7 +175,7 @@ class _TransactionTabState extends State<TransactionTab>
                 body: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ListView(
-                    controller: ModalScrollController.of(context),
+                    controller: modalSheet.ModalScrollController.of(context),
                     children: [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,

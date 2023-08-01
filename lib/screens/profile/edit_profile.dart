@@ -47,6 +47,10 @@ class _EditProfileState extends State<EditProfile> {
 
   final _phoneValidator = MultiValidator([
     RequiredValidator(errorText: 'Harap masukan nomor telepon'),
+    MinLengthValidator(9,
+        errorText: "Panjang nomor telepon minimal 10 karakter"),
+    MaxLengthValidator(15,
+        errorText: "Panjang nomor telepon maksimal 15 karakter"),
   ]);
 
   final _emailValidator = MultiValidator([
@@ -439,7 +443,9 @@ class _EditProfileState extends State<EditProfile> {
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      hintText: 'Nomor Telepon',
+                      hintText: 'Nomor Telepon (WhatsApp)',
+                      prefix: const Text("+62",
+                          style: TextStyle(color: Colors.black)),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: ColorManager.primary,

@@ -82,7 +82,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
   }
 
   countPromo(PromoModel p) {
-    double maksPromo = p.maksimalPromo!;
+    double maksPromo = p.maksimalPromo!.toDouble();
 
     if (p.jenis == "2") {
       double nilaiPromo = (total! * p.value!) / 100;
@@ -111,7 +111,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
       }
     } else {
       setState(() {
-        totalPromo = p.value!;
+        totalPromo = double.parse(p.value!.toString());
       });
 
       countAll(
@@ -446,7 +446,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
           buildMiddleSection(),
           const SizedBox(height: 10),
           buildBottomSection(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.15),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(

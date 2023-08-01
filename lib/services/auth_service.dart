@@ -24,6 +24,7 @@ class AuthService {
                 'is_google': data['is_google'],
                 'email': data['email'],
                 'nama': data['nama'],
+                'phone': data['phone'],
               })
             : jsonEncode(<String, dynamic>{
                 'is_google': data['is_google'],
@@ -38,10 +39,10 @@ class AuthService {
         var result = json.decode(response.body)['data'];
         return MemberModel.fromJson(result);
       } else {
-        throw jsonDecode(response.body)['message'];
+        throw jsonDecode(response.body)['data'];
       }
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 

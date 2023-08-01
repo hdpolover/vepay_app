@@ -8,6 +8,7 @@ import 'package:vepay_app/common/global_values.dart';
 import 'package:vepay_app/models/app_info_model.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/intro.dart';
+import 'package:vepay_app/screens/auth/referral.dart';
 import 'package:vepay_app/screens/dashboard.dart';
 import 'package:vepay_app/services/app_info_service.dart';
 import 'package:vepay_app/services/auth_service.dart';
@@ -88,6 +89,7 @@ class _SplashScreenState extends State<SplashScreen> {
           );
 
           currentMemberGlobal.value = res;
+          //_goToPage(Referral());
 
           _goToPage(Dashboard(member: currentMemberGlobal.value));
         } catch (e) {

@@ -14,10 +14,12 @@ class PromoModel {
   String? kode;
   String? nama;
   String? image;
-  double? value;
-  double? maksimalPromo;
+  int? value;
+  int? maksimalPromo;
+  int? minimumTransaksi;
   String? expired;
-  int? quota;
+  String? publish;
+  String? quota;
   String? jenis;
   String? jenisPengguna;
   String? desc;
@@ -36,7 +38,9 @@ class PromoModel {
     this.image,
     this.value,
     this.maksimalPromo,
+    this.minimumTransaksi,
     this.expired,
+    this.publish,
     this.quota,
     this.jenis,
     this.jenisPengguna,
@@ -55,10 +59,12 @@ class PromoModel {
         kode: json["kode"],
         nama: json["nama"],
         image: json["image"],
-        value: double.parse(json["value"].toString()),
-        maksimalPromo: double.parse(json["maksimal_promo"].toString()),
+        value: json["value"],
+        maksimalPromo: json["maksimal_promo"],
+        minimumTransaksi: json["minimum_transaksi"],
         expired: json["expired"],
-        quota: int.parse(json["quota"]),
+        publish: json["publish"],
+        quota: json["quota"],
         jenis: json["jenis"],
         jenisPengguna: json["jenis_pengguna"],
         desc: json["desc"],
@@ -78,7 +84,9 @@ class PromoModel {
         "image": image,
         "value": value,
         "maksimal_promo": maksimalPromo,
+        "minimum_transaksi": minimumTransaksi,
         "expired": expired,
+        "publish": publish,
         "quota": quota,
         "jenis": jenis,
         "jenis_pengguna": jenisPengguna,

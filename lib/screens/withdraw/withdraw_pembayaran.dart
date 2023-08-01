@@ -425,6 +425,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
         appBar: CommonWidgets().buildCommonAppBar("Detail Pembayaran"),
         body: SingleChildScrollView(
             child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             buildTopSection(),
             const SizedBox(height: 10),
@@ -532,6 +533,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
                       ),
                     ),
             ),
+            const SizedBox(height: 20),
           ],
         )),
       ),
