@@ -55,14 +55,23 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
     try {
       selectedPromo = await PromoService().check(promoController.text.trim());
 
-      CommonDialog.buildOkDialog(
-          context, true, "Kode promo berhasil digunakan");
+      if (selectedPromo!.minimumTransaksi! > subtotal!) {
+        CommonDialog.buildOkDialog(context, false,
+            "Minimum transaksi untuk promo ini belum terpenuhi");
 
-      setState(() {
-        isPromoValid = true;
+        setState(() {
+          isPromoValid = false;
+        });
+      } else {
+        CommonDialog.buildOkDialog(
+            context, true, "Kode promo berhasil digunakan");
 
-        countPromo(selectedPromo!);
-      });
+        setState(() {
+          isPromoValid = true;
+
+          countPromo(selectedPromo!);
+        });
+      }
     } catch (e) {
       CommonDialog.buildOkDialog(context, false, e.toString());
     }
@@ -207,7 +216,9 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                 ),
                 Expanded(
                   child: Text(
-                    "${widget.rateModel.name!} ${widget.rateModel.type!}",
+                    widget.rateModel.categories!.toLowerCase() == "vcc"
+                        ? "Beli ${widget.rateModel.name!}"
+                        : "${widget.rateModel.name!} ${widget.rateModel.type!}",
                     style: Theme.of(context).textTheme.bodyText1?.copyWith(
                           fontSize: 17,
                         ),
@@ -287,106 +298,126 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                 feeFinal!,
               ),
             ),
-            const SizedBox(height: 10),
-            buildTextItem2(
-              "Potongan Promosi",
-              "-${CommonMethods.formatCompleteCurrency(
-                totalPromo!,
-              )}",
-            ),
-            isPromoValid ? Container() : const SizedBox(height: 15),
-            isPromoValid
+            widget.rateModel.categories!.toLowerCase() == "vcc"
                 ? Container()
-                : Row(
+                : Column(
                     children: [
-                      Text(
-                        "Punya kode promo?",
-                        style: Theme.of(context).textTheme.bodyText2,
+                      const SizedBox(height: 10),
+                      buildTextItem2(
+                        "Potongan Promosi",
+                        "-${CommonMethods.formatCompleteCurrency(
+                          totalPromo!,
+                        )}",
                       ),
-                      const SizedBox(width: 20),
-                      InkWell(
-                        onTap: () {
-                          if (isShowPromo) {
-                            setState(() {
-                              isShowPromo = false;
-                            });
-                          } else {
-                            setState(() {
-                              isShowPromo = true;
-                            });
-                          }
-                        },
-                        child: Text(
-                          "Masukan kode",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1
-                              ?.copyWith(color: ColorManager.primary),
-                        ),
-                      ),
-                    ],
-                  ),
-            !isShowPromo ? Container() : const SizedBox(height: 20),
-            !isShowPromo
-                ? Container()
-                : Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: promoController,
-                          keyboardType: TextInputType.text,
-                          readOnly: isPromoValid ? true : false,
-                          decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
-                            hintText: "KODE PROMO",
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: ColorManager.primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
+                      isPromoValid ? Container() : const SizedBox(height: 15),
                       isPromoValid
-                          ? SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
-                              width: MediaQuery.of(context).size.width * 0.25,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red, // background
-                                  foregroundColor: Colors.white, // foreground
+                          ? Container()
+                          : Row(
+                              children: [
+                                Text(
+                                  "Punya kode promo?",
+                                  style: Theme.of(context).textTheme.bodyText2,
                                 ),
-                                child: const Icon((Icons.delete)),
-                                onPressed: () async {
-                                  setState(() {
-                                    isPromoValid = false;
-                                    promoController.clear();
+                                const SizedBox(width: 20),
+                                InkWell(
+                                  onTap: () {
+                                    if (isShowPromo) {
+                                      setState(() {
+                                        isShowPromo = false;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        isShowPromo = true;
+                                      });
+                                    }
+                                  },
+                                  child: Text(
+                                    "Masukan kode",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.copyWith(color: ColorManager.primary),
+                                  ),
+                                ),
+                              ],
+                            ),
+                      !isShowPromo ? Container() : const SizedBox(height: 20),
+                      !isShowPromo
+                          ? Container()
+                          : Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: promoController,
+                                    keyboardType: TextInputType.text,
+                                    readOnly: isPromoValid ? true : false,
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      hintText: "KODE PROMO",
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: ColorManager.primary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                isPromoValid
+                                    ? SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.06,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.25,
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                Colors.red, // background
+                                            foregroundColor:
+                                                Colors.white, // foreground
+                                          ),
+                                          child: const Icon((Icons.delete)),
+                                          onPressed: () async {
+                                            setState(() {
+                                              isPromoValid = false;
+                                              promoController.clear();
 
-                                    deletePromoTotal();
-                                  });
-                                },
-                              ),
-                            )
-                          : SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
-                              width: MediaQuery.of(context).size.width * 0.25,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      ColorManager.primary, // background
-                                  foregroundColor: Colors.white, // foreground
-                                ),
-                                child: const Text('SIMPAN'),
-                                onPressed: () async {
-                                  if (promoController.text.isNotEmpty) {
-                                    checkPromo();
-                                  } else {
-                                    CommonDialog.buildOkDialog(context, false,
-                                        "Harap masukan kode promo terlebih dahulu");
-                                  }
-                                },
-                              ),
+                                              deletePromoTotal();
+                                            });
+                                          },
+                                        ),
+                                      )
+                                    : SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.06,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.25,
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: ColorManager
+                                                .primary, // background
+                                            foregroundColor:
+                                                Colors.white, // foreground
+                                          ),
+                                          child: const Text('SIMPAN'),
+                                          onPressed: () async {
+                                            if (promoController
+                                                .text.isNotEmpty) {
+                                              checkPromo();
+                                            } else {
+                                              CommonDialog.buildOkDialog(
+                                                  context,
+                                                  false,
+                                                  "Harap masukan kode promo terlebih dahulu");
+                                            }
+                                          },
+                                        ),
+                                      ),
+                              ],
                             ),
                     ],
                   ),

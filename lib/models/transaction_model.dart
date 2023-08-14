@@ -36,6 +36,7 @@ class TransactionModel {
     this.blockchain,
     this.createdAt,
     this.modifiedAt,
+    this.potonganDiskon,
   });
 
   String? id;
@@ -56,6 +57,7 @@ class TransactionModel {
   String? atasNama;
   String? type;
   String? fee;
+  dynamic potonganDiskon;
   String? product;
   String? imgProduct;
   dynamic mBlockchainId;
@@ -83,6 +85,7 @@ class TransactionModel {
         atasNama: json["atas_nama"],
         type: json["type"],
         fee: json["fee"],
+        potonganDiskon: json["potongan_diskon"],
         product: json["product"],
         imgProduct: json["img_product"],
         mBlockchainId: json["m_blockchain_id"],

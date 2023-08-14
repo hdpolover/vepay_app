@@ -24,6 +24,8 @@ class _RiwayatReferralState extends State<RiwayatReferral> {
     try {
       history = await ReferralService().getRiwayat();
 
+      print(history!.length);
+
       setState(() {});
     } catch (e) {
       print(e);
@@ -76,7 +78,7 @@ class _RiwayatReferralState extends State<RiwayatReferral> {
                         ),
                         const SizedBox(height: 10),
                         const Text(
-                          "Dapatkan cashback untuk setiap teman yang kamu ajak bergabung dengan kode referrralmu",
+                          "Dapatkan cashback untuk setiap transaksi (top up atau withdraw) yang dilakukan oleh teman kamu",
                           textAlign: TextAlign.center,
                         ),
                       ],

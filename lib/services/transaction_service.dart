@@ -127,19 +127,17 @@ class TransactionService {
           "id_vcc": data['id_vcc'],
           "m_promo_id": data['promo_id'],
           "jenis_transaksi_vcc": data['jenis_transaksi_vcc'],
+          "potongan_diskon": data['total_promo'],
         }),
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         var result = json.decode(response.body)['data'];
-        print(result);
         return TransactionModel.fromJson(result);
       } else {
-        print(jsonDecode(response.body));
-        return null!;
+        throw json.decode(response.body)['message'];
       }
     } catch (e) {
-      print(e);
       rethrow;
     }
   }

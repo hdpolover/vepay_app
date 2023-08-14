@@ -1,6 +1,7 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:vepay_app/common/common_dialog.dart';
@@ -11,7 +12,9 @@ import 'package:vepay_app/models/referred_friend_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/screens/referral/daftar_teman.dart';
 import 'package:vepay_app/screens/referral/riwayat_referral.dart';
+import 'package:vepay_app/screens/referral/withdraw_cashback_referral.dart';
 import 'package:vepay_app/services/referral_service.dart';
+import 'package:html/parser.dart';
 
 import '../../common/common_method.dart';
 import '../../services/app_info_service.dart';
@@ -263,7 +266,7 @@ class _ReferralHomeState extends State<ReferralHome> {
                                     _isInputKode = true;
                                   });
                                 },
-                                child: const Text("Masukan disini"))
+                                child: const Text("Masukan di sini"))
                           ],
                         )
                   : Row(
@@ -395,9 +398,50 @@ class _ReferralHomeState extends State<ReferralHome> {
                       fontWeight: FontWeight.bold,
                       color: ColorManager.primary),
                 ),
+                myReferralModel == null || referralInfoModel == null
+                    ? Container()
+                    : referralInfoModel!.referralWithdrawMinimum! >
+                            myReferralModel!.saldoReferral!
+                        ? Container()
+                        : const SizedBox(height: 20),
+                myReferralModel == null || referralInfoModel == null
+                    ? Container()
+                    : referralInfoModel!.referralWithdrawMinimum! >
+                            myReferralModel!.saldoReferral!
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.06,
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      ColorManager.primary, // background
+                                  foregroundColor: Colors.white, // foreground
+                                ),
+                                child: const Text('Withdraw Cashback'),
+                                onPressed: () {
+                                  PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen: WithdrawCashbackReferral(
+                                      myReferralModel: myReferralModel,
+                                      referralInfoModel: referralInfoModel,
+                                    ),
+                                    withNavBar: false,
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
+                  // child: Center(
+                  //     child: HtmlWidget(
+                  //   referralInfoModel!.referralDescInfo!,
+                  //   renderMode: RenderMode.column,
+                  // )),
                   child: Text(
                     referralInfoModel == null
                         ? "-"
@@ -493,13 +537,9 @@ class _ReferralHomeState extends State<ReferralHome> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
       child: Column(
         children: [
-          Text(
-            referralInfoModel == null
-                ? ""
-                : AppInfoService()
-                    .removeHtmlTags(referralInfoModel!.penggunaan!),
-            textAlign: TextAlign.justify,
-          ),
+          referralInfoModel == null
+              ? Container()
+              : HtmlWidget(referralInfoModel!.penggunaan!)
         ],
       ),
     );

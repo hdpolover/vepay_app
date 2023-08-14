@@ -39,7 +39,7 @@ class AuthService {
         var result = json.decode(response.body)['data'];
         return MemberModel.fromJson(result);
       } else {
-        throw jsonDecode(response.body)['data'];
+        throw jsonDecode(response.body)['message'];
       }
     } catch (e) {
       rethrow;
@@ -75,7 +75,7 @@ class AuthService {
         var result = json.decode(response.body)['data'];
         return MemberModel.fromJson(result);
       } else {
-        throw jsonDecode(response.body)['data'];
+        throw jsonDecode(response.body)['message'];
       }
     } catch (e) {
       rethrow;

@@ -38,8 +38,6 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
   }
 
   getMethods() async {
-    print(widget.data['blockchain_id']);
-
     try {
       await PaymentMethodService().getMethods().then((value) {
         methods = value;
@@ -189,13 +187,17 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
                 widget.data['sub_total'],
               ),
             ),
-            const SizedBox(height: 10),
-            buildTextItem2(
-              "Potongan Promosi",
-              CommonMethods.formatCompleteCurrency(
-                widget.data['total_promo'],
-              ),
-            ),
+            widget.rateModel.categories!.toLowerCase() == "vcc"
+                ? Container()
+                : const SizedBox(height: 10),
+            widget.rateModel.categories!.toLowerCase() == "vcc"
+                ? Container()
+                : buildTextItem2(
+                    "Potongan Promosi",
+                    CommonMethods.formatCompleteCurrency(
+                      widget.data['total_promo'],
+                    ),
+                  ),
             const SizedBox(height: 10),
             buildTextItem2(
               "Biaya Transaksi",
@@ -293,6 +295,7 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
                               'akun_tujuan': widget.data['akun_tujuan'],
                               'blockchain': widget.data['blockchain_id'],
                               'promo_id': widget.data['promo_id'],
+                              'total_promo': widget.data['total_promo'],
                             };
 
                             doTransaction(data);
@@ -308,6 +311,8 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
   }
 
   doTransaction(Map<String, dynamic> data) async {
+    print(data);
+
     try {
       TransactionModel t = await TransactionService().createTransaction(data);
 

@@ -91,11 +91,15 @@ class _TransactionDetailState extends State<TransactionDetail> {
             const SizedBox(height: 20),
             CommonWidgets().buildTextItem(context, "Jenis Produk",
                 "${widget.transaction.product} - ${widget.transaction.type}"),
-            const SizedBox(height: 10),
-            CommonWidgets().buildTextItem(
-                context,
-                CommonMethods().getFieldName(widget.transaction.product!),
-                widget.transaction.akunTujuan ?? ""),
+            widget.transaction.akunTujuan == null
+                ? Container()
+                : const SizedBox(height: 10),
+            widget.transaction.akunTujuan == null
+                ? Container()
+                : CommonWidgets().buildTextItem(
+                    context,
+                    CommonMethods().getFieldName(widget.transaction.product!),
+                    widget.transaction.akunTujuan ?? ""),
             const SizedBox(height: 10),
             CommonWidgets()
                 .buildTextItem(context, "Nama", widget.transaction.name!),
@@ -116,6 +120,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
                         double.parse(widget.transaction.subTotal!)) /
                     100,
               ),
+            ),
+            const SizedBox(height: 10),
+            CommonWidgets().buildTextItem(
+              context,
+              "Potongan diskon",
+              CommonMethods.formatCompleteCurrency((double.parse(
+                  widget.transaction.potonganDiskon!.toString()))),
             ),
             const SizedBox(height: 10),
             CommonWidgets().buildTextItem(

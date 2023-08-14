@@ -11,7 +11,7 @@ String appInfoModelToJson(AppInfoModel data) => json.encode(data.toJson());
 
 class AppInfoModel {
   String? key;
-  String? value;
+  dynamic value;
   dynamic desc;
 
   AppInfoModel({

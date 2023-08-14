@@ -1,5 +1,6 @@
 import 'package:expansion_widget/expansion_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:vepay_app/common/common_shimmer.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/models/faq_model.dart';
@@ -94,8 +95,8 @@ class _FaqState extends State<Faq> {
                         ExpansionPanel(
                           headerBuilder: (context, isExpanded) {
                             return ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(20, 5, 20, 5),
                               title: Text(
                                 faqs![index].judul!,
                                 style: const TextStyle(
@@ -104,14 +105,9 @@ class _FaqState extends State<Faq> {
                             );
                           },
                           body: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
-                            title: Text(
-                              AppInfoService()
-                                  .removeHtmlTags(faqs![index].deskripsi!),
-                              textAlign: TextAlign.justify,
-                            ),
-                          ),
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                              title: HtmlWidget(faqs![index].deskripsi!)),
                           isExpanded: exp[index].isExpanded,
                           canTapOnHeader: true,
                         ),

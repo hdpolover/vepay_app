@@ -589,11 +589,19 @@ class CommonDialog {
                           currency = "Rp.";
                           saldoYangDiterima = "\$$jumlah";
 
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context, rootNavigator: true).pop();
+                          if (transactionModel.product!.toLowerCase() ==
+                              'vcc') {
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
+                          } else {
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
+                          }
                         }
 
                         CommonMethods().launchWhatsAppUri(

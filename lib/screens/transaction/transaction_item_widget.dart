@@ -88,14 +88,20 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Saldo ${widget.transaction.product}",
+                    widget.transaction.product!.toLowerCase() == "vcc"
+                        ? "Beli VCC"
+                        : "Saldo ${widget.transaction.product}",
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1
                         ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  const SizedBox(height: 5),
-                  Text(widget.transaction.akunTujuan ?? "-"),
+                  widget.transaction.akunTujuan == null
+                      ? Container()
+                      : const SizedBox(height: 5),
+                  widget.transaction.akunTujuan == null
+                      ? Container()
+                      : Text(widget.transaction.akunTujuan ?? "-"),
                   const SizedBox(height: 20),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
