@@ -121,13 +121,17 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     100,
               ),
             ),
-            const SizedBox(height: 10),
-            CommonWidgets().buildTextItem(
-              context,
-              "Potongan diskon",
-              CommonMethods.formatCompleteCurrency((double.parse(
-                  widget.transaction.potonganDiskon!.toString()))),
-            ),
+            widget.transaction.type!.toLowerCase() == "withdraw"
+                ? Container()
+                : const SizedBox(height: 10),
+            widget.transaction.type!.toLowerCase() == "withdraw"
+                ? Container()
+                : CommonWidgets().buildTextItem(
+                    context,
+                    "Potongan diskon",
+                    CommonMethods.formatCompleteCurrency((double.parse(
+                        widget.transaction.potonganDiskon!.toString()))),
+                  ),
             const SizedBox(height: 10),
             CommonWidgets().buildTextItem(
               context,

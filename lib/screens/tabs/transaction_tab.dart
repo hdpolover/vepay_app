@@ -471,7 +471,7 @@ class _TransactionTabState extends State<TransactionTab>
       body: RefreshIndicator(
         onRefresh: getTrans,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 60),
           child: transactionList == null
               ? ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 10),

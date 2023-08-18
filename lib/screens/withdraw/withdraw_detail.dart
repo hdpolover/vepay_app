@@ -49,8 +49,6 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
   void initState() {
     double fee = 0;
 
-    print(widget.rateModel.fee!);
-
     // if (widget.rateModel.categories!.toLowerCase() == "crypto") {
     //   double tempFeeRp = double.parse(widget.blockchainModel!.fee!);
 
@@ -336,6 +334,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
                             'no_rek': widget.data['no_rek'],
                             'blockchain': widget.data['blockchain_id'],
                             'promo_id': widget.data['promo_id'],
+                            'total_promo': 0,
                           };
 
                           doTransaction(data);

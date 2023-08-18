@@ -118,6 +118,9 @@ class _LoginState extends State<Login> {
             "Pendaftaran berhasil. Silakan cek email untuk verifikasi lalu lakukan login.");
       }
     } catch (e) {
+      FirebaseAuth.instance.currentUser!.delete();
+      await FirebaseAuth.instance.signOut();
+
       setState(() {
         isLoading = false;
       });

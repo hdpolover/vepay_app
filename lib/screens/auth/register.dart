@@ -382,13 +382,31 @@ class _RegisterState extends State<Register> {
                                       isLoading = true;
                                     });
 
-                                    regist(
-                                      emailController.text.trim(),
-                                      nameController.text.trim(),
-                                      passwordController.text.trim(),
-                                      phoneController.text.trim(),
-                                      false,
-                                    );
+                                    try {
+                                      await FirebaseAuth.instance
+                                          .createUserWithEmailAndPassword(
+                                        email: emailController.text.trim(),
+                                        password:
+                                            passwordController.text.trim(),
+                                      );
+
+                                      regist(
+                                        emailController.text.trim(),
+                                        nameController.text.trim(),
+                                        passwordController.text.trim(),
+                                        phoneController.text.trim(),
+                                        false,
+                                      );
+                                    } catch (e) {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+
+                                      String message = e.toString();
+
+                                      CommonDialog.buildOkDialog(context, false,
+                                          message.split("]").last);
+                                    }
                                   }
                                 }
                               },
