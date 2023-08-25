@@ -545,8 +545,8 @@ class _RegisterState extends State<Register> {
                               isLoading = false;
                             });
 
-                            CommonDialog.buildOkDialog(
-                                context, false, e.toString());
+                            // CommonDialog.buildOkDialog(
+                            //     context, false, e.toString());
                           }
                         },
                       ),

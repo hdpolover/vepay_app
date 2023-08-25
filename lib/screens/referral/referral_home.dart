@@ -59,6 +59,26 @@ class _ReferralHomeState extends State<ReferralHome> {
     }
   }
 
+  Future<void> refreshData() async {
+    setState(() {
+      referralInfoModel = null;
+      myReferralModel = null;
+      refFriends = [];
+    });
+
+    try {
+      referralInfoModel = await ReferralService().getReferralInfo();
+      myReferralModel = await ReferralService().getMyReferral();
+      refFriends = await ReferralService().getFriends();
+
+      kodeController.text = myReferralModel!.kodeReferral!.toUpperCase();
+
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     getMyInfo();
@@ -549,14 +569,18 @@ class _ReferralHomeState extends State<ReferralHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonWidgets().buildCommonAppBar("Referral"),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            buildHeader(),
-            buildKode(),
-            buildSaldo(),
-            buildBottom(),
-          ],
+      body: RefreshIndicator(
+        onRefresh: refreshData,
+        color: ColorManager.primary,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              buildHeader(),
+              buildKode(),
+              buildSaldo(),
+              buildBottom(),
+            ],
+          ),
         ),
       ),
     );

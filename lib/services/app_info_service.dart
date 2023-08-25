@@ -41,7 +41,7 @@ class AppInfoService {
     }
   }
 
-  String? getValueByKey(String key) {
+  dynamic getValueByKey(String key) {
     // Iterate over the appInfoGlobal list
     for (final appInfo in appInfoGlobal.value) {
       // Check if the key matches

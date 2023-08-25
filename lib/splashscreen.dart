@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/common/global_values.dart';
+import 'package:vepay_app/maintenance.dart';
 import 'package:vepay_app/models/app_info_model.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/intro.dart';
@@ -54,54 +55,63 @@ class _SplashScreenState extends State<SplashScreen> {
         appInfoGlobal.value = temp;
       });
 
-      if (await _checkUserLoginStatus()) {
-        var prefs = await SharedPreferences.getInstance();
-
-        String? email = prefs.getString("email");
-        String? password = prefs.getString("password") ?? "";
-        bool? isGoogle = prefs.getBool("isGoogle") ?? false;
-
-        Map<String, dynamic> data;
-
-        if (isGoogle) {
-          data = {
-            'is_google': isGoogle,
-            'email': email,
-          };
-        } else {
-          data = {
-            'is_google': isGoogle,
-            'email': email,
-            'password': password,
-          };
-        }
-
-        try {
-          MemberModel? res = await AuthService().login(data);
-
-          CommonMethods().saveUserLoginsDetails(
-            res.userId!,
-            res.name ?? res.email!,
-            res.email!,
-            password,
-            true,
-            isGoogle,
-          );
-
-          currentMemberGlobal.value = res;
-          //_goToPage(Referral());
-
-          _goToPage(Dashboard(member: currentMemberGlobal.value));
-        } catch (e) {
-          buildError(e);
-        }
-      } else {
+      if (AppInfoService().getValueByKey('web_maintenance_mode') == true) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (ctx) => Intro(),
+            builder: (ctx) => Maintenance(),
           ),
         );
+      } else {
+        if (await _checkUserLoginStatus()) {
+          var prefs = await SharedPreferences.getInstance();
+
+          String? email = prefs.getString("email");
+          String? password = prefs.getString("password") ?? "";
+          bool? isGoogle = prefs.getBool("isGoogle") ?? false;
+
+          Map<String, dynamic> data;
+
+          if (isGoogle) {
+            data = {
+              'is_google': isGoogle,
+              'email': email,
+            };
+          } else {
+            data = {
+              'is_google': isGoogle,
+              'email': email,
+              'password': password,
+            };
+          }
+
+          try {
+            MemberModel? res = await AuthService().login(data);
+
+            CommonMethods().saveUserLoginsDetails(
+              res.userId!,
+              res.name ?? res.email!,
+              res.email!,
+              password,
+              true,
+              isGoogle,
+            );
+
+            currentMemberGlobal.value = res;
+            //_goToPage(Referral());
+
+            _goToPage(Dashboard(member: currentMemberGlobal.value));
+          } catch (e) {
+            buildError(e);
+          }
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => Intro(),
+            ),
+          );
+        }
       }
     } catch (e) {
       CommonDialog.buildWrongWithAuth(context, false, e.toString());

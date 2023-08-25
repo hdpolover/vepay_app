@@ -515,8 +515,8 @@ class _LoginState extends State<Login> {
                               isLoading = false;
                             });
 
-                            CommonDialog.buildOkDialog(
-                                context, false, e.toString());
+                            // CommonDialog.buildOkDialog(
+                            //     context, false, e.toString());
                           }
                         },
                       ),

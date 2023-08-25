@@ -61,31 +61,39 @@ class _WithdrawCashbackReferralState extends State<WithdrawCashbackReferral> {
           CommonDialog.buildOkDialog(
               context, false, "Tidak dapat withdraw dengan nominal 0");
         } else {
-          setState(() {
-            isLoading = true;
-          });
+          if (selectedMethod == null) {
+            CommonDialog.buildOkDialog(context, false,
+                "Silakan pilih metode pencairan cashback terlebih dahulu");
+          } else {
+            setState(() {
+              isLoading = true;
+            });
 
-          try {
-            Map<String, dynamic> data = {
-              'nominal': nominalController.text.trim(),
-              'rekening_tujuan': rekTujuanController.text.trim(),
-              'atas_nama': atasNamaController.text.trim(),
-              'metode': selectedMethod!.id!,
-            };
+            try {
+              Map<String, dynamic> data = {
+                'nominal': nominalController.text.trim(),
+                'rekening_tujuan': rekTujuanController.text.trim(),
+                'atas_nama': atasNamaController.text.trim(),
+                'metode': selectedMethod!.id!,
+              };
 
-            await ReferralService().withdraw(data).then((value) {
+              await ReferralService().withdraw(data).then((value) {
+                setState(() {
+                  isLoading = false;
+                });
+
+                CommonDialog.buildOkWithdrawCashbackDialog(
+                    context,
+                    true,
+                    "Berhasil melalukan withdraw cashback. Mohon tunggu proses withdraw oleh Admin.",
+                    widget.referralInfoModel!);
+              });
+            } catch (e) {
               setState(() {
                 isLoading = false;
               });
-
-              CommonDialog.buildOkDialog(context, true,
-                  "Berhasil melalukan withdraw cashback. Mohon tunggu proses withdraw oleh Admin.");
-            });
-          } catch (e) {
-            setState(() {
-              isLoading = false;
-            });
-            CommonDialog.buildOkDialog(context, false, e.toString());
+              CommonDialog.buildOkDialog(context, false, e.toString());
+            }
           }
         }
       }
