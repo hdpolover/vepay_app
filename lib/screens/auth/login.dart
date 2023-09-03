@@ -455,41 +455,64 @@ class _LoginState extends State<Login> {
                                 true,
                               );
                             } else {
-                              try {
-                                Map<String, dynamic> data = {
-                                  "is_google": true,
-                                  "email": result.user!.email!,
-                                };
+                              int? res = await AuthService().checkEmail(
+                                  emailController.text.trim().toString());
 
+                              if (res == 1) {
+                                regist(
+                                  result.user!.email!,
+                                  result.user!.displayName!,
+                                  "",
+                                  true,
+                                );
+                              } else {
                                 try {
-                                  MemberModel m =
-                                      await AuthService().login(data);
+                                  Map<String, dynamic> data = {
+                                    "is_google": true,
+                                    "email": result.user!.email!,
+                                  };
 
-                                  CommonMethods().saveUserLoginsDetails(
-                                      m.userId!,
-                                      m.email!,
-                                      m.email!,
-                                      "",
-                                      true,
-                                      true);
+                                  try {
+                                    MemberModel m =
+                                        await AuthService().login(data);
 
-                                  setState(() {
-                                    isLoading = false;
-                                  });
+                                    CommonMethods().saveUserLoginsDetails(
+                                        m.userId!,
+                                        m.name!,
+                                        m.email!,
+                                        "",
+                                        true,
+                                        true);
 
-                                  currentMemberGlobal.value = m;
+                                    setState(() {
+                                      isLoading = false;
+                                    });
 
+                                    currentMemberGlobal.value = m;
+
+                                    Navigator.of(context).pop();
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Dashboard(
+                                          member: currentMemberGlobal.value,
+                                        ),
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    Navigator.of(context).pop();
+
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    CommonDialog.buildOkDialog(
+                                        context, false, e.toString());
+                                  }
+                                } catch (e) {
                                   Navigator.of(context).pop();
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Dashboard(
-                                        member: currentMemberGlobal.value,
-                                      ),
-                                    ),
-                                  );
-                                } catch (e) {
                                   setState(() {
                                     isLoading = false;
                                   });
@@ -497,15 +520,6 @@ class _LoginState extends State<Login> {
                                   CommonDialog.buildOkDialog(
                                       context, false, e.toString());
                                 }
-                              } catch (e) {
-                                Navigator.of(context).pop();
-
-                                setState(() {
-                                  isLoading = false;
-                                });
-
-                                CommonDialog.buildOkDialog(
-                                    context, false, e.toString());
                               }
                             }
                           } catch (e) {

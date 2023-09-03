@@ -383,29 +383,55 @@ class _RegisterState extends State<Register> {
                                     });
 
                                     try {
-                                      await FirebaseAuth.instance
-                                          .createUserWithEmailAndPassword(
-                                        email: emailController.text.trim(),
-                                        password:
-                                            passwordController.text.trim(),
-                                      );
+                                      int? res = await AuthService().checkEmail(
+                                          emailController.text
+                                              .trim()
+                                              .toString());
 
-                                      regist(
-                                        emailController.text.trim(),
-                                        nameController.text.trim(),
-                                        passwordController.text.trim(),
-                                        phoneController.text.trim(),
-                                        false,
-                                      );
+                                      print(res);
+
+                                      if (res == 0 || res == 2) {
+                                        try {
+                                          await FirebaseAuth.instance
+                                              .createUserWithEmailAndPassword(
+                                            email: emailController.text.trim(),
+                                            password:
+                                                passwordController.text.trim(),
+                                          );
+
+                                          regist(
+                                            emailController.text.trim(),
+                                            nameController.text.trim(),
+                                            passwordController.text.trim(),
+                                            phoneController.text.trim(),
+                                            false,
+                                          );
+                                        } catch (e) {
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+
+                                          String message = e.toString();
+
+                                          CommonDialog.buildOkDialog(context,
+                                              false, message.split("]").last);
+                                        }
+                                      } else {
+                                        regist(
+                                          emailController.text.trim(),
+                                          nameController.text.trim(),
+                                          passwordController.text.trim(),
+                                          phoneController.text.trim(),
+                                          false,
+                                        );
+                                      }
                                     } catch (e) {
                                       setState(() {
                                         isLoading = false;
                                       });
 
-                                      String message = e.toString();
-
-                                      CommonDialog.buildOkDialog(context, false,
-                                          message.split("]").last);
+                                      CommonDialog.buildOkDialog(
+                                          context, false, e.toString());
                                     }
                                   }
                                 }
@@ -483,40 +509,62 @@ class _RegisterState extends State<Register> {
                                 true,
                               );
                             } else {
-                              try {
-                                Map<String, dynamic> data = {
-                                  "is_google": true,
-                                  "email": result.user!.email!,
-                                };
+                              int? res = await AuthService().checkEmail(
+                                  emailController.text.trim().toString());
 
+                              if (res == 1) {
+                                regist(
+                                  result.user!.email!,
+                                  result.user!.displayName!,
+                                  "",
+                                  "8123",
+                                  true,
+                                );
+                              } else {
                                 try {
-                                  MemberModel m =
-                                      await AuthService().login(data);
+                                  Map<String, dynamic> data = {
+                                    "is_google": true,
+                                    "email": result.user!.email!,
+                                  };
 
-                                  CommonMethods().saveUserLoginsDetails(
-                                      m.userId!,
-                                      m.name!,
-                                      m.email!,
-                                      "",
-                                      true,
-                                      true);
+                                  try {
+                                    MemberModel m =
+                                        await AuthService().login(data);
 
-                                  setState(() {
-                                    isLoading = false;
-                                  });
+                                    CommonMethods().saveUserLoginsDetails(
+                                        m.userId!,
+                                        m.name!,
+                                        m.email!,
+                                        "",
+                                        true,
+                                        true);
 
-                                  currentMemberGlobal.value = m;
+                                    setState(() {
+                                      isLoading = false;
+                                    });
 
-                                  Navigator.of(context).pop();
+                                    currentMemberGlobal.value = m;
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Dashboard(
-                                        member: currentMemberGlobal.value,
+                                    Navigator.of(context).pop();
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Dashboard(
+                                          member: currentMemberGlobal.value,
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  } catch (e) {
+                                    Navigator.of(context).pop();
+
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    CommonDialog.buildOkDialog(
+                                        context, false, e.toString());
+                                  }
                                 } catch (e) {
                                   Navigator.of(context).pop();
 
@@ -527,15 +575,6 @@ class _RegisterState extends State<Register> {
                                   CommonDialog.buildOkDialog(
                                       context, false, e.toString());
                                 }
-                              } catch (e) {
-                                Navigator.of(context).pop();
-
-                                setState(() {
-                                  isLoading = false;
-                                });
-
-                                CommonDialog.buildOkDialog(
-                                    context, false, e.toString());
                               }
                             }
                           } catch (e) {

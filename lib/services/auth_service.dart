@@ -178,6 +178,31 @@ class AuthService {
     }
   }
 
+  Future<int> checkEmail(String email) async {
+    String url = "${AppConstants.apiUrl}check_user_account/$email";
+
+    print(url);
+
+    try {
+      final http.Response response = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        var result = json.decode(response.body)['status'];
+        return result;
+      } else {
+        throw jsonDecode(response.body)['message'];
+      }
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   Future<MemberModel> getMemberDetail() async {
     var prefs = await SharedPreferences.getInstance();
     String? userId = prefs.getString("user_id");
