@@ -24,11 +24,9 @@ class _VccState extends State<Vcc> {
     getVcc();
   }
 
-  getVcc() async {
+  Future<void> getVcc() async {
     try {
       vccs = await VccService().getVccs();
-
-      print(vccs![0].holder);
 
       setState(() {});
     } catch (e) {
@@ -39,34 +37,33 @@ class _VccState extends State<Vcc> {
   buildEmpty() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
-            ),
-            Image(
-              width: MediaQuery.of(context).size.width * 0.4,
-              image: const AssetImage('assets/sorry.png'),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              "Yah, kamu belum punya VCC!",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                  ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              "Jangan kuatir! VCC dapat kamu beli di Vepay.id dengan proses yang sangat mudah dan cepat",
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-          ],
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image(
+                width: MediaQuery.of(context).size.width * 0.4,
+                image: const AssetImage('assets/sorry.png'),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                "Yah, kamu belum punya VCC!",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                    ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                "Jangan kuatir! VCC dapat kamu beli di Vepay.id dengan proses yang sangat mudah dan cepat",
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -74,54 +71,29 @@ class _VccState extends State<Vcc> {
 
   @override
   Widget build(BuildContext context) {
-    double? h = MediaQuery.of(context).size.height;
-    double? w = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: CommonWidgets().buildCommonAppBar("Virtual Credit Card"),
       body: SafeArea(
-        child: SingleChildScrollView(
-          // child: Column(
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     buildEmpty(),
-          //   ],
-          // ),
-          child: vccs == null
-              ? buildEmpty()
-              : InkWell(
-                  onTap: () {
-                    PersistentNavBarNavigator.pushNewScreen(
-                      context,
-                      screen: VccDetail(vcc: vccs![0]),
-                      withNavBar: false,
-                    );
-                  },
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    shrinkWrap: true,
-                    itemCount: vccs!.length,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) {
-                      return CreditCardWidget(
+        child: vccs == null
+            ? buildEmpty()
+            : RefreshIndicator(
+                onRefresh: getVcc,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  shrinkWrap: true,
+                  itemCount: vccs!.length,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: VccDetail(vcc: vccs![index]),
+                          withNavBar: false,
+                        );
+                      },
+                      child: CreditCardWidget(
                         cardBgColor: ColorManager.primary,
-                        // glassmorphismConfig: Glassmorphism(
-                        //   blurX: 10.0,
-                        //   blurY: 10.0,
-                        //   gradient: LinearGradient(
-                        //     begin: Alignment.topLeft,
-                        //     end: Alignment.bottomRight,
-                        //     colors: <Color>[
-                        //       Colors.grey.withAlpha(20),
-                        //       Colors.white.withAlpha(20),
-                        //     ],
-                        //     stops: const <double>[
-                        //       0.3,
-                        //       0,
-                        //     ],
-                        //   ),
-                        // ),
                         bankName: "VCC",
                         cardNumber: vccs![index].number!,
                         expiryDate: vccs![index].validDate!,
@@ -132,11 +104,16 @@ class _VccState extends State<Vcc> {
                         isSwipeGestureEnabled: false,
                         onCreditCardWidgetChange:
                             (CreditCardBrand) {}, //true when you want to show cvv(back) view
-                      );
-                    },
-                  ),
+                        obscureInitialCardNumber: true,
+                        cardType: vccs![index].jenisVcc!.toLowerCase() == "visa"
+                            ? CardType.visa
+                            : CardType
+                                .mastercard, //Optional if you want to override Card Type
+                      ),
+                    );
+                  },
                 ),
-        ),
+              ),
       ),
     );
   }

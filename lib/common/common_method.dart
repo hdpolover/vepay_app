@@ -185,8 +185,14 @@ class CommonMethods {
 
     String subject = 'Transaksi Baru #${transactionModel.kodeTransaksi}';
 
-    String body =
-        "Transaksi Baru #${transactionModel.kodeTransaksi}\n\nSilakan proses pesanan dengan detail sebagai berikut:\n\n${transactionModel.type}\n\nKode Transaksi: ${transactionModel.kodeTransaksi}\nProduk: ${transactionModel.product}\nNama Pengguna: ${transactionModel.name}\nTotal: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\nSaldo yang akan diterima: $saldoYangDiterima \n\nPastikan untuk membuka website admin untuk melihat detail transaksi.";
+    String body = "";
+    if (transactionModel.product!.toLowerCase() == "vcc") {
+      body =
+          "Transaksi Baru #${transactionModel.kodeTransaksi}\n\nSilakan proses pesanan dengan detail sebagai berikut:\n\n${transactionModel.type}\n\nKode Transaksi: ${transactionModel.kodeTransaksi}\nProduk: ${transactionModel.product}\nNama Pengguna: ${transactionModel.name}\nTotal: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)} \n\nPastikan untuk membuka website admin untuk melihat detail transaksi.";
+    } else {
+      body =
+          "Transaksi Baru #${transactionModel.kodeTransaksi}\n\nSilakan proses pesanan dengan detail sebagai berikut:\n\n${transactionModel.type}\n\nKode Transaksi: ${transactionModel.kodeTransaksi}\nProduk: ${transactionModel.product}\nNama Pengguna: ${transactionModel.name}\nTotal: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\nSaldo yang akan diterima: $saldoYangDiterima \n\nPastikan untuk membuka website admin untuk melihat detail transaksi.";
+    }
 
     String username = 'sent@vepay.id';
     String password = 'asemjawa123';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -43,6 +44,10 @@ class _VccDetailState extends State<VccDetail> {
               obscureCardNumber: false,
               onCreditCardWidgetChange:
                   (CreditCardBrand) {}, //true when you want to show cvv(back) view
+              cardType: widget.vcc.jenisVcc!.toLowerCase() == "visa"
+                  ? CardType.visa
+                  : CardType
+                      .mastercard, //Optional if you want to override Card Type
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -100,12 +105,35 @@ class _VccDetailState extends State<VccDetail> {
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                   const SizedBox(height: 10),
-                  Text(
-                    widget.vcc.number!,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        ?.copyWith(fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          widget.vcc.number!,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Clipboard.setData(
+                                  ClipboardData(text: widget.vcc.number!))
+                              .then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        "Berhasil menyalin nomor VCC ke clipboard")));
+                          });
+                        },
+                        child: Icon(
+                          Icons.copy,
+                          size: 17,
+                          color: ColorManager.primary,
+                        ),
+                      )
+                    ],
                   ),
                   const SizedBox(height: 20),
                   Text(

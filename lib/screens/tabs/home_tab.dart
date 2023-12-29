@@ -231,7 +231,7 @@ class _HomeTabState extends State<HomeTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Promo",
+          "Promo dan Berita",
           style: Theme.of(context).textTheme.bodyText1?.copyWith(
                 fontSize: 18,
               ),

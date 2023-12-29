@@ -570,7 +570,6 @@ class CommonDialog {
                           backgroundColor: ColorManager.primary),
                       onPressed: () {
                         Navigator.of(context, rootNavigator: true).pop();
-                        Navigator.of(context, rootNavigator: true).pop();
 
                         CommonMethods().launchWhatsAppUri(
                             "Halo, Admin.\n\nSaya ingin melakukan jasa pembayaran. Mohon bantuannya. \n\nTerima kasih.");

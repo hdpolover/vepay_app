@@ -1,7 +1,11 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:vepay_app/common/common_dialog.dart';
+import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/screens/home/promo_detail.dart';
+import 'package:vepay_app/screens/home/promo_news_detail.dart';
 
 import '../../models/promo_model.dart';
 
@@ -19,14 +23,31 @@ class _PromoItemWidgetState extends State<PromoItemWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: InkWell(
-        onTap: () {
-          PersistentNavBarNavigator.pushNewScreen(
-            context,
-            screen: PromoDetail(
-              promo: widget.promo,
-            ),
-            withNavBar: false,
-          );
+        onTap: () async {
+          if (widget.promo.jenisKonten == "1") {
+            PersistentNavBarNavigator.pushNewScreen(
+              context,
+              screen: PromoDetail(
+                promo: widget.promo,
+              ),
+              withNavBar: false,
+            );
+          } else if (widget.promo.jenisKonten == "2") {
+            PersistentNavBarNavigator.pushNewScreen(
+              context,
+              screen: PromoNewsDetail(
+                promo: widget.promo,
+              ),
+              withNavBar: false,
+            );
+          } else if (widget.promo.jenisKonten == "3") {
+            final url = Uri.parse(widget.promo.redirectLink!);
+
+            if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+              CommonDialog.buildOkDialog(
+                  context, false, "Terjadi kesalahan. Silahkan coba lagi.");
+            }
+          }
         },
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.18,

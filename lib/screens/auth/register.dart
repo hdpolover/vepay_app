@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:vepay_app/common/common_dialog.dart';
-import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/common/global_values.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/login.dart';
@@ -137,7 +136,7 @@ class _RegisterState extends State<Register> {
             "Pendaftaran berhasil. Silakan cek email untuk verifikasi lalu lakukan login.");
       }
     } catch (e) {
-      FirebaseAuth.instance.currentUser!.delete();
+      //FirebaseAuth.instance.currentUser!.delete();
       await FirebaseAuth.instance.signOut();
 
       setState(() {
@@ -390,7 +389,7 @@ class _RegisterState extends State<Register> {
 
                                       print(res);
 
-                                      if (res == 0 || res == 2) {
+                                      if (res == 0) {
                                         try {
                                           await FirebaseAuth.instance
                                               .createUserWithEmailAndPassword(
@@ -416,14 +415,26 @@ class _RegisterState extends State<Register> {
                                           CommonDialog.buildOkDialog(context,
                                               false, message.split("]").last);
                                         }
-                                      } else {
-                                        regist(
-                                          emailController.text.trim(),
-                                          nameController.text.trim(),
-                                          passwordController.text.trim(),
-                                          phoneController.text.trim(),
-                                          false,
-                                        );
+                                      } else if (res == 1) {
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+
+                                        FbService.signOut(context);
+
+                                        CommonDialog.buildOkDialog(
+                                            context,
+                                            false,
+                                            "Akun Anda dibanned, silahkan hubungi admin untuk informasi lebih lanjut.");
+                                      } else if (res == 2) {
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+
+                                        CommonDialog.buildOkDialog(
+                                            context,
+                                            false,
+                                            "Email sudah terdaftar. Silakan lakukan login.");
                                       }
                                     } catch (e) {
                                       setState(() {
@@ -509,10 +520,12 @@ class _RegisterState extends State<Register> {
                                 true,
                               );
                             } else {
-                              int? res = await AuthService().checkEmail(
-                                  emailController.text.trim().toString());
+                              int? res = await AuthService()
+                                  .checkEmail(result.user!.email!);
 
-                              if (res == 1) {
+                              print(res);
+
+                              if (res == 0) {
                                 regist(
                                   result.user!.email!,
                                   result.user!.displayName!,
@@ -520,7 +533,18 @@ class _RegisterState extends State<Register> {
                                   "8123",
                                   true,
                                 );
-                              } else {
+                              } else if (res == 1) {
+                                FbService.signOut(context);
+
+                                Navigator.of(context).pop();
+
+                                setState(() {
+                                  isLoading = false;
+                                });
+
+                                CommonDialog.buildOkDialog(context, false,
+                                    "Akun Anda dibanned, silahkan hubungi admin untuk informasi lebih lanjut.");
+                              } else if (res == 2) {
                                 try {
                                   Map<String, dynamic> data = {
                                     "is_google": true,

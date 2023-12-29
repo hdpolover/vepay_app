@@ -136,22 +136,32 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.3),
-            Image(
-              width: MediaQuery.of(context).size.width * 0.38,
-              image: const AssetImage('assets/logo_main.png'),
-            ),
-            // SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            // Text(
-            //   "v 0.0.1",
-            //   style: Theme.of(context).textTheme.caption,
-            // ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-          ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.height * 0.07),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.35),
+
+              Image(
+                width: MediaQuery.of(context).size.width * 0.38,
+                image: const AssetImage('assets/logo_main.png'),
+              ),
+              // SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              // Text(
+              //   "v 0.0.1",
+              //   style: Theme.of(context).textTheme.caption,
+              // ),
+              const Spacer(),
+              Text(
+                "PT. Vepay Multipayment Internasional",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.bold, color: Colors.black),
+              ),
+            ],
+          ),
         ),
       ),
     );

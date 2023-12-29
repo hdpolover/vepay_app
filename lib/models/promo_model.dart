@@ -11,19 +11,21 @@ String promoModelToJson(PromoModel data) => json.encode(data.toJson());
 
 class PromoModel {
   String? id;
-  String? kode;
+  dynamic kode;
+  String? jenisKonten;
   String? nama;
   String? image;
   int? value;
   int? maksimalPromo;
   int? minimumTransaksi;
   String? expired;
-  String? publish;
+  dynamic publish;
   String? quota;
-  String? jenis;
-  String? jenisPengguna;
+  dynamic jenis;
+  dynamic jenisPengguna;
   String? desc;
-  String? status;
+  String? redirectLink;
+  dynamic status;
   String? createdAt;
   String? createdBy;
   String? modifiedAt;
@@ -34,6 +36,7 @@ class PromoModel {
   PromoModel({
     this.id,
     this.kode,
+    this.jenisKonten,
     this.nama,
     this.image,
     this.value,
@@ -45,6 +48,7 @@ class PromoModel {
     this.jenis,
     this.jenisPengguna,
     this.desc,
+    this.redirectLink,
     this.status,
     this.createdAt,
     this.createdBy,
@@ -57,6 +61,7 @@ class PromoModel {
   factory PromoModel.fromJson(Map<String, dynamic> json) => PromoModel(
         id: json["id"],
         kode: json["kode"],
+        jenisKonten: json["jenis_konten"],
         nama: json["nama"],
         image: json["image"],
         value: json["value"],
@@ -68,6 +73,7 @@ class PromoModel {
         jenis: json["jenis"],
         jenisPengguna: json["jenis_pengguna"],
         desc: json["desc"],
+        redirectLink: json["redirect_link"],
         status: json["status"],
         createdAt: json["created_at"],
         createdBy: json["created_by"],
@@ -80,6 +86,7 @@ class PromoModel {
   Map<String, dynamic> toJson() => {
         "id": id,
         "kode": kode,
+        "jenis_konten": jenisKonten,
         "nama": nama,
         "image": image,
         "value": value,
@@ -91,6 +98,7 @@ class PromoModel {
         "jenis": jenis,
         "jenis_pengguna": jenisPengguna,
         "desc": desc,
+        "redirect_link": redirectLink,
         "status": status,
         "created_at": createdAt,
         "created_by": createdBy,

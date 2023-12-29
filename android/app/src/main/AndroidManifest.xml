@@ -7,7 +7,8 @@
    <application
         android:label="Vepay"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -40,6 +41,10 @@
     <intent>
       <action android:name="android.intent.action.SENDTO" />
       <data android:scheme="mailto" />
+    </intent>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="https" />
     </intent>
   </queries>
 </manifest>

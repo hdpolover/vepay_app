@@ -118,7 +118,8 @@ class _LoginState extends State<Login> {
             "Pendaftaran berhasil. Silakan cek email untuk verifikasi lalu lakukan login.");
       }
     } catch (e) {
-      FirebaseAuth.instance.currentUser!.delete();
+      //FirebaseAuth.instance.currentUser!.delete();
+      FbService.signOut(context);
       await FirebaseAuth.instance.signOut();
 
       setState(() {
@@ -130,33 +131,62 @@ class _LoginState extends State<Login> {
   }
 
   login() async {
-    Map<String, dynamic> data = {
-      "is_google": false,
-      "email": emailController.text.trim(),
-      "password": passwordController.text.trim(),
-    };
-
     try {
-      MemberModel m = await AuthService().login(data);
+      int? res = await AuthService()
+          .checkEmail(emailController.text.trim().toString());
 
-      CommonMethods().saveUserLoginsDetails(m.userId!, m.name!, m.email!,
-          passwordController.text.trim(), true, false);
+      if (res == 0) {
+        setState(() {
+          isLoading = false;
+        });
 
-      setState(() {
-        isLoading = false;
-      });
+        CommonDialog.buildOkDialog(context, false,
+            "Email tidak terdaftar. Silakan daftar terlebih dahulu.");
+      } else if (res == 1) {
+        setState(() {
+          isLoading = false;
+        });
 
-      currentMemberGlobal.value = m;
+        CommonDialog.buildOkDialog(context, false,
+            "Akun Anda dibanned, silahkan hubungi admin untuk informasi lebih lanjut.");
+      } else if (res == 2) {
+        Map<String, dynamic> data = {
+          "is_google": false,
+          "email": emailController.text.trim(),
+          "password": passwordController.text.trim(),
+        };
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Dashboard(
-            member: currentMemberGlobal.value,
-          ),
-        ),
-      );
+        try {
+          MemberModel m = await AuthService().login(data);
+
+          CommonMethods().saveUserLoginsDetails(m.userId!, m.name!, m.email!,
+              passwordController.text.trim(), true, false);
+
+          setState(() {
+            isLoading = false;
+          });
+
+          currentMemberGlobal.value = m;
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Dashboard(
+                member: currentMemberGlobal.value,
+              ),
+            ),
+          );
+        } catch (e) {
+          setState(() {
+            isLoading = false;
+          });
+
+          CommonDialog.buildOkDialog(context, false, e.toString());
+        }
+      }
     } catch (e) {
+      Navigator.of(context).pop();
+
       setState(() {
         isLoading = false;
       });
@@ -455,17 +485,27 @@ class _LoginState extends State<Login> {
                                 true,
                               );
                             } else {
-                              int? res = await AuthService().checkEmail(
-                                  emailController.text.trim().toString());
+                              int? res = await AuthService()
+                                  .checkEmail(result.user!.email!);
 
-                              if (res == 1) {
+                              if (res == 0) {
                                 regist(
                                   result.user!.email!,
                                   result.user!.displayName!,
                                   "",
                                   true,
                                 );
-                              } else {
+                              } else if (res == 1) {
+                                FbService.signOut(context);
+                                Navigator.of(context).pop();
+
+                                setState(() {
+                                  isLoading = false;
+                                });
+
+                                CommonDialog.buildOkDialog(context, false,
+                                    "Akun Anda dibanned, silahkan hubungi admin untuk informasi lebih lanjut.");
+                              } else if (res == 2) {
                                 try {
                                   Map<String, dynamic> data = {
                                     "is_google": true,

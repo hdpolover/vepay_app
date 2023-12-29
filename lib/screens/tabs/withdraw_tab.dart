@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -179,80 +180,17 @@ class _WithdrawTabState extends State<WithdrawTab> {
           child: TextFormField(
             controller: totalController,
             validator: _totalValidator,
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'(^\d*[\.\,]?\d{0,2})')),
+            ],
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               hintText: 'Jumlah',
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: ColorManager.primary,
-                ),
-              ),
-              suffixIcon: SizedBox(
-                height: 50,
-                width: 100,
-                child: IntrinsicHeight(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          if (totalController.text == "" ||
-                              int.parse(totalController.text.trim()) == 0) {
-                            CommonDialog.buildOkDialog(
-                                context, false, "Jumlah harus lebih dari 0");
-
-                            totalController.text = 1.toString();
-                          } else {
-                            setState(() {
-                              int total = int.parse(totalController.text) - 1;
-                              totalController.text = total.toString();
-                            });
-                          }
-                        },
-                        child: Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border:
-                                      Border.all(width: 2, color: Colors.grey)),
-                              child: const Icon(
-                                FontAwesomeIcons.minus,
-                                color: Colors.grey,
-                                size: 20,
-                              ),
-                            )),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          if (totalController.text == "") {
-                            totalController.text = 1.toString();
-                          } else {
-                            int total = int.parse(totalController.text) + 1;
-                            totalController.text = total.toString();
-                          }
-                        },
-                        child: Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border:
-                                      Border.all(width: 2, color: Colors.grey)),
-                              child: const Icon(
-                                FontAwesomeIcons.plus,
-                                color: Colors.grey,
-                                size: 20,
-                              ),
-                            )),
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ),
@@ -428,89 +366,101 @@ class _WithdrawTabState extends State<WithdrawTab> {
                                 CommonDialog.buildOkDialog(context, false,
                                     "Harap pilih blockchain terlebih dahulu");
                               } else {
-                                if (int.parse(totalController.text.trim()) ==
-                                    0) {
+                                if (totalController.text.contains(",")) {
                                   CommonDialog.buildOkDialog(context, false,
-                                      "Jumlah harus lebih dari 0");
+                                      "Gunakan titik (.) sebagai pemisah desimal");
                                 } else {
-                                  if (selectedMethod == null) {
+                                  if (double.parse(
+                                          totalController.text.trim()) ==
+                                      0) {
                                     CommonDialog.buildOkDialog(context, false,
-                                        "Harap pilih metode pencairan terlebih dahulu");
+                                        "Jumlah harus lebih dari 0");
                                   } else {
-                                    if (norekController.text.trim().isEmpty) {
+                                    if (selectedMethod == null) {
                                       CommonDialog.buildOkDialog(context, false,
-                                          "Harap isi nomor rekening atau e-wallet tujuan.");
+                                          "Harap pilih metode pencairan terlebih dahulu");
                                     } else {
-                                      if (selectedChain != null) {
-                                        for (WithdrawModel item2 in withdraws) {
-                                          if (item2.withdraw!
-                                                  .toLowerCase()
-                                                  .contains(selectedChain!
-                                                      .blockchain!
-                                                      .toLowerCase()) &&
-                                              item2.withdraw!
-                                                  .toLowerCase()
-                                                  .contains(selectedRate!.name!
-                                                      .toLowerCase())) {
-                                            setState(() {
-                                              selectedWithdraw = item2;
-                                            });
-
-                                            break;
-                                          }
-                                        }
+                                      if (norekController.text.trim().isEmpty) {
+                                        CommonDialog.buildOkDialog(
+                                            context,
+                                            false,
+                                            "Harap isi nomor rekening atau e-wallet tujuan.");
                                       } else {
-                                        for (WithdrawModel item2 in withdraws) {
-                                          if (item2.withdraw!
-                                              .toLowerCase()
-                                              .contains(selectedRate!.name!
-                                                  .toLowerCase())) {
-                                            setState(() {
-                                              selectedWithdraw = item2;
-                                            });
+                                        if (selectedChain != null) {
+                                          for (WithdrawModel item2
+                                              in withdraws) {
+                                            if (item2.withdraw!
+                                                    .toLowerCase()
+                                                    .contains(selectedChain!
+                                                        .blockchain!
+                                                        .toLowerCase()) &&
+                                                item2.withdraw!
+                                                    .toLowerCase()
+                                                    .contains(selectedRate!
+                                                        .name!
+                                                        .toLowerCase())) {
+                                              setState(() {
+                                                selectedWithdraw = item2;
+                                              });
 
-                                            break;
+                                              break;
+                                            }
+                                          }
+                                        } else {
+                                          for (WithdrawModel item2
+                                              in withdraws) {
+                                            if (item2.withdraw!
+                                                .toLowerCase()
+                                                .contains(selectedRate!.name!
+                                                    .toLowerCase())) {
+                                              setState(() {
+                                                selectedWithdraw = item2;
+                                              });
+
+                                              break;
+                                            }
                                           }
                                         }
+
+                                        Map<String, dynamic> data = {
+                                          "akun_tujuan": "-",
+                                          'no_rek': norekController.text.trim(),
+                                          "jumlah": totalController.text.trim(),
+                                          "blockchain_id": selectedChain == null
+                                              ? null
+                                              : selectedChain!.id,
+                                          "blockchain_name":
+                                              selectedChain == null
+                                                  ? null
+                                                  : selectedChain!.blockchain,
+                                          "m_metode_id": selectedMethod!.id!,
+                                          'potongan_diskon': 0,
+                                        };
+
+                                        RateModel chosenRate = selectedRate!;
+                                        WithdrawModel chosenWd =
+                                            selectedWithdraw!;
+                                        BlockchainModel? chosenbc =
+                                            selectedChain ?? null;
+
+                                        setState(() {
+                                          selectedRate == null;
+                                          selectedWithdraw = null;
+                                          selectedChain = null;
+                                        });
+
+                                        PersistentNavBarNavigator.pushNewScreen(
+                                          context,
+                                          screen: WithdrawDetail(
+                                            rateModel: chosenRate,
+                                            withdrawModel: chosenWd,
+                                            blockchainModel: chosenbc,
+                                            data: data,
+                                            wdSource: "tab",
+                                          ),
+                                          withNavBar: false,
+                                        );
                                       }
-
-                                      Map<String, dynamic> data = {
-                                        "akun_tujuan": "-",
-                                        'no_rek': norekController.text.trim(),
-                                        "jumlah": totalController.text.trim(),
-                                        "blockchain_id": selectedChain == null
-                                            ? null
-                                            : selectedChain!.id,
-                                        "blockchain_name": selectedChain == null
-                                            ? null
-                                            : selectedChain!.blockchain,
-                                        "m_metode_id": selectedMethod!.id!,
-                                        'potongan_diskon': 0,
-                                      };
-
-                                      RateModel chosenRate = selectedRate!;
-                                      WithdrawModel chosenWd =
-                                          selectedWithdraw!;
-                                      BlockchainModel? chosenbc =
-                                          selectedChain ?? null;
-
-                                      setState(() {
-                                        selectedRate == null;
-                                        selectedWithdraw = null;
-                                        selectedChain = null;
-                                      });
-
-                                      PersistentNavBarNavigator.pushNewScreen(
-                                        context,
-                                        screen: WithdrawDetail(
-                                          rateModel: chosenRate,
-                                          withdrawModel: chosenWd,
-                                          blockchainModel: chosenbc,
-                                          data: data,
-                                          wdSource: "tab",
-                                        ),
-                                        withNavBar: false,
-                                      );
                                     }
                                   }
                                 }
