@@ -48,6 +48,13 @@ class _HomeTabState extends State<HomeTab> {
   Future<void> _getAllData() async {
     try {
       member = await AuthService().getMemberDetail();
+
+      // * handle user ketika nomor hp null atau kosong
+      if (member!.phone!.isEmpty || member?.phone == null) {
+        CommonDialog.buildOkDialog(context, false,
+            "Silahkan lengkapi No. Handphone anda terlebih dahulu");
+      }
+
       setState(() {});
     } catch (e) {
       CommonDialog.buildOkDialog(context, false, e.toString());

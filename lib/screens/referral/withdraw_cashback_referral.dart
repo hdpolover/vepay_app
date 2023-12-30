@@ -158,7 +158,21 @@ class _WithdrawCashbackReferralState extends State<WithdrawCashbackReferral> {
                           .map<DropdownMenuItem<PaymentMethodModel>>((value) {
                         return DropdownMenuItem<PaymentMethodModel>(
                           value: value,
-                          child: Text(value.metode!),
+                          child: Row(
+                            children: [
+                              Image.network(
+                                value.image ?? '',
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
+                                  width: 40,
+                                  height: 40,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(value.metode ?? 'Nama Kosong'),
+                            ],
+                          ),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -288,7 +302,7 @@ class _WithdrawCashbackReferralState extends State<WithdrawCashbackReferral> {
             ),
           ),
           methods == null ? Container() : buildInput(),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
         ],
       )),
     );
