@@ -9,12 +9,9 @@ import 'package:vepay_app/services/blockchain_service.dart';
 import 'package:vepay_app/services/payment_method_service.dart';
 
 import '../../common/common_dialog.dart';
-import '../../common/common_method.dart';
 import '../../models/withdraw_model.dart';
 import '../../resources/color_manager.dart';
-import '../../services/rate_service.dart';
 import '../../services/withdraw_service.dart';
-import '../home/product_buy_detail.dart';
 import '../withdraw/withdraw_detail.dart';
 
 class WithdrawAlt extends StatefulWidget {
@@ -94,12 +91,12 @@ class _WithdrawAltState extends State<WithdrawAlt> {
 
     for (WithdrawModel item1 in withdraws) {
       if (item1.withdraw!.toLowerCase().contains(rate.name!.toLowerCase())) {
-        print(item1.withdraw!.toLowerCase() + "#1");
+        print("${item1.withdraw!.toLowerCase()}#1");
         for (BlockchainModel item2 in blockchains!) {
           if (item1.withdraw!
               .toLowerCase()
               .contains(item2.blockchain!.toLowerCase())) {
-            print(item2.blockchain!.toLowerCase() + "#2");
+            print("${item2.blockchain!.toLowerCase()}#2");
             newBlockchains.add(item2);
             break;
           }
@@ -292,7 +289,22 @@ class _WithdrawAltState extends State<WithdrawAlt> {
                                   (value) {
                             return DropdownMenuItem<PaymentMethodModel>(
                               value: value,
-                              child: Text(value.metode!),
+                              child: Row(
+                                children: [
+                                  Image.network(
+                                    value.image ?? '',
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Container(
+                                      width: 40,
+                                      height: 40,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(value.metode ?? 'Nama Kosong'),
+                                ],
+                              ),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -440,8 +452,7 @@ class _WithdrawAltState extends State<WithdrawAlt> {
 
                                     RateModel chosenRate = selectedRate!;
                                     WithdrawModel chosenWd = selectedWithdraw!;
-                                    BlockchainModel? chosenbc =
-                                        selectedChain ?? null;
+                                    BlockchainModel? chosenbc = selectedChain;
 
                                     setState(() {
                                       selectedRate == null;

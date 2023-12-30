@@ -10,7 +10,6 @@ import 'package:vepay_app/models/withdraw_model.dart';
 import 'package:vepay_app/services/payment_method_service.dart';
 
 import '../../common/common_dialog.dart';
-import '../../common/common_method.dart';
 import '../../resources/color_manager.dart';
 import '../../services/blockchain_service.dart';
 import '../../services/rate_service.dart';
@@ -18,7 +17,7 @@ import '../../services/withdraw_service.dart';
 import '../withdraw/withdraw_detail.dart';
 
 class WithdrawTab extends StatefulWidget {
-  WithdrawTab({Key? key}) : super(key: key);
+  const WithdrawTab({Key? key}) : super(key: key);
 
   @override
   State<WithdrawTab> createState() => _WithdrawTabState();
@@ -91,12 +90,12 @@ class _WithdrawTabState extends State<WithdrawTab> {
 
     for (WithdrawModel item1 in withdraws) {
       if (item1.withdraw!.toLowerCase().contains(rate.name!.toLowerCase())) {
-        print(item1.withdraw!.toLowerCase() + "#1");
+        print("${item1.withdraw!.toLowerCase()}#1");
         for (BlockchainModel item2 in blockchains!) {
           if (item1.withdraw!
               .toLowerCase()
               .contains(item2.blockchain!.toLowerCase())) {
-            print(item2.blockchain!.toLowerCase() + "#2");
+            print("${item2.blockchain!.toLowerCase()}#2");
             newBlockchains.add(item2);
             break;
           }
@@ -223,7 +222,21 @@ class _WithdrawTabState extends State<WithdrawTab> {
                         .map<DropdownMenuItem<PaymentMethodModel>>((value) {
                       return DropdownMenuItem<PaymentMethodModel>(
                         value: value,
-                        child: Text(value.metode!),
+                        child: Row(
+                          children: [
+                            Image.network(
+                              value.image ?? '',
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                width: 40,
+                                height: 40,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(value.metode ?? 'Nama Kosong'),
+                          ],
+                        ),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -303,7 +316,24 @@ class _WithdrawTabState extends State<WithdrawTab> {
                                 rates.map<DropdownMenuItem<RateModel>>((value) {
                               return DropdownMenuItem<RateModel>(
                                 value: value,
-                                child: Text(value.name!),
+                                child: Row(
+                                  children: [
+                                    Image.network(
+                                      value.image ?? '',
+                                      width: 36,
+                                      height: 36,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              Container(
+                                        width: 40,
+                                        height: 40,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(value.name ?? 'Nama Kosong'),
+                                  ],
+                                ),
                               );
                             }).toList(),
                             onChanged: (value) {
@@ -441,7 +471,7 @@ class _WithdrawTabState extends State<WithdrawTab> {
                                         WithdrawModel chosenWd =
                                             selectedWithdraw!;
                                         BlockchainModel? chosenbc =
-                                            selectedChain ?? null;
+                                            selectedChain;
 
                                         setState(() {
                                           selectedRate == null;
