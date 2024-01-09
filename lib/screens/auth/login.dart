@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -14,7 +16,7 @@ import '../../services/auth_service.dart';
 import '../../services/fb_service.dart';
 
 class Login extends StatefulWidget {
-  Login({Key? key}) : super(key: key);
+  const Login({Key? key}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
@@ -568,6 +570,11 @@ class _LoginState extends State<Login> {
                             setState(() {
                               isLoading = false;
                             });
+
+                            CommonDialog.buildOkDialog(
+                                context, false, 'Terjadi Kesalahan Saat Login');
+
+                            log(e.toString());
 
                             // CommonDialog.buildOkDialog(
                             //     context, false, e.toString());

@@ -925,4 +925,31 @@ class CommonDialog {
       },
     );
   }
+
+  static void showLoading(BuildContext context) {
+    showDialog(
+        // The user CANNOT close this dialog  by pressing outsite it
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Dialog(
+            // The background color
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 50),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // The loading indicator
+                  CircularProgressIndicator(
+                    color: ColorManager.primary,
+                  ),
+                  const SizedBox(height: 15),
+                  const Text("Menyambungkan")
+                ],
+              ),
+            ),
+          );
+        });
+  }
 }
