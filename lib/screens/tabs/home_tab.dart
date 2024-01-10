@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:vepay_app/common/common_shimmer.dart';
 import 'package:vepay_app/models/member_model.dart';
+import 'package:vepay_app/models/profile_request_model.dart';
 import 'package:vepay_app/models/promo_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/screens/home/product_item_widget.dart';
@@ -49,13 +53,31 @@ class _HomeTabState extends State<HomeTab> {
     try {
       member = await AuthService().getMemberDetail();
 
-      // * handle user ketika nomor hp null atau kosong
-      if (member!.phone!.isEmpty || member?.phone == null) {
-        CommonDialog.buildOkDialog(context, false,
-            "Silahkan lengkapi No. Handphone anda terlebih dahulu");
-      }
+      log(member!.toJson().toString(), name: 'TEST');
 
-      setState(() {});
+      // * handle user ketika nomor hp null atau kosong
+      if (member!.phone!.isEmpty ||
+          member?.phone == null ||
+          member!.phone!.length < 10 ||
+          member!.name!.isEmpty ||
+          member?.name == null) {
+        TextEditingController? nameController = TextEditingController();
+        TextEditingController? phoneController = TextEditingController();
+
+        _showMyDialog(
+          userId: member?.userId ?? '',
+          phoneController: phoneController,
+          nameController: nameController,
+          isShowName: (member!.name!.isEmpty || member?.name == null),
+          isShowPhone: (member!.phone!.isEmpty ||
+              member?.phone == null ||
+              member!.phone!.length < 10),
+          nameField: member?.name,
+          phoneField: member?.phone,
+        );
+        setState(() {});
+        return;
+      }
     } catch (e) {
       CommonDialog.buildOkDialog(context, false, e.toString());
     }
@@ -293,7 +315,9 @@ class _HomeTabState extends State<HomeTab> {
               const Text("Halo,"),
               const SizedBox(height: 3),
               Text(
-                "${member!.name}!",
+                (member!.name!.isEmpty || member?.name == null)
+                    ? "${member!.email}!"
+                    : "${member!.name}!",
                 softWrap: true,
                 style: Theme.of(context)
                     .textTheme
@@ -318,6 +342,125 @@ class _HomeTabState extends State<HomeTab> {
           ],
         ),
       ],
+    );
+  }
+
+  Future<void> _showMyDialog({
+    required TextEditingController phoneController,
+    required TextEditingController nameController,
+    required bool isShowName,
+    required bool isShowPhone,
+    required String userId,
+    String? nameField,
+    String? phoneField,
+  }) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        final formKey = GlobalKey<FormState>();
+
+        return AlertDialog(
+          title: const Text('Silahkan Lengkapi Data Anda'),
+          content: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Visibility(
+                  visible: isShowPhone,
+                  child: TextFormField(
+                    controller: phoneController,
+                    validator: MultiValidator([
+                      RequiredValidator(
+                          errorText: 'Harap masukan nomor telepon'),
+                      MinLengthValidator(9,
+                          errorText:
+                              "Panjang nomor telepon minimal 10 karakter"),
+                      MaxLengthValidator(15,
+                          errorText:
+                              "Panjang nomor telepon maksimal 15 karakter"),
+                    ]),
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: 'Nomor Telepon (WhatsApp)',
+                      prefix: const Text("+62",
+                          style: TextStyle(color: Colors.black)),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: ColorManager.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Visibility(
+                  visible: isShowName,
+                  child: TextFormField(
+                    controller: nameController,
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: 'Harap masukan nama'),
+                    ]),
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: 'Nama',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: ColorManager.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                if (formKey.currentState!.validate()) {
+                  // Do something with the entered data
+                  String phone = phoneController.text;
+                  String name = nameController.text;
+
+                  var data = ProfileRequestModel(
+                    userId: userId,
+                    name: name.isEmpty ? nameField : name,
+                    phone: phone.isEmpty ? phoneField : phone,
+                  );
+
+                  try {
+                    CommonDialog.showLoading(context);
+
+                    bool res = await AuthService().updateDetailProfile(data);
+
+                    Navigator.of(context).pop();
+
+                    if (res) {
+                      CommonDialog.buildOkUpdateDialog(
+                          context, true, "Berhasil memperbarui profil.");
+                    } else {
+                      CommonDialog.buildOkDialog(
+                          context, false, "Terjadi kesalahan. Coba lagi.");
+                    }
+                  } catch (e) {
+                    CommonDialog.buildOkDialog(context, false, e.toString());
+                  }
+
+                  phoneController.dispose();
+                  nameController.dispose();
+
+                  _getAllData();
+                }
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

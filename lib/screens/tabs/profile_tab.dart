@@ -5,7 +5,6 @@ import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/intro.dart';
-import 'package:vepay_app/screens/auth/login.dart';
 import 'package:vepay_app/screens/profile/about_us.dart';
 import 'package:vepay_app/screens/profile/contact_us.dart';
 import 'package:vepay_app/screens/profile/edit_profile.dart';
@@ -277,7 +276,9 @@ class _ProfileTabState extends State<ProfileTab> {
                 const Text("Nama"),
                 const SizedBox(height: 5),
                 Text(
-                  currentMember!.name ?? currentMember!.email!,
+                  (currentMember!.name!.isEmpty || currentMember?.name == null)
+                      ? currentMember!.email!
+                      : currentMember!.name!,
                   softWrap: true,
                   style: Theme.of(context).textTheme.bodyText1?.copyWith(
                         fontSize: 18,

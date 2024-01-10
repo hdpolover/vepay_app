@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/app_constants.dart';
 import 'package:vepay_app/models/member_model.dart';
+import 'package:vepay_app/models/profile_request_model.dart';
 
 class AuthService {
   Future<MemberModel> register(Map<String, dynamic> data) async {
@@ -142,6 +144,40 @@ class AuthService {
       }
     } catch (e) {
       print(e);
+      rethrow;
+    }
+  }
+
+  Future<bool> updateDetailProfile(ProfileRequestModel data) async {
+    String url = "${AppConstants.apiUrl}update_detail_member";
+
+    try {
+      final http.Response response = await http.put(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          if (data.userId != null) "user_id": data.userId,
+          if (data.name != null) "name": data.name,
+          if (data.gender != null) "gender": data.gender,
+          if (data.birthdate != null) "birthdate": data.birthdate,
+          if (data.phone != null) "phone": data.phone,
+          if (data.address != null) "address": data.address,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        log(response.body);
+        var result = json.decode(response.body)['status'];
+        return result;
+      } else {
+        log(response.body);
+
+        return jsonDecode(response.body)['status'];
+      }
+    } catch (e) {
+      log(e.toString());
       rethrow;
     }
   }
