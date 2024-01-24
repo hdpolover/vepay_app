@@ -10,7 +10,7 @@ import '../../common/common_dialog.dart';
 
 class ProductItemWidget extends StatefulWidget {
   RateModel rateModel;
-  ProductItemWidget({required this.rateModel, Key? key}) : super(key: key);
+  ProductItemWidget({required this.rateModel, super.key});
 
   @override
   State<ProductItemWidget> createState() => _ProductItemWidgetState();
@@ -59,7 +59,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
       child: Padding(
         padding: const EdgeInsets.all(4),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.13,
+          height: MediaQuery.of(context).size.height * 0.135,
           width: MediaQuery.of(context).size.width * 0.2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -81,7 +81,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                 widget.rateModel.name!,
                 textAlign: TextAlign.center,
                 softWrap: true,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: 13,
                     ),
               ),

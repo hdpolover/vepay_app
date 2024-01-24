@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_credit_card/credit_card_widget.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:vepay_app/common/common_method.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as modalSheet;
+//import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as modalSheet;
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/screens/transaction/transaction_item_widget.dart';
@@ -99,298 +99,298 @@ class _TransactionTabState extends State<TransactionTab>
 
   int? selectedIndex;
 
-  void _showFilterPopup() {
-    modalSheet.showBarModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-      ),
-      context: context,
-      barrierColor: Colors.black45,
-      bounce: false,
-      builder: (builder) {
-        return StatefulBuilder(
-          builder: (BuildContext context,
-              StateSetter setState /*You can rename this!*/) {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height * 0.8,
-              child: NestedScrollView(
-                controller: ScrollController(),
-                physics: const ScrollPhysics(parent: PageScrollPhysics()),
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
-                  return <Widget>[
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 30, 20, 5),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    "Filter Transaksi",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.05,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Colors.white, // background
-                                      foregroundColor:
-                                          ColorManager.primary, // foreground
-                                    ),
-                                    child: const Text('Reset'),
-                                    onPressed: () async {
-                                      setState(() {
-                                        selectedItemRates = [];
-                                        startDate = null;
-                                        endDate = null;
-                                        startDateController!.clear();
-                                        endDateController!.clear();
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 20),
-                        ],
-                      ),
-                    ),
-                  ];
-                },
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: ListView(
-                    controller: modalSheet.ModalScrollController.of(context),
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Filter Berdasarkan",
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle1
-                                ?.copyWith(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              ChoiceButton(
-                                title: 'Top up',
-                                isSelected: selectedChoice == 'top_up',
-                                onTap: () {
-                                  setState(() {
-                                    selectedChoice = 'top_up';
-                                  });
+  // void _showFilterPopup() {
+  //   modalSheet.showBarModalBottomSheet(
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+  //     ),
+  //     context: context,
+  //     barrierColor: Colors.black45,
+  //     bounce: false,
+  //     builder: (builder) {
+  //       return StatefulBuilder(
+  //         builder: (BuildContext context,
+  //             StateSetter setState /*You can rename this!*/) {
+  //           return SizedBox(
+  //             height: MediaQuery.of(context).size.height * 0.8,
+  //             child: NestedScrollView(
+  //               controller: ScrollController(),
+  //               physics: const ScrollPhysics(parent: PageScrollPhysics()),
+  //               headerSliverBuilder:
+  //                   (BuildContext context, bool innerBoxIsScrolled) {
+  //                 return <Widget>[
+  //                   SliverList(
+  //                     delegate: SliverChildListDelegate(
+  //                       [
+  //                         Padding(
+  //                           padding: const EdgeInsets.fromLTRB(20, 30, 20, 5),
+  //                           child: Row(
+  //                             children: [
+  //                               Expanded(
+  //                                 child: Text(
+  //                                   "Filter Transaksi",
+  //                                   style: Theme.of(context)
+  //                                       .textTheme
+  //                                       .subtitle1
+  //                                       ?.copyWith(
+  //                                           fontWeight: FontWeight.bold,
+  //                                           fontSize: 20),
+  //                                 ),
+  //                               ),
+  //                               SizedBox(
+  //                                 height:
+  //                                     MediaQuery.of(context).size.height * 0.05,
+  //                                 width:
+  //                                     MediaQuery.of(context).size.width * 0.2,
+  //                                 child: ElevatedButton(
+  //                                   style: ElevatedButton.styleFrom(
+  //                                     backgroundColor:
+  //                                         Colors.white, // background
+  //                                     foregroundColor:
+  //                                         ColorManager.primary, // foreground
+  //                                   ),
+  //                                   child: const Text('Reset'),
+  //                                   onPressed: () async {
+  //                                     setState(() {
+  //                                       selectedItemRates = [];
+  //                                       startDate = null;
+  //                                       endDate = null;
+  //                                       startDateController!.clear();
+  //                                       endDateController!.clear();
+  //                                     });
+  //                                   },
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                         SizedBox(
+  //                             width: MediaQuery.of(context).size.width,
+  //                             height: 20),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ];
+  //               },
+  //               body: Padding(
+  //                 padding: const EdgeInsets.symmetric(horizontal: 20),
+  //                 child: ListView(
+  //                   //controller: modalSheet.ModalScrollController.of(context),
+  //                   children: [
+  //                     Column(
+  //                       mainAxisAlignment: MainAxisAlignment.start,
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: [
+  //                         Text(
+  //                           "Filter Berdasarkan",
+  //                           style: Theme.of(context)
+  //                               .textTheme
+  //                               .subtitle1
+  //                               ?.copyWith(
+  //                                   fontWeight: FontWeight.bold, fontSize: 20),
+  //                         ),
+  //                         SizedBox(
+  //                             width: MediaQuery.of(context).size.width,
+  //                             height: 20),
+  //                         Row(
+  //                           mainAxisAlignment: MainAxisAlignment.start,
+  //                           children: [
+  //                             ChoiceButton(
+  //                               title: 'Top up',
+  //                               isSelected: selectedChoice == 'top_up',
+  //                               onTap: () {
+  //                                 setState(() {
+  //                                   selectedChoice = 'top_up';
+  //                                 });
 
-                                  print(selectedChoice);
-                                },
-                              ),
-                              const SizedBox(width: 10),
-                              ChoiceButton(
-                                title: 'Withdraw',
-                                isSelected: selectedChoice == 'withdraw',
-                                onTap: () {
-                                  setState(() {
-                                    selectedChoice = 'withdraw';
-                                  });
+  //                                 print(selectedChoice);
+  //                               },
+  //                             ),
+  //                             const SizedBox(width: 10),
+  //                             ChoiceButton(
+  //                               title: 'Withdraw',
+  //                               isSelected: selectedChoice == 'withdraw',
+  //                               onTap: () {
+  //                                 setState(() {
+  //                                   selectedChoice = 'withdraw';
+  //                                 });
 
-                                  print(selectedChoice);
-                                },
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 20),
-                          Text(
-                            "Tanggal",
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle1
-                                ?.copyWith(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 20),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  controller: startDateController,
-                                  readOnly: true,
-                                  onTap: () {
-                                    displayDatePicker(1);
-                                  },
-                                  decoration: InputDecoration(
-                                    border: const OutlineInputBorder(),
-                                    hintText: 'Mulai',
-                                    suffixIcon:
-                                        const Icon(Icons.calendar_month),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: ColorManager.primary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                child: Text("s/d"),
-                              ),
-                              Expanded(
-                                child: TextFormField(
-                                  controller: endDateController,
-                                  readOnly: true,
-                                  onTap: () {
-                                    displayDatePicker(2);
-                                  },
-                                  decoration: InputDecoration(
-                                    border: const OutlineInputBorder(),
-                                    hintText: 'Akhir',
-                                    suffixIcon:
-                                        const Icon(Icons.calendar_month),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: ColorManager.primary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 20),
-                          Text(
-                            "Produk",
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle1
-                                ?.copyWith(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 20),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.65,
-                            child: ListView.builder(
-                              itemCount: itemRates.length,
-                              itemBuilder: (context, index) {
-                                return CheckboxListTile(
-                                  title: Text(itemRates[index].name!),
-                                  value: selectedItemRates
-                                      .contains(itemRates[index]),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedItemRates.add(itemRates[index]);
-                                      } else {
-                                        selectedItemRates
-                                            .remove(itemRates[index]);
-                                      }
-                                    });
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 30),
-                          Center(
-                            child: SizedBox(
-                              width: 276,
-                              height: 55,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      ColorManager.primary, // background
-                                  foregroundColor: Colors.white, // foreground
-                                ),
-                                child: const Text('Terapkan'),
-                                onPressed: () async {
-                                  if (startDate == null || endDate == null) {
-                                    CommonDialog.buildOkDialog(context, false,
-                                        "Harap tentukan rentang tanggal transaksi untuk difilter.");
-                                  } else {
-                                    if (startDate!.isAfter(endDate!)) {
-                                      CommonDialog.buildOkDialog(context, false,
-                                          "Tanngal awal tidak bisa lebih dari tanggal akhir. Coba lagi.");
-                                    } else {
-                                      if (selectedItemRates.isEmpty) {
-                                        CommonDialog.buildOkDialog(
-                                            context,
-                                            false,
-                                            "Harap pilih minimal 1 produk transaksi untuk difilter.");
-                                      } else {
-                                        Map<String, dynamic> prods = {};
-                                        for (int i = 0;
-                                            i < selectedItemRates.length;
-                                            i++) {
-                                          prods['prod$i'] = selectedItemRates[i]
-                                              .name!
-                                              .toLowerCase();
-                                        }
+  //                                 print(selectedChoice);
+  //                               },
+  //                             ),
+  //                           ],
+  //                         ),
+  //                         SizedBox(
+  //                             width: MediaQuery.of(context).size.width,
+  //                             height: 20),
+  //                         Text(
+  //                           "Tanggal",
+  //                           style: Theme.of(context)
+  //                               .textTheme
+  //                               .subtitle1
+  //                               ?.copyWith(
+  //                                   fontWeight: FontWeight.bold, fontSize: 20),
+  //                         ),
+  //                         SizedBox(
+  //                             width: MediaQuery.of(context).size.width,
+  //                             height: 20),
+  //                         Row(
+  //                           children: [
+  //                             Expanded(
+  //                               child: TextFormField(
+  //                                 controller: startDateController,
+  //                                 readOnly: true,
+  //                                 onTap: () {
+  //                                   displayDatePicker(1);
+  //                                 },
+  //                                 decoration: InputDecoration(
+  //                                   border: const OutlineInputBorder(),
+  //                                   hintText: 'Mulai',
+  //                                   suffixIcon:
+  //                                       const Icon(Icons.calendar_month),
+  //                                   focusedBorder: OutlineInputBorder(
+  //                                     borderSide: BorderSide(
+  //                                       color: ColorManager.primary,
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                             const Padding(
+  //                               padding: EdgeInsets.symmetric(horizontal: 10),
+  //                               child: Text("s/d"),
+  //                             ),
+  //                             Expanded(
+  //                               child: TextFormField(
+  //                                 controller: endDateController,
+  //                                 readOnly: true,
+  //                                 onTap: () {
+  //                                   displayDatePicker(2);
+  //                                 },
+  //                                 decoration: InputDecoration(
+  //                                   border: const OutlineInputBorder(),
+  //                                   hintText: 'Akhir',
+  //                                   suffixIcon:
+  //                                       const Icon(Icons.calendar_month),
+  //                                   focusedBorder: OutlineInputBorder(
+  //                                     borderSide: BorderSide(
+  //                                       color: ColorManager.primary,
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                         SizedBox(
+  //                             width: MediaQuery.of(context).size.width,
+  //                             height: 20),
+  //                         Text(
+  //                           "Produk",
+  //                           style: Theme.of(context)
+  //                               .textTheme
+  //                               .subtitle1
+  //                               ?.copyWith(
+  //                                   fontWeight: FontWeight.bold, fontSize: 20),
+  //                         ),
+  //                         SizedBox(
+  //                             width: MediaQuery.of(context).size.width,
+  //                             height: 20),
+  //                         SizedBox(
+  //                           height: MediaQuery.of(context).size.height * 0.65,
+  //                           child: ListView.builder(
+  //                             itemCount: itemRates.length,
+  //                             itemBuilder: (context, index) {
+  //                               return CheckboxListTile(
+  //                                 title: Text(itemRates[index].name!),
+  //                                 value: selectedItemRates
+  //                                     .contains(itemRates[index]),
+  //                                 onChanged: (value) {
+  //                                   setState(() {
+  //                                     if (value!) {
+  //                                       selectedItemRates.add(itemRates[index]);
+  //                                     } else {
+  //                                       selectedItemRates
+  //                                           .remove(itemRates[index]);
+  //                                     }
+  //                                   });
+  //                                 },
+  //                               );
+  //                             },
+  //                           ),
+  //                         ),
+  //                         SizedBox(
+  //                             width: MediaQuery.of(context).size.width,
+  //                             height: 30),
+  //                         Center(
+  //                           child: SizedBox(
+  //                             width: 276,
+  //                             height: 55,
+  //                             child: ElevatedButton(
+  //                               style: ElevatedButton.styleFrom(
+  //                                 backgroundColor:
+  //                                     ColorManager.primary, // background
+  //                                 foregroundColor: Colors.white, // foreground
+  //                               ),
+  //                               child: const Text('Terapkan'),
+  //                               onPressed: () async {
+  //                                 if (startDate == null || endDate == null) {
+  //                                   CommonDialog.buildOkDialog(context, false,
+  //                                       "Harap tentukan rentang tanggal transaksi untuk difilter.");
+  //                                 } else {
+  //                                   if (startDate!.isAfter(endDate!)) {
+  //                                     CommonDialog.buildOkDialog(context, false,
+  //                                         "Tanngal awal tidak bisa lebih dari tanggal akhir. Coba lagi.");
+  //                                   } else {
+  //                                     if (selectedItemRates.isEmpty) {
+  //                                       CommonDialog.buildOkDialog(
+  //                                           context,
+  //                                           false,
+  //                                           "Harap pilih minimal 1 produk transaksi untuk difilter.");
+  //                                     } else {
+  //                                       Map<String, dynamic> prods = {};
+  //                                       for (int i = 0;
+  //                                           i < selectedItemRates.length;
+  //                                           i++) {
+  //                                         prods['prod$i'] = selectedItemRates[i]
+  //                                             .name!
+  //                                             .toLowerCase();
+  //                                       }
 
-                                        String start = DateFormat('dd-MM-yyyy')
-                                            .format(startDate!);
-                                        String end = DateFormat('dd-MM-yyyy')
-                                            .format(endDate!);
+  //                                       String start = DateFormat('dd-MM-yyyy')
+  //                                           .format(startDate!);
+  //                                       String end = DateFormat('dd-MM-yyyy')
+  //                                           .format(endDate!);
 
-                                        Map<String, dynamic> data = {
-                                          'start_date': start,
-                                          'end_date': end,
-                                          'type': selectedChoice,
-                                        };
+  //                                       Map<String, dynamic> data = {
+  //                                         'start_date': start,
+  //                                         'end_date': end,
+  //                                         'type': selectedChoice,
+  //                                       };
 
-                                        doFilter(data, prods);
-                                      }
-                                    }
-                                  }
-                                },
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 0.1),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
+  //                                       doFilter(data, prods);
+  //                                     }
+  //                                   }
+  //                                 }
+  //                               },
+  //                             ),
+  //                           ),
+  //                         ),
+  //                         SizedBox(
+  //                             width: MediaQuery.of(context).size.width,
+  //                             height: MediaQuery.of(context).size.height * 0.1),
+  //                       ],
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 
   displayDatePicker(int type) {
     showDatePicker(
@@ -448,6 +448,7 @@ class _TransactionTabState extends State<TransactionTab>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Riwayat Transaksi"),
@@ -457,7 +458,8 @@ class _TransactionTabState extends State<TransactionTab>
         elevation: 0,
         actions: [
           InkWell(
-            onTap: _showFilterPopup,
+            //onTap: _showFilterPopup,
+            onTap: () {},
             child: const Padding(
               padding: EdgeInsets.all(15),
               child: FaIcon(

@@ -22,7 +22,7 @@ import '../transaction/transaction_item_widget.dart';
 
 class HomeTab extends StatefulWidget {
   MemberModel member;
-  HomeTab({required this.member, Key? key}) : super(key: key);
+  HomeTab({required this.member, super.key});
 
   @override
   State<HomeTab> createState() => _HomeTabState();
@@ -151,7 +151,7 @@ class _HomeTabState extends State<HomeTab> {
                     "Top up/Beli",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodyLarge
                         ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -180,7 +180,7 @@ class _HomeTabState extends State<HomeTab> {
       children: [
         Text(
           "Transaksi Terbaru",
-          style: Theme.of(context).textTheme.bodyText1?.copyWith(
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontSize: 18,
               ),
         ),
@@ -234,18 +234,6 @@ class _HomeTabState extends State<HomeTab> {
               ),
       ),
     );
-    // return Column(
-    //   children: [
-    //     Row(
-    //       children: [
-    //         buildProductItemWidget(),
-    //         buildProductItemWidget(),
-    //         buildProductItemWidget(),
-    //         buildProductItemWidget(),
-    //       ],
-    //     )
-    //   ],
-    // );
   }
 
   buildProductItemWidget(RateModel rateModel) {
@@ -261,8 +249,9 @@ class _HomeTabState extends State<HomeTab> {
       children: [
         Text(
           "Promo dan Berita",
-          style: Theme.of(context).textTheme.bodyText1?.copyWith(
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
         ),
         promos == null
