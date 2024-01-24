@@ -158,7 +158,7 @@ class CommonMethods {
 
   bool isEmail(String string) {
     // Null or empty string is invalid
-    if (string == null || string.isEmpty) {
+    if (string.isEmpty) {
       return false;
     }
 
