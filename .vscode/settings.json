@@ -1,4 +1,10 @@
 {
-    "dart.flutterSdkPath": "~/fvm/versions/3.16.7",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "dart.sdkPath": "C:\\tools\\dart-sdk",
+    "dart.flutterSdkPath": "C:\\dev\\flutter",
+    "[dart]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.suggest.insertMode": "replace"
+    }
 }

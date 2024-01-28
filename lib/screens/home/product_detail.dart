@@ -7,17 +7,15 @@ import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/models/blockchain_model.dart';
-import 'package:vepay_app/models/payment_method_model.dart';
 import 'package:vepay_app/models/rate_model.dart';
 import 'package:vepay_app/screens/home/product_buy_detail.dart';
-import 'package:vepay_app/screens/withdraw/withdraw_detail.dart';
 import 'package:vepay_app/services/blockchain_service.dart';
 
 import '../../resources/color_manager.dart';
 
 class ProductDetail extends StatefulWidget {
-  RateModel rateModel;
-  ProductDetail({required this.rateModel, Key? key}) : super(key: key);
+  final RateModel rateModel;
+  const ProductDetail({required this.rateModel, super.key});
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -71,7 +69,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 padding: const EdgeInsets.all(10),
                 child: TextFormField(
                   controller: fieldController,
-                  validator: _akunValidator,
+                  validator: _akunValidator.call,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
@@ -89,7 +87,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                 child: TextFormField(
                   controller: totalController,
-                  validator: _totalValidator,
+                  validator: _totalValidator.call,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
@@ -104,78 +102,6 @@ class _ProductDetailState extends State<ProductDetail> {
                         color: ColorManager.primary,
                       ),
                     ),
-                    // suffixIcon: SizedBox(
-                    //   height: 50,
-                    //   width: 100,
-                    //   child: IntrinsicHeight(
-                    //     child: Row(
-                    //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //       children: [
-                    //         GestureDetector(
-                    //           onTap: () {
-                    //             if (totalController.text == "" ||
-                    //                 int.parse(totalController.text.trim()) ==
-                    //                     0) {
-                    //               CommonDialog.buildOkDialog(context, false,
-                    //                   "Jumlah harus lebih dari 0");
-
-                    //               totalController.text = 1.toString();
-                    //             } else {
-                    //               setState(() {
-                    //                 int total =
-                    //                     int.parse(totalController.text) - 1;
-                    //                 totalController.text = total.toString();
-                    //               });
-                    //             }
-                    //           },
-                    //           child: Align(
-                    //               alignment: Alignment.center,
-                    //               child: Container(
-                    //                 width: 30,
-                    //                 height: 30,
-                    //                 decoration: BoxDecoration(
-                    //                     borderRadius:
-                    //                         BorderRadius.circular(100),
-                    //                     border: Border.all(
-                    //                         width: 2, color: Colors.grey)),
-                    //                 child: const Icon(
-                    //                   FontAwesomeIcons.minus,
-                    //                   color: Colors.grey,
-                    //                   size: 20,
-                    //                 ),
-                    //               )),
-                    //         ),
-                    //         GestureDetector(
-                    //           onTap: () {
-                    //             if (totalController.text == "") {
-                    //               totalController.text = 1.toString();
-                    //             } else {
-                    //               int total =
-                    //                   int.parse(totalController.text) + 1;
-                    //               totalController.text = total.toString();
-                    //             }
-                    //           },
-                    //           child: Align(
-                    //               alignment: Alignment.center,
-                    //               child: Container(
-                    //                 width: 30,
-                    //                 height: 30,
-                    //                 decoration: BoxDecoration(
-                    //                     borderRadius:
-                    //                         BorderRadius.circular(100),
-                    //                     border: Border.all(
-                    //                         width: 2, color: Colors.grey)),
-                    //                 child: const Icon(
-                    //                   FontAwesomeIcons.plus,
-                    //                   color: Colors.grey,
-                    //                   size: 20,
-                    //                 ),
-                    //               )),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                   ),
                 ),
               ),

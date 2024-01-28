@@ -17,7 +17,7 @@ import '../../services/withdraw_service.dart';
 import '../withdraw/withdraw_detail.dart';
 
 class WithdrawTab extends StatefulWidget {
-  const WithdrawTab({Key? key}) : super(key: key);
+  const WithdrawTab({super.key});
 
   @override
   State<WithdrawTab> createState() => _WithdrawTabState();
@@ -178,7 +178,7 @@ class _WithdrawTabState extends State<WithdrawTab> {
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: TextFormField(
             controller: totalController,
-            validator: _totalValidator,
+            validator: _totalValidator.call,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
               FilteringTextInputFormatter.allow(

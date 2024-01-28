@@ -37,7 +37,7 @@ class _DashboardState extends State<Dashboard> {
       HomeTab(
         member: widget.member,
       ),
-      WithdrawTab(),
+      const WithdrawTab(),
       TransactionTab(),
       RateTab(),
       ProfileTab(
@@ -81,95 +81,98 @@ class _DashboardState extends State<Dashboard> {
     ];
   }
 
+  _showModalBackDialog() {
+    // show modal bottom sheet
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.23,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
+                Text(
+                  "Keluar?",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "Yakin untuk keluar?",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.normal),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor:
+                                  ColorManager.primary, // foreground
+                            ),
+                            child: const Text('Tidak'),
+                            onPressed: () async {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  ColorManager.primary, // background
+                              foregroundColor: Colors.white, // foreground
+                            ),
+                            child: const Text('Ya'),
+                            onPressed: () async {
+                              if (Platform.isAndroid) {
+                                SystemNavigator.pop();
+                              } else if (Platform.isIOS) {
+                                exit(0);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (didPop) => didPop,
-      //onWillPop:  () async {
-      // bool shouldClose = await modalSheet.showBarModalBottomSheet(
-      //     barrierColor: Colors.black38,
-      //     context: context,
-      //     builder: (context) {
-      //       return SizedBox(
-      //         height: MediaQuery.of(context).size.height * 0.23,
-      //         child: Padding(
-      //           padding:
-      //               const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      //           child: Column(
-      //             children: [
-      //               const SizedBox(height: 10),
-      //               Text(
-      //                 "Keluar?",
-      //                 style: Theme.of(context).textTheme.bodyText1?.copyWith(
-      //                     fontSize: 18, fontWeight: FontWeight.bold),
-      //               ),
-      //               const SizedBox(height: 20),
-      //               Text(
-      //                 "Yakin untuk keluar?",
-      //                 style: Theme.of(context)
-      //                     .textTheme
-      //                     .bodyText1
-      //                     ?.copyWith(fontWeight: FontWeight.normal),
-      //               ),
-      //               const SizedBox(height: 20),
-      //               Row(
-      //                 children: [
-      //                   Expanded(
-      //                     child: Padding(
-      //                       padding:
-      //                           const EdgeInsets.symmetric(horizontal: 20),
-      //                       child: SizedBox(
-      //                         height:
-      //                             MediaQuery.of(context).size.height * 0.06,
-      //                         child: ElevatedButton(
-      //                           style: ElevatedButton.styleFrom(
-      //                             backgroundColor: Colors.white,
-      //                             foregroundColor:
-      //                                 ColorManager.primary, // foreground
-      //                           ),
-      //                           child: const Text('Tidak'),
-      //                           onPressed: () async {
-      //                             Navigator.pop(context);
-      //                           },
-      //                         ),
-      //                       ),
-      //                     ),
-      //                   ),
-      //                   Expanded(
-      //                     child: Padding(
-      //                       padding:
-      //                           const EdgeInsets.symmetric(horizontal: 20),
-      //                       child: SizedBox(
-      //                         height:
-      //                             MediaQuery.of(context).size.height * 0.06,
-      //                         child: ElevatedButton(
-      //                           style: ElevatedButton.styleFrom(
-      //                             backgroundColor:
-      //                                 ColorManager.primary, // background
-      //                             foregroundColor: Colors.white, // foreground
-      //                           ),
-      //                           child: const Text('Ya'),
-      //                           onPressed: () async {
-      //                             if (Platform.isAndroid) {
-      //                               SystemNavigator.pop();
-      //                             } else if (Platform.isIOS) {
-      //                               exit(0);
-      //                             }
-      //                           },
-      //                         ),
-      //                       ),
-      //                     ),
-      //                   ),
-      //                 ],
-      //               )
-      //             ],
-      //           ),
-      //         ),
-      //       );
-      //     });
-      // return shouldClose;
-      //},
-
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        if (didPop) {
+          return;
+        }
+        _showModalBackDialog();
+      },
       child: Scaffold(
         body: PersistentTabView(
           context,

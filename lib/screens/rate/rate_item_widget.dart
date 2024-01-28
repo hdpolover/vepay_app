@@ -8,8 +8,8 @@ import 'package:vepay_app/screens/rate/withdraw_alt.dart';
 import '../home/product_detail.dart';
 
 class RateItemWidget extends StatefulWidget {
-  RateModel rate;
-  RateItemWidget({required this.rate, Key? key}) : super(key: key);
+  final RateModel rate;
+  const RateItemWidget({required this.rate, super.key});
 
   @override
   State<RateItemWidget> createState() => _RateItemWidgetState();
@@ -39,6 +39,7 @@ class _RateItemWidgetState extends State<RateItemWidget> {
         }
       },
       child: Card(
+        color: Colors.white,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(15),
@@ -73,7 +74,7 @@ class _RateItemWidgetState extends State<RateItemWidget> {
                     Text(
                       widget.rate.name!,
                       softWrap: true,
-                      style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
@@ -92,7 +93,7 @@ class _RateItemWidgetState extends State<RateItemWidget> {
               Text(
                 CommonMethods.formatCompleteCurrency(
                     double.parse(widget.rate.price!)),
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),

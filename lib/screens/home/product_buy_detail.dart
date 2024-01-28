@@ -20,8 +20,7 @@ class ProductBuyDetail extends StatefulWidget {
       {required this.rateModel,
       this.blockchainModel,
       required this.data,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   State<ProductBuyDetail> createState() => _ProductBuyDetailState();
@@ -159,7 +158,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
           value,
           style: Theme.of(context)
               .textTheme
-              .bodyText1
+              .bodyLarge
               ?.copyWith(fontWeight: FontWeight.bold),
         )),
       ],
@@ -176,7 +175,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
           value,
           style: Theme.of(context)
               .textTheme
-              .bodyText1
+              .bodyLarge
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
       ],
@@ -185,12 +184,13 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
 
   buildTopSection() {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -219,7 +219,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                     widget.rateModel.categories!.toLowerCase() == "vcc"
                         ? "Beli ${widget.rateModel.name!}"
                         : "${widget.rateModel.name!} ${widget.rateModel.type!}",
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 17,
                         ),
                   ),
@@ -264,12 +264,13 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
 
   buildMiddleSection() {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -281,7 +282,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
               "Detail Pembayaran",
               style: Theme.of(context)
                   .textTheme
-                  .bodyText1
+                  .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             const SizedBox(height: 20),
@@ -316,7 +317,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                               children: [
                                 Text(
                                   "Punya kode promo?",
-                                  style: Theme.of(context).textTheme.bodyText2,
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 const SizedBox(width: 20),
                                 InkWell(
@@ -335,7 +336,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                                     "Masukan kode",
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1
+                                        .bodyLarge
                                         ?.copyWith(color: ColorManager.primary),
                                   ),
                                 ),
@@ -429,12 +430,14 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
 
   buildBottomSection() {
     return Card(
+      // don't give radius to the main card
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Row(

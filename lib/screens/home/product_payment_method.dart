@@ -16,10 +16,10 @@ import '../../common/common_method.dart';
 import '../../common/common_widgets.dart';
 
 class ProductPaymentMethod extends StatefulWidget {
-  RateModel rateModel;
-  Map<String, dynamic> data;
-  ProductPaymentMethod({required this.rateModel, required this.data, Key? key})
-      : super(key: key);
+  final RateModel rateModel;
+  final Map<String, dynamic> data;
+  const ProductPaymentMethod(
+      {required this.rateModel, required this.data, super.key});
 
   @override
   State<ProductPaymentMethod> createState() => _ProductPaymentMethodState();
@@ -56,12 +56,13 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
 
   buildMetodePembayaranSection() {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.55,
         width: double.infinity,
@@ -78,7 +79,7 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
                       "Metode Pembayaran",
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText1
+                          .bodyLarge
                           ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
@@ -133,7 +134,7 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
                                           softWrap: true,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .subtitle2
+                                              .titleSmall
                                               ?.copyWith(
                                                   fontWeight:
                                                       FontWeight.normal),
@@ -161,11 +162,12 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
   buildTotalSection() {
     return Card(
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      color: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -177,7 +179,7 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
               "Jumlah yang harus dibayarkan",
               style: Theme.of(context)
                   .textTheme
-                  .bodyText1
+                  .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             const SizedBox(height: 20),
@@ -228,7 +230,7 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
           value,
           style: Theme.of(context)
               .textTheme
-              .bodyText1
+              .bodyLarge
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
       ],
@@ -281,7 +283,9 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
                             int metodeId =
                                 int.parse(selectedPaymentMethod!.id!);
                             int rateId = int.parse(widget.rateModel.id!);
-                            int jumlah = int.parse(widget.data['jumlah']);
+                            // convert widget.data['jumlah'] to double and check for this Unhandled Exception: FormatException: Invalid radix-10 number (at character 1)
+                            double jumlah =
+                                double.parse(widget.data['jumlah'].toString());
                             double bayar = widget.data['total'];
                             double subtotal = widget.data['sub_total'];
 

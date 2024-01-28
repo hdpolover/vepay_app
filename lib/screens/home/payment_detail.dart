@@ -19,8 +19,7 @@ class PaymentDetail extends StatefulWidget {
   Map<String, dynamic> trData;
   TransactionModel transactionModel;
   PaymentDetail(
-      {required this.trData, required this.transactionModel, Key? key})
-      : super(key: key);
+      {required this.trData, required this.transactionModel, super.key});
 
   @override
   State<PaymentDetail> createState() => _PaymentDetailState();
@@ -51,7 +50,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
           value,
           style: Theme.of(context)
               .textTheme
-              .bodyText1
+              .bodyLarge
               ?.copyWith(fontWeight: FontWeight.bold),
         )),
         isToCopy
@@ -75,12 +74,13 @@ class _PaymentDetailState extends State<PaymentDetail> {
 
   buildTopSection() {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -107,7 +107,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                 Expanded(
                   child: Text(
                     widget.transactionModel.metode!,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 17,
                         ),
                   ),
@@ -136,12 +136,13 @@ class _PaymentDetailState extends State<PaymentDetail> {
 
   buildDetailSection() {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -153,7 +154,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
               "Detail Pembayaran",
               style: Theme.of(context)
                   .textTheme
-                  .bodyText1
+                  .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             const SizedBox(height: 20),
@@ -199,12 +200,13 @@ class _PaymentDetailState extends State<PaymentDetail> {
 
   buildTransferDetailSection() {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -216,7 +218,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
               "Silakan Transfer ke",
               style: Theme.of(context)
                   .textTheme
-                  .bodyText1
+                  .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             Row(
@@ -240,7 +242,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                 Expanded(
                   child: Text(
                     widget.transactionModel.metode!,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 17,
                         ),
                   ),
@@ -305,7 +307,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                         "${CommonMethods().getWithdrawFieldName(widget.transactionModel.product!.toLowerCase())} ${widget.transactionModel.product!}",
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyLarge
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
@@ -335,12 +337,13 @@ class _PaymentDetailState extends State<PaymentDetail> {
 
   buildBuktiBayarSection() {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -352,7 +355,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
               "Upload Bukti Pembayaran",
               style: Theme.of(context)
                   .textTheme
-                  .bodyText1
+                  .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             const SizedBox(height: 10),
@@ -369,18 +372,18 @@ class _PaymentDetailState extends State<PaymentDetail> {
                             const BorderRadius.all(Radius.circular(15)),
                         color: ColorManager.primary.withOpacity(0.2),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(13),
+                      child: const Padding(
+                        padding: EdgeInsets.all(13),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.image,
                               size: 50,
                             ),
-                            const SizedBox(height: 10),
-                            const Text("Format Gambar: JPG, JPEG, PNG"),
+                            SizedBox(height: 10),
+                            Text("Format Gambar: JPG, JPEG, PNG"),
                           ],
                         ),
                       ),
@@ -413,7 +416,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
           value,
           style: Theme.of(context)
               .textTheme
-              .bodyText1
+              .bodyLarge
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
       ],

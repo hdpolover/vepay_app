@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:vepay_app/common/common_shimmer.dart';
 import 'package:vepay_app/models/member_model.dart';
@@ -10,6 +11,7 @@ import 'package:vepay_app/models/promo_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/screens/home/product_item_widget.dart';
 import 'package:vepay_app/screens/home/promo_item_widget.dart';
+import 'package:vepay_app/screens/home/promo_see_all.dart';
 import 'package:vepay_app/services/promo_service.dart';
 
 import '../../common/common_dialog.dart';
@@ -247,12 +249,33 @@ class _HomeTabState extends State<HomeTab> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Promo dan Berita",
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Promo dan Berita",
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            TextButton(
+                onPressed: () {
+                  PersistentNavBarNavigator.pushNewScreen(
+                    context,
+                    screen: PromoSeeAll(
+                      promos: promos!,
+                    ),
+                    withNavBar: false,
+                  );
+                },
+                child: Text(
+                  "Lihat Semua",
+                  style: TextStyle(
+                    color: ColorManager.primary,
+                  ),
+                ))
+          ],
         ),
         promos == null
             ? SizedBox(
@@ -277,6 +300,7 @@ class _HomeTabState extends State<HomeTab> {
                   itemBuilder: (context, index) {
                     return PromoItemWidget(
                       promo: promos![index],
+                      source: "home",
                     );
                   },
                 ),

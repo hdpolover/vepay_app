@@ -185,6 +185,11 @@ class CommonMethods {
 
     String subject = 'Transaksi Baru #${transactionModel.kodeTransaksi}';
 
+    // print pay transaction model detail in a loop
+    for (var item in transactionModel.toJson().entries) {
+      print(item.key + " : " + item.value.toString());
+    }
+
     String body = "";
     if (transactionModel.product!.toLowerCase() == "vcc") {
       body =
@@ -193,6 +198,8 @@ class CommonMethods {
       body =
           "Transaksi Baru #${transactionModel.kodeTransaksi}\n\nSilakan proses pesanan dengan detail sebagai berikut:\n\n${transactionModel.type}\n\nKode Transaksi: ${transactionModel.kodeTransaksi}\nProduk: ${transactionModel.product}\nNama Pengguna: ${transactionModel.name}\nTotal: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\nSaldo yang akan diterima: $saldoYangDiterima \n\nPastikan untuk membuka website admin untuk melihat detail transaksi.";
     }
+
+    print(body);
 
     String username = 'sent@vepay.id';
     String password = 'asemjawa123';

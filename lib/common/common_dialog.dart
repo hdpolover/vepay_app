@@ -72,7 +72,7 @@ class CommonDialog {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .titleLarge
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -165,7 +165,7 @@ class CommonDialog {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .titleLarge
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -265,7 +265,7 @@ class CommonDialog {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .titleLarge
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -357,7 +357,7 @@ class CommonDialog {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .titleLarge
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -446,7 +446,7 @@ class CommonDialog {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .titleLarge
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -479,7 +479,7 @@ class CommonDialog {
                       child: Text(noStr,
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle2
+                              .titleSmall
                               ?.copyWith(color: ColorManager.primary)),
                       onPressed: () {
                         Navigator.of(context, rootNavigator: true).pop();
@@ -556,7 +556,7 @@ class CommonDialog {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .titleLarge
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -656,7 +656,7 @@ class CommonDialog {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .titleLarge
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -707,8 +707,17 @@ class CommonDialog {
                           }
                         }
 
-                        CommonMethods().launchWhatsAppUri(
-                            "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.");
+                        String message = '';
+
+                        if (transactionModel.product!.toLowerCase() == 'vcc') {
+                          message =
+                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)} \n\nTerima kasih.";
+                        } else {
+                          message =
+                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.";
+                        }
+
+                        CommonMethods().launchWhatsAppUri(message);
                       },
                       child: const Text(
                         'OK',

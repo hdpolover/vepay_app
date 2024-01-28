@@ -6,7 +6,7 @@ import 'package:vepay_app/models/promo_model.dart';
 
 class PromoDetail extends StatefulWidget {
   PromoModel promo;
-  PromoDetail({required this.promo, Key? key}) : super(key: key);
+  PromoDetail({required this.promo, super.key});
 
   @override
   State<PromoDetail> createState() => _PromoDetailState();
@@ -40,7 +40,7 @@ class _PromoDetailState extends State<PromoDetail> {
                   widget.promo.nama!,
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1
+                      .bodyLarge
                       ?.copyWith(fontSize: 20),
                 ),
                 const SizedBox(height: 20),
@@ -48,33 +48,33 @@ class _PromoDetailState extends State<PromoDetail> {
                   "Kode Promo",
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1
+                      .bodyLarge
                       ?.copyWith(fontSize: 15),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   widget.promo.kode!,
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 20),
                 Text(
                   "Kuota Promo",
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1
+                      .bodyLarge
                       ?.copyWith(fontSize: 15),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   widget.promo.quota!.toString(),
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 20),
                 Text(
                   "Nilai Promo",
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1
+                      .bodyLarge
                       ?.copyWith(fontSize: 15),
                 ),
                 const SizedBox(height: 5),
@@ -84,34 +84,34 @@ class _PromoDetailState extends State<PromoDetail> {
                           widget.promo.value!.toDouble(),
                         )
                       : "${widget.promo.value!}%",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 20),
                 Text(
                   "Masa Aktif Sampai",
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1
+                      .bodyLarge
                       ?.copyWith(fontSize: 15),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   CommonMethods().formatDate(widget.promo.expired!, "s"),
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 20),
                 Text(
                   "Keterangan",
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1
+                      .bodyLarge
                       ?.copyWith(fontSize: 15),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   widget.promo.desc!,
                   textAlign: TextAlign.justify,
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 20),
               ],

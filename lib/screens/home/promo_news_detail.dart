@@ -1,12 +1,11 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/models/promo_model.dart';
 
 class PromoNewsDetail extends StatefulWidget {
   PromoModel promo;
-  PromoNewsDetail({required this.promo, Key? key}) : super(key: key);
+  PromoNewsDetail({required this.promo, super.key});
 
   @override
   State<PromoNewsDetail> createState() => _PromoNewsDetailState();
@@ -36,11 +35,18 @@ class _PromoNewsDetailState extends State<PromoNewsDetail> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  widget.promo.nama!,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(fontSize: 20),
+                ),
                 const SizedBox(height: 10),
                 Text(
                   widget.promo.desc!,
                   textAlign: TextAlign.justify,
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 20),
               ],
