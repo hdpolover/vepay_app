@@ -77,6 +77,7 @@ android {
    
    buildTypes {
        release {
+           crunchPngs false
            signingConfig signingConfigs.release
        }
    }
@@ -95,6 +96,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
     implementation "androidx.activity:activity:1.6.0-alpha05"
+
+    implementation 'com.google.android.recaptcha:recaptcha:18.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
