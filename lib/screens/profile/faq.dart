@@ -4,6 +4,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:vepay_app/common/common_shimmer.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/models/faq_model.dart';
+import 'package:vepay_app/resources/text_style_manager.dart';
 import 'package:vepay_app/services/app_info_service.dart';
 import 'package:vepay_app/services/faq_service.dart';
 import 'dart:math' as math;
@@ -97,17 +98,21 @@ class _FaqState extends State<Faq> {
                             return ListTile(
                               contentPadding:
                                   const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                              title: Text(
-                                faqs![index].judul!,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              title: Text(faqs![index].judul!,
+                                  style: TextStyleManager.instance.body3
+                                      .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15)),
                             );
                           },
                           body: ListTile(
-                              contentPadding:
-                                  const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                              title: HtmlWidget(faqs![index].deskripsi!)),
+                            contentPadding:
+                                const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                            title: HtmlWidget(
+                              faqs![index].deskripsi!,
+                              textStyle: TextStyleManager.instance.body2,
+                            ),
+                          ),
                           isExpanded: exp[index].isExpanded,
                           canTapOnHeader: true,
                         ),

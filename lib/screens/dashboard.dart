@@ -143,11 +143,14 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             child: const Text('Ya'),
                             onPressed: () async {
-                              if (Platform.isAndroid) {
-                                SystemNavigator.pop();
-                              } else if (Platform.isIOS) {
-                                exit(0);
-                              }
+                              exit(0);
+                              // if (Platform.isAndroid) {
+                              //   Navigator.pop(context);
+
+                              //   SystemNavigator.pop();
+                              // } else if (Platform.isIOS) {
+                              //   exit(0);
+                              // }
                             },
                           ),
                         ),

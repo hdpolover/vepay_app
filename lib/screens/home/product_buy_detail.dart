@@ -5,6 +5,8 @@ import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/models/promo_model.dart';
 import 'package:vepay_app/models/rate_model.dart';
+import 'package:vepay_app/resources/text_style_manager.dart';
+import 'package:vepay_app/resources/widget_manager.dart';
 import 'package:vepay_app/screens/home/product_payment_method.dart';
 import 'package:vepay_app/services/promo_service.dart';
 
@@ -147,41 +149,6 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
     setState(() {});
   }
 
-  buildTextItem(String title, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Expanded(child: Text(title)),
-        Expanded(
-            child: Text(
-          value,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(fontWeight: FontWeight.bold),
-        )),
-      ],
-    );
-  }
-
-  buildTextItem2(String title, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(child: Text(title)),
-        Text(
-          value,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
-  }
-
   buildTopSection() {
     return Card(
       color: Colors.white,
@@ -216,13 +183,12 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                 ),
                 Expanded(
                   child: Text(
-                    widget.rateModel.categories!.toLowerCase() == "vcc"
-                        ? "Beli ${widget.rateModel.name!}"
-                        : "${widget.rateModel.name!} ${widget.rateModel.type!}",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 17,
-                        ),
-                  ),
+                      widget.rateModel.categories!.toLowerCase() == "vcc"
+                          ? "Beli ${widget.rateModel.name!}"
+                          : "${widget.rateModel.name!} ${widget.rateModel.type!}",
+                      style: TextStyleManager.instance.heading3.copyWith(
+                        fontWeight: FontWeight.bold,
+                      )),
                 ),
               ],
             ),
@@ -232,11 +198,12 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
               height: 2,
             ),
             const SizedBox(height: 10),
-            buildTextItem("Jenis Produk", widget.rateModel.name!),
+            WidgetManager()
+                .buildTextItem("Jenis Produk", widget.rateModel.name!),
             const SizedBox(height: 10),
             widget.data['akun_tujuan'] == null
                 ? Container()
-                : buildTextItem(
+                : WidgetManager().buildTextItem(
                     CommonMethods().getFieldName(widget.rateModel.name!),
                     widget.data['akun_tujuan']!),
             widget.data['akun_tujuan'] == null
@@ -244,13 +211,14 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                 : const SizedBox(height: 10),
             widget.data['blockchain_name'] == null
                 ? Container()
-                : buildTextItem("Blockchain", widget.data['blockchain_name']!),
+                : WidgetManager().buildTextItem(
+                    "Blockchain", widget.data['blockchain_name']!),
             widget.data['blockchain_name'] == null
                 ? Container()
                 : const SizedBox(height: 10),
-            buildTextItem("Jumlah", widget.data['jumlah']!),
+            WidgetManager().buildTextItem("Jumlah", widget.data['jumlah']!),
             const SizedBox(height: 10),
-            buildTextItem(
+            WidgetManager().buildTextItem(
               "Harga Satuan",
               CommonMethods.formatCompleteCurrency(
                 double.parse(widget.rateModel.price!),
@@ -280,20 +248,17 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
           children: [
             Text(
               "Detail Pembayaran",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyleManager.instance.heading3,
             ),
             const SizedBox(height: 20),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Subtotal Tagihan",
               CommonMethods.formatCompleteCurrency(
                 subtotal!,
               ),
             ),
             const SizedBox(height: 10),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Biaya Transaksi",
               CommonMethods.formatCompleteCurrency(
                 feeFinal!,
@@ -304,7 +269,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                 : Column(
                     children: [
                       const SizedBox(height: 10),
-                      buildTextItem2(
+                      WidgetManager().buildTextItem2(
                         "Potongan Promosi",
                         "-${CommonMethods.formatCompleteCurrency(
                           totalPromo!,
@@ -317,7 +282,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                               children: [
                                 Text(
                                   "Punya kode promo?",
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  style: TextStyleManager.instance.body2,
                                 ),
                                 const SizedBox(width: 20),
                                 InkWell(
@@ -334,10 +299,10 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                                   },
                                   child: Text(
                                     "Masukan kode",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.copyWith(color: ColorManager.primary),
+                                    style: TextStyleManager.instance.body2
+                                        .copyWith(
+                                      color: ColorManager.primary,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -369,9 +334,6 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                                         height:
                                             MediaQuery.of(context).size.height *
                                                 0.06,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.25,
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
@@ -394,9 +356,6 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                                         height:
                                             MediaQuery.of(context).size.height *
                                                 0.06,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.25,
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: ColorManager
@@ -404,7 +363,11 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                                             foregroundColor:
                                                 Colors.white, // foreground
                                           ),
-                                          child: const Text('SIMPAN'),
+                                          child: Text(
+                                            'SIMPAN',
+                                            style:
+                                                TextStyleManager.instance.body2,
+                                          ),
                                           onPressed: () async {
                                             if (promoController
                                                 .text.isNotEmpty) {
@@ -448,20 +411,14 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
             Expanded(
               child: Text(
                 "Total Pembayaran",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+                style: TextStyleManager.instance.heading3,
               ),
             ),
             Text(
               CommonMethods.formatCompleteCurrency(
                 total!,
               ),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyleManager.instance.heading3,
             ),
           ],
         ),
@@ -480,7 +437,6 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
           buildMiddleSection(),
           const SizedBox(height: 10),
           buildBottomSection(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -495,12 +451,6 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                   ),
                   child: const Text('Pilih Metode Pembayaran'),
                   onPressed: () async {
-                    // if (_formKey.currentState!.validate()) {
-                    //   Map<String, dynamic> data = {
-                    //     "email": emailController.text.trim(),
-                    //     "jumlah": totalController.text.trim(),
-                    //   };
-
                     widget.data['sub_total'] = subtotal!;
                     widget.data['total'] = total!;
                     widget.data['fee'] = feeFinal;
@@ -510,6 +460,8 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                       widget.data['promo_id'] = selectedPromo!.id;
                     }
 
+                    setState(() {});
+
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
                       screen: ProductPaymentMethod(
@@ -518,7 +470,6 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
                       ),
                       withNavBar: false,
                     );
-                    // }
                   },
                 ),
               ),

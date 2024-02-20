@@ -595,7 +595,7 @@ class CommonDialog {
       bool status,
       String message,
       PayTransactionModel transactionModel,
-      dynamic jumlah,
+      Map<String, dynamic> data,
       String withdrawSourceType) {
     showGeneralDialog(
       barrierLabel: "Barrier",
@@ -669,14 +669,26 @@ class CommonDialog {
                       style: OutlinedButton.styleFrom(
                           backgroundColor: ColorManager.primary),
                       onPressed: () {
+                        String message = '';
+
                         String currency = '';
                         String saldoYangDiterima = '';
+
                         if (transactionModel.type!.toLowerCase() ==
                             'withdraw') {
                           currency = "\$";
                           saldoYangDiterima =
                               CommonMethods.formatCompleteCurrency(
-                                  double.parse(transactionModel.subTotal!));
+                                  data['sub_total']);
+
+                          message =
+                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${data['total']}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.";
+
+                          print(transactionModel.type.toString() +
+                              ": " +
+                              message);
+
+                          CommonMethods().launchWhatsAppUri(message);
 
                           if (withdrawSourceType == "tab") {
                             Navigator.of(context, rootNavigator: true).pop();
@@ -690,15 +702,33 @@ class CommonDialog {
                           }
                         } else {
                           currency = "Rp.";
-                          saldoYangDiterima = "\$$jumlah";
+                          saldoYangDiterima = "\$${data['jumlah']}";
 
                           if (transactionModel.product!.toLowerCase() ==
                               'vcc') {
+                            message =
+                                "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)} \n\nTerima kasih.";
+
+                            print(transactionModel.type.toString() +
+                                ": " +
+                                message);
+
+                            CommonMethods().launchWhatsAppUri(message);
+
                             Navigator.of(context, rootNavigator: true).pop();
                             Navigator.of(context, rootNavigator: true).pop();
                             Navigator.of(context, rootNavigator: true).pop();
                             Navigator.of(context, rootNavigator: true).pop();
                           } else {
+                            message =
+                                "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${data['total'].toStringAsFixed(2)}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.";
+
+                            print(transactionModel.type.toString() +
+                                ": " +
+                                message);
+
+                            CommonMethods().launchWhatsAppUri(message);
+
                             Navigator.of(context, rootNavigator: true).pop();
                             Navigator.of(context, rootNavigator: true).pop();
                             Navigator.of(context, rootNavigator: true).pop();
@@ -706,18 +736,6 @@ class CommonDialog {
                             Navigator.of(context, rootNavigator: true).pop();
                           }
                         }
-
-                        String message = '';
-
-                        if (transactionModel.product!.toLowerCase() == 'vcc') {
-                          message =
-                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)} \n\nTerima kasih.";
-                        } else {
-                          message =
-                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.";
-                        }
-
-                        CommonMethods().launchWhatsAppUri(message);
                       },
                       child: const Text(
                         'OK',

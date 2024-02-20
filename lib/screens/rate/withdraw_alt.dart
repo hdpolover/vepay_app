@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -179,81 +180,18 @@ class _WithdrawAltState extends State<WithdrawAlt> {
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: TextFormField(
             controller: totalController,
-            validator: _totalValidator,
-            keyboardType: TextInputType.number,
+            validator: _totalValidator.call,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'(^\d*[\.\,]?\d{0,2})')),
+            ],
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               hintText: 'Jumlah',
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: ColorManager.primary,
-                ),
-              ),
-              suffixIcon: SizedBox(
-                height: 50,
-                width: 100,
-                child: IntrinsicHeight(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          if (totalController.text == "" ||
-                              int.parse(totalController.text.trim()) == 0) {
-                            CommonDialog.buildOkDialog(
-                                context, false, "Jumlah harus lebih dari 0");
-
-                            totalController.text = 1.toString();
-                          } else {
-                            setState(() {
-                              int total = int.parse(totalController.text) - 1;
-                              totalController.text = total.toString();
-                            });
-                          }
-                        },
-                        child: Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border:
-                                      Border.all(width: 2, color: Colors.grey)),
-                              child: const Icon(
-                                FontAwesomeIcons.minus,
-                                color: Colors.grey,
-                                size: 20,
-                              ),
-                            )),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          if (totalController.text == "") {
-                            totalController.text = 1.toString();
-                          } else {
-                            int total = int.parse(totalController.text) + 1;
-                            totalController.text = total.toString();
-                          }
-                        },
-                        child: Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border:
-                                      Border.all(width: 2, color: Colors.grey)),
-                              child: const Icon(
-                                FontAwesomeIcons.plus,
-                                color: Colors.grey,
-                                size: 20,
-                              ),
-                            )),
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:vepay_app/common/common_widgets.dart';
+import 'package:vepay_app/resources/text_style_manager.dart';
 
 import '../../resources/color_manager.dart';
 import '../../services/app_info_service.dart';
 
 class ContactUs extends StatefulWidget {
-  ContactUs({Key? key}) : super(key: key);
+  const ContactUs({Key? key}) : super(key: key);
 
   @override
   State<ContactUs> createState() => _ContactUsState();
@@ -53,7 +54,6 @@ class _ContactUsState extends State<ContactUs> {
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.57,
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -66,78 +66,57 @@ class _ContactUsState extends State<ContactUs> {
                             child: Text(
                               AppInfoService().removeHtmlTags(
                                   AppInfoService().getValueByKey('web_title')!),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  ?.copyWith(fontSize: 25),
+                              style: TextStyleManager.instance.heading3,
                               textAlign: TextAlign.center,
                             ),
                           ),
                           const SizedBox(height: 20),
                           Text(
                             "Alamat",
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyleManager.instance.body2,
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            AppInfoService().removeHtmlTags(
-                                AppInfoService().getValueByKey('web_alamat')!),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                ?.copyWith(fontWeight: FontWeight.normal),
-                          ),
+                              AppInfoService().removeHtmlTags(AppInfoService()
+                                  .getValueByKey('web_alamat')!),
+                              style: TextStyleManager.instance.body2),
                           const SizedBox(height: 20),
                           Text(
                             "Email",
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyleManager.instance.body2,
                           ),
                           const SizedBox(height: 10),
                           Text(
                             AppInfoService().removeHtmlTags(
                                 AppInfoService().getValueByKey('web_email')!),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                ?.copyWith(fontWeight: FontWeight.normal),
+                            style: TextStyleManager.instance.body2,
                           ),
                           const SizedBox(height: 20),
                           Text(
                             "WhatsApp",
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyleManager.instance.body2,
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            AppInfoService().removeHtmlTags(
-                                AppInfoService().getValueByKey('web_telepon')!),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                ?.copyWith(fontWeight: FontWeight.normal),
-                          ),
+                              AppInfoService().removeHtmlTags(AppInfoService()
+                                  .getValueByKey('web_telepon')!),
+                              style: TextStyleManager.instance.body2),
                           const SizedBox(height: 20),
                           Text(
                             "Website",
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyleManager.instance.body2,
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            AppInfoService().removeHtmlTags(
-                                AppInfoService().getValueByKey('web_website')!),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                ?.copyWith(fontWeight: FontWeight.normal),
-                          ),
+                              AppInfoService().removeHtmlTags(AppInfoService()
+                                  .getValueByKey('web_website')!),
+                              style: TextStyleManager.instance.body2),
                           const SizedBox(height: 30),
                           Center(
                             child: Text(
                               AppInfoService().removeHtmlTags(AppInfoService()
                                   .getValueByKey('web_info_desc')!),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  ?.copyWith(fontWeight: FontWeight.normal),
+                              style: TextStyleManager.instance.body2,
                               textAlign: TextAlign.center,
                             ),
                           ),

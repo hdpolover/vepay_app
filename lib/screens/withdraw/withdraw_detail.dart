@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/models/blockchain_model.dart';
+import 'package:vepay_app/resources/text_style_manager.dart';
+import 'package:vepay_app/resources/widget_manager.dart';
 import 'package:vepay_app/screens/withdraw/withdraw_pembayaran.dart';
 
 import '../../common/common_dialog.dart';
@@ -86,41 +88,6 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
     setState(() {});
   }
 
-  buildTextItem(String title, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Expanded(child: Text(title)),
-        Expanded(
-            child: Text(
-          value,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(fontWeight: FontWeight.bold),
-        )),
-      ],
-    );
-  }
-
-  buildTextItem2(String title, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(child: Text(title)),
-        Text(
-          value,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
-  }
-
   buildTopSection() {
     return Card(
       color: Colors.white,
@@ -155,11 +122,10 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
                 ),
                 Expanded(
                   child: Text(
-                    "${widget.rateModel.name!} ${widget.rateModel.type!}",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 17,
-                        ),
-                  ),
+                      "${widget.rateModel.name!} ${widget.rateModel.type!}",
+                      style: TextStyleManager.instance.heading3.copyWith(
+                        fontWeight: FontWeight.bold,
+                      )),
                 ),
               ],
             ),
@@ -169,7 +135,8 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
               height: 2,
             ),
             const SizedBox(height: 10),
-            buildTextItem("Jenis Produk", widget.rateModel.name!),
+            WidgetManager()
+                .buildTextItem("Jenis Produk", widget.rateModel.name!),
             const SizedBox(height: 10),
             // widget.data['akun_tujuan'] == null
             //     ? Container()
@@ -181,21 +148,24 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
             //     : const SizedBox(height: 10),
             widget.data['blockchain_name'] == null
                 ? Container()
-                : buildTextItem("Blockchain", widget.data['blockchain_name']!),
+                : WidgetManager().buildTextItem(
+                    "Blockchain", widget.data['blockchain_name']!),
             widget.data['blockchain_name'] == null
                 ? Container()
                 : const SizedBox(height: 10),
             // ignore: prefer_interpolation_to_compose_strings
-            buildTextItem("Jumlah", "\$" + widget.data['jumlah']!),
+            WidgetManager()
+                // ignore: prefer_interpolation_to_compose_strings
+                .buildTextItem("Jumlah", "\$" + widget.data['jumlah']!),
             const SizedBox(height: 10),
-            buildTextItem(
+            WidgetManager().buildTextItem(
               "Rate Withdraw",
               CommonMethods.formatCompleteCurrency(
                 double.parse(widget.rateModel.price!),
               ),
             ),
             const SizedBox(height: 10),
-            buildTextItem(
+            WidgetManager().buildTextItem(
               "Biaya Transaksi",
               "\$${biayaTransaksi!.toStringAsFixed(2)}",
             ),
@@ -223,18 +193,17 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
           children: [
             Text(
               "Detail Withdraw",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyleManager.instance.heading3.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 20),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Subtotal Tagihan",
               "\$${subtotalUsd!.toStringAsFixed(2)}",
             ),
             const SizedBox(height: 10),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Subtotal Jumlah yang Diterima",
               CommonMethods.formatCompleteCurrency(
                 subtotal!,
@@ -256,28 +225,22 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Text(
-                "Total Pembayaran",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
+              child: Text("Total Pembayaran",
+                  style: TextStyleManager.instance.heading3.copyWith(
+                    fontWeight: FontWeight.bold,
+                  )),
             ),
-            Text(
-              "\$${total!.toStringAsFixed(2)}",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
+            Text("\$${total!.toStringAsFixed(2)}",
+                style: TextStyleManager.instance.heading3.copyWith(
+                  fontWeight: FontWeight.bold,
+                )),
           ],
         ),
       ),
@@ -296,7 +259,6 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
           buildMiddleSection(),
           const SizedBox(height: 10),
           buildBottomSection(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.15),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -317,6 +279,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
                           });
 
                           widget.data['sub_total'] = subtotal!;
+                          widget.data['sub_total_usd'] = subtotalUsd!;
                           widget.data['total'] = total!;
                           widget.data['fee'] = biayaTransaksi;
                           widget.data['total_promo'] = totalPromo;
@@ -333,6 +296,8 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
                             'promo_id': widget.data['promo_id'],
                             'total_promo': 0,
                           };
+
+                          setState(() {});
 
                           doTransaction(data);
                         },

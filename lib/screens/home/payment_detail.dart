@@ -11,6 +11,8 @@ import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/models/pay_transaction_model.dart';
 import 'package:vepay_app/models/transaction_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
+import 'package:vepay_app/resources/text_style_manager.dart';
+import 'package:vepay_app/resources/widget_manager.dart';
 import 'package:vepay_app/services/transaction_service.dart';
 
 import '../../common/common_method.dart';
@@ -37,39 +39,6 @@ class _PaymentDetailState extends State<PaymentDetail> {
 
   void _setImageFileListFromFile(XFile? value) {
     _imageFile = value;
-  }
-
-  buildTextItem(String title, String value, bool isToCopy) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Expanded(child: Text(title)),
-        Expanded(
-            child: Text(
-          value,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(fontWeight: FontWeight.bold),
-        )),
-        isToCopy
-            ? InkWell(
-                onTap: () {
-                  Clipboard.setData(ClipboardData(text: value)).then((_) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Berhasil menyalin text ke clipboard")));
-                  });
-                },
-                child: Icon(
-                  Icons.copy,
-                  size: 17,
-                  color: ColorManager.primary,
-                ),
-              )
-            : Container()
-      ],
-    );
   }
 
   buildTopSection() {
@@ -120,14 +89,15 @@ class _PaymentDetailState extends State<PaymentDetail> {
               height: 1,
             ),
             const SizedBox(height: 10),
-            buildTextItem(
-                "ID Pembayaran", widget.transactionModel.kodeTransaksi!, false),
+            WidgetManager().buildTextItemToCopy("ID Pembayaran",
+                widget.transactionModel.kodeTransaksi!, false, context),
             const SizedBox(height: 10),
-            buildTextItem(
+            WidgetManager().buildTextItemToCopy(
                 "Tanggal",
                 CommonMethods()
                     .formatDate(widget.transactionModel.createdAt!, "l"),
-                false),
+                false,
+                context),
           ],
         ),
       ),
@@ -152,32 +122,27 @@ class _PaymentDetailState extends State<PaymentDetail> {
           children: [
             Text(
               "Detail Pembayaran",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyleManager.instance.heading3,
             ),
             const SizedBox(height: 20),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Subtotal Tagihan",
               CommonMethods.formatCompleteCurrency(
                 double.parse(widget.transactionModel.subTotal!),
               ),
             ),
             const SizedBox(height: 10),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Potongan Promosi",
               CommonMethods.formatCompleteCurrency(
                 widget.trData['total_promo'],
               ),
             ),
             const SizedBox(height: 10),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Biaya Transaksi",
               CommonMethods.formatCompleteCurrency(
-                (double.parse(widget.transactionModel.fee!) *
-                        double.parse(widget.transactionModel.subTotal!)) /
-                    100,
+                widget.trData['fee']!,
               ),
             ),
             const SizedBox(height: 15),
@@ -186,10 +151,10 @@ class _PaymentDetailState extends State<PaymentDetail> {
               height: 1,
             ),
             const SizedBox(height: 15),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Total",
               CommonMethods.formatCompleteCurrency(
-                double.parse(widget.transactionModel.total!),
+                widget.trData['total']!,
               ),
             ),
           ],
@@ -216,10 +181,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
           children: [
             Text(
               "Silakan Transfer ke",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyleManager.instance.heading3,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -240,21 +202,17 @@ class _PaymentDetailState extends State<PaymentDetail> {
                   ),
                 ),
                 Expanded(
-                  child: Text(
-                    widget.transactionModel.metode!,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 17,
-                        ),
-                  ),
+                  child: Text(widget.transactionModel.metode!,
+                      style: TextStyleManager.instance.body2),
                 ),
               ],
             ),
             const SizedBox(height: 10),
-            buildTextItem(
-                "Nomor Rekening", widget.transactionModel.noRekening!, true),
+            WidgetManager().buildTextItemToCopy("Nomor Rekening",
+                widget.transactionModel.noRekening!, true, context),
             const SizedBox(height: 10),
-            buildTextItem(
-                "Atas Nama", widget.transactionModel.atasNama!, false),
+            WidgetManager().buildTextItemToCopy(
+                "Atas Nama", widget.transactionModel.atasNama!, false, context),
             const SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
@@ -269,26 +227,22 @@ class _PaymentDetailState extends State<PaymentDetail> {
                     RichText(
                       text: TextSpan(
                         children: [
-                          const TextSpan(
+                          TextSpan(
                             text:
                                 "Transfer total pembayaran sesuai dengan rincian di atas ke nomor rekening atas nama ",
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
+                            style: TextStyleManager.instance.body2
+                                .copyWith(color: Colors.black),
                           ),
                           TextSpan(
-                            text: widget.transactionModel.atasNama,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const TextSpan(
+                              text: widget.transactionModel.atasNama,
+                              style: TextStyleManager.instance.body2.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                          TextSpan(
                             text:
                                 ". \n\nBiaya transfer ditanggung pengguna. Lalu upload bukti transfer pada fitur di bawah ini.",
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
+                            style: TextStyleManager.instance.body2
+                                .copyWith(color: Colors.black),
                           ),
                         ],
                       ),
@@ -305,10 +259,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                       const SizedBox(height: 20),
                       Text(
                         "${CommonMethods().getWithdrawFieldName(widget.transactionModel.product!.toLowerCase())} ${widget.transactionModel.product!}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
+                        style: TextStyleManager.instance.body2,
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
@@ -353,10 +304,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
           children: [
             Text(
               "Upload Bukti Pembayaran",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyleManager.instance.heading3,
             ),
             const SizedBox(height: 10),
             InkWell(
@@ -366,7 +314,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
               child: _imageFile == null
                   ? Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.25,
                       decoration: BoxDecoration(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(15)),
@@ -403,23 +351,6 @@ class _PaymentDetailState extends State<PaymentDetail> {
           ],
         ),
       ),
-    );
-  }
-
-  buildTextItem2(String title, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(child: Text(title)),
-        Text(
-          value,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ],
     );
   }
 
@@ -524,7 +455,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                         true,
                                         "Pembuatan Pesanan berhasil. Buka WhatsApp sekarang untuk hubungi Admin.",
                                         p,
-                                        widget.trData['jumlah'],
+                                        widget.trData,
                                         "",
                                       );
                                     } catch (e) {
@@ -577,7 +508,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                     true,
                                     "Pembuatan Pesanan berhasil. Buka WhatsApp sekarang untuk hubungi Admin.",
                                     p,
-                                    widget.trData['jumlah'],
+                                    widget.trData,
                                     "",
                                   );
                                 } catch (e) {

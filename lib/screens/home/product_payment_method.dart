@@ -8,6 +8,8 @@ import 'package:vepay_app/models/payment_method_model.dart';
 import 'package:vepay_app/models/rate_model.dart';
 import 'package:vepay_app/models/transaction_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
+import 'package:vepay_app/resources/text_style_manager.dart';
+import 'package:vepay_app/resources/widget_manager.dart';
 import 'package:vepay_app/screens/home/payment_detail.dart';
 import 'package:vepay_app/services/payment_method_service.dart';
 import 'package:vepay_app/services/transaction_service.dart';
@@ -64,7 +66,7 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
         ),
       ),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.55,
+        height: MediaQuery.of(context).size.height * 0.5,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -77,25 +79,12 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
                   Expanded(
                     child: Text(
                       "Metode Pembayaran",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: TextStyleManager.instance.heading3,
                     ),
                   ),
-                  // InkWell(
-                  //   onTap: () {},
-                  //   child: Text(
-                  //     "Lihat semua",
-                  //     style: Theme.of(context)
-                  //         .textTheme
-                  //         .bodyText1
-                  //         ?.copyWith(color: ColorManager.primary),
-                  //   ),
-                  // ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               methods == null
                   ? Center(
                       child: CircularProgressIndicator(
@@ -132,12 +121,8 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
                                           paymentOptionValue.metode!,
                                           overflow: TextOverflow.ellipsis,
                                           softWrap: true,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleSmall
-                                              ?.copyWith(
-                                                  fontWeight:
-                                                      FontWeight.normal),
+                                          style:
+                                              TextStyleManager.instance.body2,
                                         ),
                                       ),
                                     ],
@@ -177,13 +162,10 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
           children: [
             Text(
               "Jumlah yang harus dibayarkan",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyleManager.instance.heading3,
             ),
             const SizedBox(height: 20),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Subtotal Tagihan",
               CommonMethods.formatCompleteCurrency(
                 widget.data['sub_total'],
@@ -194,21 +176,21 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
                 : const SizedBox(height: 10),
             widget.rateModel.categories!.toLowerCase() == "vcc"
                 ? Container()
-                : buildTextItem2(
+                : WidgetManager().buildTextItem2(
                     "Potongan Promosi",
                     CommonMethods.formatCompleteCurrency(
                       widget.data['total_promo'],
                     ),
                   ),
             const SizedBox(height: 10),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Biaya Transaksi",
               CommonMethods.formatCompleteCurrency(
                 widget.data['fee'],
               ),
             ),
             const SizedBox(height: 10),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Total",
               CommonMethods.formatCompleteCurrency(
                 widget.data['total'],
@@ -217,23 +199,6 @@ class _ProductPaymentMethodState extends State<ProductPaymentMethod> {
           ],
         ),
       ),
-    );
-  }
-
-  buildTextItem2(String title, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(child: Text(title)),
-        Text(
-          value,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ],
     );
   }
 

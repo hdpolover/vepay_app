@@ -13,6 +13,8 @@ import 'package:vepay_app/models/pay_transaction_model.dart';
 import 'package:vepay_app/models/transaction_model.dart';
 import 'package:vepay_app/models/withdraw_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
+import 'package:vepay_app/resources/text_style_manager.dart';
+import 'package:vepay_app/resources/widget_manager.dart';
 import 'package:vepay_app/services/transaction_service.dart';
 
 import '../../common/common_method.dart';
@@ -49,47 +51,15 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
     _imageFile = value;
   }
 
-  buildTextItem(String title, String value, bool isToCopy) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Expanded(child: Text(title)),
-        Expanded(
-            child: Text(
-          value,
-          style: Theme.of(context)
-              .textTheme
-              .bodyText1
-              ?.copyWith(fontWeight: FontWeight.bold),
-        )),
-        isToCopy
-            ? InkWell(
-                onTap: () {
-                  Clipboard.setData(ClipboardData(text: value)).then((_) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Berhasil menyalin text ke clipboard")));
-                  });
-                },
-                child: Icon(
-                  Icons.copy,
-                  size: 17,
-                  color: ColorManager.primary,
-                ),
-              )
-            : Container()
-      ],
-    );
-  }
-
   buildTopSection() {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -116,9 +86,9 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
                 Expanded(
                   child: Text(
                     widget.withdrawModel.withdraw!,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                          fontSize: 17,
-                        ),
+                    style: TextStyleManager.instance.body3.copyWith(
+                      fontSize: 17,
+                    ),
                   ),
                 ),
               ],
@@ -129,14 +99,14 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
               height: 1,
             ),
             const SizedBox(height: 10),
-            buildTextItem(
-                "ID Pembayaran", widget.transactionModel.kodeTransaksi!, false),
+            WidgetManager().buildTextItem(
+                "ID Pembayaran", widget.transactionModel.kodeTransaksi!),
             const SizedBox(height: 10),
-            buildTextItem(
-                "Tanggal",
-                CommonMethods()
-                    .formatDate(widget.transactionModel.createdAt!, "l"),
-                false),
+            WidgetManager().buildTextItem(
+              "Tanggal",
+              CommonMethods()
+                  .formatDate(widget.transactionModel.createdAt!, "l"),
+            ),
           ],
         ),
       ),
@@ -145,12 +115,13 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
 
   buildDetailSection() {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -160,18 +131,15 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
           children: [
             Text(
               "Detail Pembayaran",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyleManager.instance.heading3,
             ),
             const SizedBox(height: 20),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Subtotal Tagihan",
-              "\$${widget.trData['jumlah']}",
+              "\$${widget.trData['sub_total_usd'].toStringAsFixed(2)}",
             ),
             const SizedBox(height: 10),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Biaya Transaksi",
               "\$${widget.trData['fee'].toStringAsFixed(2)}",
             ),
@@ -181,9 +149,9 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
               height: 1,
             ),
             const SizedBox(height: 15),
-            buildTextItem2(
+            WidgetManager().buildTextItem2(
               "Total",
-              "\$${(double.parse(widget.trData['jumlah']) + widget.trData['fee']).toStringAsFixed(2)}",
+              "\$${widget.trData['total']}",
             ),
           ],
         ),
@@ -193,12 +161,13 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
 
   buildTransferDetailSection() {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -208,10 +177,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
           children: [
             Text(
               "Silakan Transfer ke",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyleManager.instance.heading3,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -234,7 +200,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
                 Expanded(
                   child: Text(
                     widget.withdrawModel.withdraw!,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 17,
                         ),
                   ),
@@ -242,10 +208,11 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
               ],
             ),
             const SizedBox(height: 10),
-            buildTextItem(
-                "Nomor Rekening", widget.withdrawModel.noRekening!, true),
+            WidgetManager().buildTextItemToCopy("Nomor Rekening",
+                widget.withdrawModel.noRekening!, true, context),
             const SizedBox(height: 10),
-            buildTextItem("Atas Nama", widget.withdrawModel.atasNama!, false),
+            WidgetManager().buildTextItemToCopy(
+                "Atas Nama", widget.withdrawModel.atasNama!, false, context),
             const SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
@@ -293,10 +260,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
             const SizedBox(height: 20),
             Text(
               "${CommonMethods().getWithdrawFieldName(widget.transactionModel.product!.toLowerCase())} ${widget.transactionModel.product!}",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  ?.copyWith(fontWeight: FontWeight.bold),
+              style: TextStyleManager.instance.heading3,
             ),
             const SizedBox(height: 10),
             TextFormField(
@@ -322,12 +286,13 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
 
   buildBuktiBayarSection() {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.zero,
-      // shape: const RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(15),
-      //   ),
-      // ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(0),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -337,10 +302,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
           children: [
             Text(
               "Upload Bukti Pembayaran",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyleManager.instance.heading3,
             ),
             const SizedBox(height: 10),
             InkWell(
@@ -350,24 +312,24 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
               child: _imageFile == null
                   ? Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.25,
                       decoration: BoxDecoration(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(15)),
                         color: ColorManager.primary.withOpacity(0.2),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(13),
+                      child: const Padding(
+                        padding: EdgeInsets.all(13),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.image,
                               size: 50,
                             ),
-                            const SizedBox(height: 10),
-                            const Text("Format Gambar: JPG, JPEG, PNG"),
+                            SizedBox(height: 10),
+                            Text("Format Gambar: JPG, JPEG, PNG"),
                           ],
                         ),
                       ),
@@ -387,23 +349,6 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
           ],
         ),
       ),
-    );
-  }
-
-  buildTextItem2(String title, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(child: Text(title)),
-        Text(
-          value,
-          style: Theme.of(context)
-              .textTheme
-              .bodyText1
-              ?.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ],
     );
   }
 
@@ -507,7 +452,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
                                       true,
                                       "Pembuatan Pesanan berhasil. Buka WhatsApp sekarang untuk hubungi Admin.",
                                       p,
-                                      widget.trData['jumlah'],
+                                      widget.trData,
                                       widget.wdSource,
                                     );
                                   } catch (e) {
