@@ -180,10 +180,12 @@ class _HomeTabState extends State<HomeTab> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 30),
         Text(
           "Transaksi Terbaru",
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
         ),
         transactionList == null
@@ -334,7 +336,7 @@ class _HomeTabState extends State<HomeTab> {
                 softWrap: true,
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
+                    .bodyLarge
                     ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ],
@@ -393,7 +395,7 @@ class _HomeTabState extends State<HomeTab> {
                       MaxLengthValidator(15,
                           errorText:
                               "Panjang nomor telepon maksimal 15 karakter"),
-                    ]),
+                    ]).call,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
@@ -415,7 +417,7 @@ class _HomeTabState extends State<HomeTab> {
                     controller: nameController,
                     validator: MultiValidator([
                       RequiredValidator(errorText: 'Harap masukan nama'),
-                    ]),
+                    ]).call,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),

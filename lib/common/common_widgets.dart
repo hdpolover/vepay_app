@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:vepay_app/resources/color_manager.dart';
-import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 import 'common_method.dart';
 
@@ -54,12 +52,12 @@ class CommonWidgets {
 
     switch (status) {
       case 1:
-        bgColor = const Color.fromARGB(255, 243, 182, 90).withOpacity(0.4);
-        textColor = Colors.orange.withOpacity(0.8);
+        bgColor = Colors.orange.withOpacity(0.14);
+        textColor = const Color(0xffFCAC12);
         break;
       case 2:
-        bgColor = Colors.grey.withOpacity(0.1);
-        textColor = Colors.green;
+        bgColor = const Color(0xff4CAF50).withOpacity(0.1);
+        textColor = const Color(0xff01C851);
         break;
       case 3:
         bgColor = Colors.red;
@@ -73,6 +71,11 @@ class CommonWidgets {
 
     value = Chip(
       backgroundColor: bgColor,
+      side: BorderSide.none,
+      shape: RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.circular(8), // Atur nilai sesuai kebutuhan Anda
+      ),
       label: Text(
         CommonMethods().getStatusLabel(
           status,
@@ -95,7 +98,7 @@ class CommonWidgets {
           value,
           style: Theme.of(context)
               .textTheme
-              .bodyText1
+              .bodyLarge
               ?.copyWith(fontWeight: FontWeight.bold),
         )),
       ],
