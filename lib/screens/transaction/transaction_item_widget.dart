@@ -6,12 +6,10 @@ import 'package:vepay_app/screens/transaction/transaction_detail.dart';
 
 import '../../common/common_method.dart';
 import '../../common/common_widgets.dart';
-import '../../resources/color_manager.dart';
 
 class TransactionItemWidget extends StatefulWidget {
   TransactionModel transaction;
-  TransactionItemWidget({required this.transaction, Key? key})
-      : super(key: key);
+  TransactionItemWidget({required this.transaction, super.key});
 
   @override
   State<TransactionItemWidget> createState() => _TransactionItemWidgetState();
@@ -58,12 +56,12 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
                     children: [
                       Text(
                         widget.transaction.type!,
-                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      const SizedBox(height: 5),
+                      // const SizedBox(height: 5),
                       Text(
                         CommonMethods()
                             .formatDate(widget.transaction.createdAt!, "s"),
@@ -93,12 +91,12 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
                         : "Saldo ${widget.transaction.product}",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodyLarge
                         ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  widget.transaction.akunTujuan == null
-                      ? Container()
-                      : const SizedBox(height: 5),
+                  // widget.transaction.akunTujuan == null
+                  //     ? Container()
+                  //     : const SizedBox(height: 0),
                   widget.transaction.akunTujuan == null
                       ? Container()
                       : Text(widget.transaction.akunTujuan ?? "-"),
@@ -112,12 +110,12 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text("Total Harga"),
-                          const SizedBox(height: 5),
+                          // const SizedBox(height: 5),
                           Text(
                             CommonMethods.formatCompleteCurrency(
                                 double.parse(widget.transaction.subTotal!)),
                             style:
-                                Theme.of(context).textTheme.bodyText1?.copyWith(
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),
