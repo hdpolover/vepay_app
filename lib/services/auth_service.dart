@@ -27,6 +27,7 @@ class AuthService {
                 'email': data['email'],
                 'nama': data['nama'],
                 'phone': data['phone'],
+                'fcm_token': data['fcm_token'],
               })
             : jsonEncode(<String, dynamic>{
                 'is_google': data['is_google'],
@@ -34,6 +35,7 @@ class AuthService {
                 'email': data['email'],
                 'phone': data['phone'],
                 'password': data['password'],
+                'fcm_token': data['fcm_token'],
               }),
       );
 
@@ -65,16 +67,20 @@ class AuthService {
             ? jsonEncode(<String, dynamic>{
                 'is_google': isGoogle,
                 'email': data['email'],
+                'fcm_token': data['fcm_token'],
               })
             : jsonEncode(<String, dynamic>{
                 'is_google': isGoogle,
                 'email': data['email'],
                 'password': data['password'],
+                'fcm_token': data['fcm_token'],
               }),
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         var result = json.decode(response.body)['data'];
+
+        print(result);
         return MemberModel.fromJson(result);
       } else {
         throw jsonDecode(response.body)['message'];

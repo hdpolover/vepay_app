@@ -206,8 +206,8 @@ class _ProfileTabState extends State<ProfileTab> {
                   if (widget.member.isGoogle == "1") {
                     FbService.signOut(context);
 
-                    CommonMethods()
-                        .saveUserLoginsDetails("", "", "", "", false, false);
+                    CommonMethods().saveUserLoginsDetails(
+                        "", "", "", "", false, false, "");
 
                     Navigator.of(context, rootNavigator: true).pop();
 
@@ -219,8 +219,8 @@ class _ProfileTabState extends State<ProfileTab> {
                   } else {
                     FbService.signOut(context);
 
-                    CommonMethods()
-                        .saveUserLoginsDetails("", "", "", "", false, false);
+                    CommonMethods().saveUserLoginsDetails(
+                        "", "", "", "", false, false, "");
 
                     Navigator.of(context, rootNavigator: true).pop();
 

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/common/global_values.dart';
@@ -16,7 +17,7 @@ import '../../services/auth_service.dart';
 import '../../services/fb_service.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -43,13 +44,14 @@ class _LoginState extends State<Login> {
     EmailValidator(errorText: "Harap masukan email yang valid")
   ]);
 
-  regist(String e, String n, String p, bool isGoogle) async {
+  regist(String e, String n, String p, bool isGoogle, String fcmToken) async {
     Map<String, dynamic> data;
     if (isGoogle) {
       data = {
         'is_google': true,
         "email": e,
         'mama': n,
+        'fcm_token': fcmToken,
       };
     } else {
       data = {
@@ -58,6 +60,7 @@ class _LoginState extends State<Login> {
         "nama": n,
         "phone": "08",
         "password": p,
+        'fcm_token': fcmToken,
       };
     }
 
@@ -79,7 +82,7 @@ class _LoginState extends State<Login> {
             MemberModel m = await AuthService().login(data);
 
             CommonMethods().saveUserLoginsDetails(
-                m.userId!, m.name!, m.email!, "", true, true);
+                m.userId!, m.name!, m.email!, "", true, true, fcmToken);
 
             setState(() {
               isLoading = false;
@@ -132,7 +135,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-  login() async {
+  login(String fcmToken) async {
     try {
       int? res = await AuthService()
           .checkEmail(emailController.text.trim().toString());
@@ -156,13 +159,14 @@ class _LoginState extends State<Login> {
           "is_google": false,
           "email": emailController.text.trim(),
           "password": passwordController.text.trim(),
+          'fcm_token': fcmToken,
         };
 
         try {
           MemberModel m = await AuthService().login(data);
 
           CommonMethods().saveUserLoginsDetails(m.userId!, m.name!, m.email!,
-              passwordController.text.trim(), true, false);
+              passwordController.text.trim(), true, false, fcmToken);
 
           setState(() {
             isLoading = false;
@@ -358,7 +362,12 @@ class _LoginState extends State<Login> {
                                     isLoading = true;
                                   });
 
-                                  login();
+                                  var prefs = SharedPreferences.getInstance();
+
+                                  String fcmToken = await prefs.then((value) =>
+                                      value.getString("fcmToken") ?? "");
+
+                                  login(fcmToken);
                                 }
                               },
                             ),
@@ -474,6 +483,12 @@ class _LoginState extends State<Login> {
                             UserCredential? result =
                                 await FbService.signInWithGoogle();
 
+                            var prefs = SharedPreferences.getInstance();
+
+                            String fcmToken = await prefs.then((value) {
+                              return value.getString("fcmToken")!;
+                            });
+
                             print(result.additionalUserInfo!.isNewUser);
 
                             if (result.additionalUserInfo!.isNewUser) {
@@ -485,6 +500,7 @@ class _LoginState extends State<Login> {
                                 result.user!.displayName!,
                                 "",
                                 true,
+                                fcmToken,
                               );
                             } else {
                               int? res = await AuthService()
@@ -496,6 +512,7 @@ class _LoginState extends State<Login> {
                                   result.user!.displayName!,
                                   "",
                                   true,
+                                  fcmToken,
                                 );
                               } else if (res == 1) {
                                 FbService.signOut(context);
@@ -519,12 +536,14 @@ class _LoginState extends State<Login> {
                                         await AuthService().login(data);
 
                                     CommonMethods().saveUserLoginsDetails(
-                                        m.userId!,
-                                        m.name!,
-                                        m.email!,
-                                        "",
-                                        true,
-                                        true);
+                                      m.userId!,
+                                      m.name!,
+                                      m.email!,
+                                      "",
+                                      true,
+                                      true,
+                                      fcmToken,
+                                    );
 
                                     setState(() {
                                       isLoading = false;

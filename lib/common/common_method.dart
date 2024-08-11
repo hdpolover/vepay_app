@@ -26,7 +26,7 @@ class CommonMethods {
   }
 
   Future saveUserLoginsDetails(String id, String name, String email,
-      String password, bool loginStatus, bool isGoogle) async {
+      String password, bool loginStatus, bool isGoogle, String fcmToken) async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setString("user_id", id);
     prefs.setString("name", name);
@@ -34,6 +34,7 @@ class CommonMethods {
     prefs.setString("password", password);
     prefs.setBool("loginStatus", loginStatus);
     prefs.setBool("isGoogle", isGoogle);
+    prefs.setString("fcmToken", fcmToken);
   }
 
   String getWithdrawFieldName(String productName) {

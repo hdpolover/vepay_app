@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'services/app_info_service.dart';
 
 class Maintenance extends StatefulWidget {
-  Maintenance({Key? key}) : super(key: key);
+  const Maintenance({super.key});
 
   @override
   State<Maintenance> createState() => _MaintenanceState();

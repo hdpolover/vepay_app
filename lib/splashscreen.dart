@@ -15,7 +15,7 @@ import 'package:vepay_app/services/app_info_service.dart';
 import 'package:vepay_app/services/auth_service.dart';
 
 class SplashScreen extends StatefulWidget {
-  SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -70,18 +70,25 @@ class _SplashScreenState extends State<SplashScreen> {
           String? password = prefs.getString("password") ?? "";
           bool? isGoogle = prefs.getBool("isGoogle") ?? false;
 
+          var prefs1 = SharedPreferences.getInstance();
+
+          String fcmToken =
+              await prefs1.then((value) => value.getString("fcmToken") ?? "");
+
           Map<String, dynamic> data;
 
           if (isGoogle) {
             data = {
               'is_google': isGoogle,
               'email': email,
+              'fcm_token': fcmToken,
             };
           } else {
             data = {
               'is_google': isGoogle,
               'email': email,
               'password': password,
+              'fcm_token': fcmToken,
             };
           }
 
@@ -95,6 +102,7 @@ class _SplashScreenState extends State<SplashScreen> {
               password,
               true,
               isGoogle,
+              fcmToken,
             );
 
             currentMemberGlobal.value = res;
