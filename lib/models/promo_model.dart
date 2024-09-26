@@ -15,9 +15,9 @@ class PromoModel {
   String? jenisKonten;
   String? nama;
   String? image;
-  int? value;
-  int? maksimalPromo;
-  int? minimumTransaksi;
+  dynamic value;
+  dynamic maksimalPromo;
+  dynamic minimumTransaksi;
   String? expired;
   dynamic publish;
   String? quota;

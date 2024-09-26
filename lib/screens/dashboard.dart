@@ -15,7 +15,7 @@ import 'package:vepay_app/screens/tabs/withdraw_tab.dart';
 
 class Dashboard extends StatefulWidget {
   MemberModel member;
-  Dashboard({required this.member, Key? key}) : super(key: key);
+  Dashboard({required this.member, super.key});
 
   @override
   State<Dashboard> createState() => _DashboardState();

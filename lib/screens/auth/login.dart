@@ -50,7 +50,8 @@ class _LoginState extends State<Login> {
       data = {
         'is_google': true,
         "email": e,
-        'mama': n,
+        'nama': n,
+        "phone": "08",
         'fcm_token': fcmToken,
       };
     } else {
@@ -400,7 +401,7 @@ class _LoginState extends State<Login> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Register(),
+                            builder: (context) => const Register(),
                           ),
                         );
                       },

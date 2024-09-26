@@ -90,13 +90,19 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Future<void> getPromos() async {
-    try {
-      promos = await PromoService().getPromos();
+    await PromoService().getPromos().then((value) async {
+      promos = value;
 
-      setState(() {});
-    } catch (e) {
-      print(e);
-    }
+      await PromoService().getBerita().then((value) async {
+        promos!.addAll(value);
+
+        await PromoService().getIklan().then((value) {
+          promos!.addAll(value);
+        });
+      });
+    });
+
+    setState(() {});
   }
 
   Future<void> getRates() async {

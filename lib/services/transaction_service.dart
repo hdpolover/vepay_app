@@ -55,9 +55,9 @@ class TransactionService {
 
     String tempString = "[";
 
-    selectedProducts.values.forEach((value) {
+    for (var value in selectedProducts.values) {
       tempString += '"$value", ';
-    });
+    }
 
     if (tempString.endsWith(", ")) {
       tempString = tempString.substring(0, tempString.length - 2);

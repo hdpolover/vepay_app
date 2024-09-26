@@ -227,6 +227,28 @@ class _ReferralHomeState extends State<ReferralHome> {
                             color: Colors.white,
                           ),
                           onPressed: () {
+                            if (kodeController.text.trim().isEmpty) {
+                              CommonDialog.buildOkDialog(context, false,
+                                  "Kode referral tidak boleh kosong");
+                              return;
+                            }
+
+                            // referral code cannot contain special characters besides a-z or numbers,
+                            // and must be at least 6 characters long
+                            if (kodeController.text.trim().length < 6) {
+                              CommonDialog.buildOkDialog(context, false,
+                                  "Kode referral minimal 6 karakter");
+                              return;
+                            }
+
+                            if (kodeController.text
+                                .trim()
+                                .contains(RegExp(r'[^\w\s]'))) {
+                              CommonDialog.buildOkDialog(context, false,
+                                  "Kode referral hanya boleh berisi huruf dan angka");
+                              return;
+                            }
+
                             setState(() {
                               _isSaving = true;
                             });

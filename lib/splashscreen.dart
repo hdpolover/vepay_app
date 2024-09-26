@@ -70,48 +70,64 @@ class _SplashScreenState extends State<SplashScreen> {
           String? password = prefs.getString("password") ?? "";
           bool? isGoogle = prefs.getBool("isGoogle") ?? false;
 
-          var prefs1 = SharedPreferences.getInstance();
+          await AuthService().getFcmTokenByEmail(email!).then((value) async {
+            String? fcmFromDb = value;
 
-          String fcmToken =
-              await prefs1.then((value) => value.getString("fcmToken") ?? "");
+            var prefs1 = SharedPreferences.getInstance();
 
-          Map<String, dynamic> data;
+            String currentToken =
+                await prefs1.then((value) => value.getString("fcmToken") ?? "");
 
-          if (isGoogle) {
-            data = {
-              'is_google': isGoogle,
-              'email': email,
-              'fcm_token': fcmToken,
-            };
-          } else {
-            data = {
-              'is_google': isGoogle,
-              'email': email,
-              'password': password,
-              'fcm_token': fcmToken,
-            };
-          }
+            String fcmToken = "";
 
-          try {
-            MemberModel? res = await AuthService().login(data);
+            if (fcmFromDb != null) {
+              if (currentToken.isEmpty || currentToken == fcmFromDb) {
+                fcmToken = fcmFromDb;
+              } else if (currentToken != fcmFromDb) {
+                fcmToken = currentToken;
+              }
+            } else {
+              fcmToken = currentToken;
+            }
 
-            CommonMethods().saveUserLoginsDetails(
-              res.userId!,
-              res.name ?? res.email!,
-              res.email!,
-              password,
-              true,
-              isGoogle,
-              fcmToken,
-            );
+            Map<String, dynamic> data;
 
-            currentMemberGlobal.value = res;
-            //_goToPage(Referral());
+            if (isGoogle) {
+              data = {
+                'is_google': isGoogle,
+                'email': email,
+                'fcm_token': fcmToken,
+              };
+            } else {
+              data = {
+                'is_google': isGoogle,
+                'email': email,
+                'password': password,
+                'fcm_token': fcmToken,
+              };
+            }
 
-            _goToPage(Dashboard(member: currentMemberGlobal.value));
-          } catch (e) {
-            buildError(e);
-          }
+            try {
+              MemberModel? res = await AuthService().login(data);
+
+              CommonMethods().saveUserLoginsDetails(
+                res.userId!,
+                res.name ?? res.email!,
+                res.email!,
+                password,
+                true,
+                isGoogle,
+                fcmToken,
+              );
+
+              currentMemberGlobal.value = res;
+              //_goToPage(Referral());
+
+              _goToPage(Dashboard(member: currentMemberGlobal.value));
+            } catch (e) {
+              buildError(e);
+            }
+          });
         } else {
           Navigator.pushReplacement(
             context,

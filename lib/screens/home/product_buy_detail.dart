@@ -45,7 +45,6 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
     countAll(
       double.parse(widget.rateModel.price!),
       double.parse(widget.data['jumlah']),
-      double.parse(widget.rateModel.fee!),
       totalPromo!,
     );
 
@@ -86,7 +85,6 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
     countAll(
       double.parse(widget.rateModel.price!),
       double.parse(widget.data['jumlah']),
-      double.parse(widget.rateModel.fee!),
       totalPromo!,
     );
   }
@@ -105,7 +103,6 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
         countAll(
           double.parse(widget.rateModel.price!),
           double.parse(widget.data['jumlah']),
-          double.parse(widget.rateModel.fee!),
           totalPromo!,
         );
       } else {
@@ -115,7 +112,6 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
         countAll(
           double.parse(widget.rateModel.price!),
           double.parse(widget.data['jumlah']),
-          double.parse(widget.rateModel.fee!),
           totalPromo!,
         );
       }
@@ -127,17 +123,94 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
       countAll(
         double.parse(widget.rateModel.price!),
         double.parse(widget.data['jumlah']),
-        double.parse(widget.rateModel.fee!),
         totalPromo!,
       );
     }
   }
 
-  countAll(double price, double amount, double fee, double promo) {
+  getDefaultFee() {
+    if (widget.rateModel.feeType == "%") {
+      return (double.parse(widget.rateModel.fee!) * subtotal!) / 100;
+    } else {
+      return double.parse(widget.rateModel.fee!);
+    }
+  }
+
+  setFee(double subtotal) {
+    double tempFee = 0;
+
+    if (widget.rateModel.rules == null || widget.rateModel.rules!.isEmpty) {
+      // get default fee
+      tempFee = getDefaultFee();
+    } else {
+      // get fee from rules
+      double jumlah = double.parse(widget.data['jumlah']!);
+
+      bool isAnyRuleMatched = false;
+      int ruleIndex = 0;
+
+      for (var rule in widget.rateModel.rules!) {
+        String condition = rule.condition!;
+        // conditions will be like =, >, <, >=, <=, !=
+
+        // if matched, get rule index and break the loop
+        if (condition == "=") {
+          if (jumlah == double.parse(rule.quantity!)) {
+            isAnyRuleMatched = true;
+            break;
+          }
+        } else if (condition == ">") {
+          if (jumlah > double.parse(rule.quantity!)) {
+            isAnyRuleMatched = true;
+            break;
+          }
+        } else if (condition == "<") {
+          if (jumlah < double.parse(rule.quantity!)) {
+            isAnyRuleMatched = true;
+            break;
+          }
+        } else if (condition == ">=") {
+          if (jumlah >= double.parse(rule.quantity!)) {
+            isAnyRuleMatched = true;
+            break;
+          }
+        } else if (condition == "<=") {
+          if (jumlah <= double.parse(rule.quantity!)) {
+            isAnyRuleMatched = true;
+            break;
+          }
+        } else if (condition == "!=") {
+          if (jumlah != double.parse(rule.quantity!)) {
+            isAnyRuleMatched = true;
+            break;
+          }
+        }
+      }
+
+      if (isAnyRuleMatched) {
+        // get fee from matched rule
+        String feeType = widget.rateModel.rules![ruleIndex].type!;
+
+        if (feeType == "%") {
+          tempFee = (double.parse(widget.rateModel.rules![ruleIndex].fee!) *
+                  subtotal) /
+              100;
+        } else {
+          tempFee = double.parse(widget.rateModel.rules![ruleIndex].fee!);
+        }
+      } else {
+        tempFee = getDefaultFee();
+      }
+    }
+
+    return tempFee;
+  }
+
+  countAll(double price, double amount, double promo) {
     subtotal = price * amount;
 
     if (widget.blockchainModel == null) {
-      feeFinal = (fee * subtotal!) / 100;
+      feeFinal = setFee(subtotal!);
     } else {
       feeFinal = double.parse(widget.blockchainModel!.fee!);
     }
