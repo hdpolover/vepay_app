@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:vepay_app/resources/color_manager.dart';
-import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 import 'common_method.dart';
 
@@ -95,7 +93,7 @@ class CommonWidgets {
           value,
           style: Theme.of(context)
               .textTheme
-              .bodyText1
+              .bodyLarge
               ?.copyWith(fontWeight: FontWeight.bold),
         )),
       ],

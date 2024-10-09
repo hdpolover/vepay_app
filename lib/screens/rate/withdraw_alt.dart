@@ -16,9 +16,9 @@ import '../../services/withdraw_service.dart';
 import '../withdraw/withdraw_detail.dart';
 
 class WithdrawAlt extends StatefulWidget {
-  RateModel rateModel;
+  final RateModel rateModel;
 
-  WithdrawAlt({required this.rateModel, Key? key}) : super(key: key);
+  const WithdrawAlt({required this.rateModel, super.key});
 
   @override
   State<WithdrawAlt> createState() => _WithdrawAltState();

@@ -4,8 +4,8 @@ import 'package:vepay_app/screens/auth/login.dart';
 import '../../resources/color_manager.dart';
 
 class CheckEmail extends StatefulWidget {
-  String email;
-  CheckEmail({required this.email, Key? key}) : super(key: key);
+  final String email;
+  const CheckEmail({required this.email, super.key});
 
   @override
   State<CheckEmail> createState() => _CheckEmailState();
@@ -29,7 +29,7 @@ class _CheckEmailState extends State<CheckEmail> {
             "Email telah terkirim!",
             style: Theme.of(context)
                 .textTheme
-                .bodyText1
+                .bodyLarge
                 ?.copyWith(fontSize: 17, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.02),
@@ -64,7 +64,7 @@ class _CheckEmailState extends State<CheckEmail> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Login(),
+                      builder: (context) => const Login(),
                     ),
                   );
                 },

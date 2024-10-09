@@ -1,6 +1,5 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-import 'package:vepay_app/common/global_values.dart';
 import 'package:vepay_app/screens/auth/login.dart';
 import 'package:vepay_app/screens/auth/register.dart';
 import 'package:vepay_app/services/app_info_service.dart';
@@ -8,7 +7,7 @@ import 'package:vepay_app/services/app_info_service.dart';
 import '../../resources/color_manager.dart';
 
 class Intro extends StatefulWidget {
-  Intro({Key? key}) : super(key: key);
+  const Intro({super.key});
 
   @override
   State<Intro> createState() => _IntroState();
@@ -48,7 +47,7 @@ class _IntroState extends State<Intro> {
                         AppInfoService().getValueByKey('web_splash_title')!),
                     softWrap: true,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -65,7 +64,7 @@ class _IntroState extends State<Intro> {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText2
+                        .bodyMedium
                         ?.copyWith(color: Colors.grey),
                   ),
                 ),
@@ -87,7 +86,7 @@ class _IntroState extends State<Intro> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Register(),
+                            builder: (context) => const Register(),
                           ),
                         );
                       },
@@ -112,7 +111,7 @@ class _IntroState extends State<Intro> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Login(),
+                            builder: (context) => const Login(),
                           ),
                         );
                       },

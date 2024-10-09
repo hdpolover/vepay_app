@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -46,6 +44,7 @@ class _LoginState extends State<Login> {
 
   regist(String e, String n, String p, bool isGoogle, String fcmToken) async {
     Map<String, dynamic> data;
+
     if (isGoogle) {
       data = {
         'is_google': true,
@@ -65,56 +64,45 @@ class _LoginState extends State<Login> {
       };
     }
 
-    try {
-      MemberModel m = await AuthService().register(data);
+    await AuthService().register(data).then((value) async {
+      MemberModel m = value;
 
       setState(() {
         isLoading = false;
       });
 
       if (isGoogle) {
-        try {
-          Map<String, dynamic> data = {
-            "is_google": true,
-            "email": m.email,
-          };
+        Map<String, dynamic> data = {
+          "is_google": true,
+          "email": m.email,
+        };
 
-          try {
-            MemberModel m = await AuthService().login(data);
+        await AuthService().login(data).then((value) {
+          MemberModel m = value;
 
-            CommonMethods().saveUserLoginsDetails(
-                m.userId!, m.name!, m.email!, "", true, true, fcmToken);
-
-            setState(() {
-              isLoading = false;
-            });
-
-            currentMemberGlobal.value = m;
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Dashboard(
-                  member: currentMemberGlobal.value,
-                ),
-              ),
-            );
-          } catch (e) {
-            setState(() {
-              isLoading = false;
-            });
-            CommonDialog.buildOkDialog(context, false, e.toString());
-          }
-        } catch (e) {
-          Navigator.of(context).pop();
+          CommonMethods().saveUserLoginsDetails(
+              m.userId!, m.name!, m.email!, "", true, true, fcmToken);
 
           setState(() {
             isLoading = false;
           });
 
-          CommonDialog.buildOkDialog(
-              context, false, "Terjadi kesalahan. Coba lagi.");
-        }
+          currentMemberGlobal.value = m;
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Dashboard(
+                member: currentMemberGlobal.value,
+              ),
+            ),
+          );
+        }).onError((error, stackTrace) {
+          setState(() {
+            isLoading = false;
+          });
+          CommonDialog.buildOkDialog(context, false, e.toString());
+        });
       } else {
         setState(() {
           isLoading = false;
@@ -123,23 +111,24 @@ class _LoginState extends State<Login> {
         CommonDialog.buildOkRegister(context, true,
             "Pendaftaran berhasil. Silakan cek email untuk verifikasi lalu lakukan login.");
       }
-    } catch (e) {
+    }).onError((error, stackTrace) async {
       //FirebaseAuth.instance.currentUser!.delete();
       FbService.signOut(context);
-      await FirebaseAuth.instance.signOut();
+      await FirebaseAuth.instance.signOut().then((value) {
+        setState(() {
+          isLoading = false;
+        });
 
-      setState(() {
-        isLoading = false;
+        CommonDialog.buildOkDialog(context, false, e.toString());
       });
-
-      CommonDialog.buildOkDialog(context, false, e.toString());
-    }
+    });
   }
 
   login(String fcmToken) async {
-    try {
-      int? res = await AuthService()
-          .checkEmail(emailController.text.trim().toString());
+    await AuthService()
+        .checkEmail(emailController.text.trim().toString())
+        .then((value) async {
+      int? res = value;
 
       if (res == 0) {
         setState(() {
@@ -163,8 +152,8 @@ class _LoginState extends State<Login> {
           'fcm_token': fcmToken,
         };
 
-        try {
-          MemberModel m = await AuthService().login(data);
+        await AuthService().login(data).then((value) {
+          MemberModel m = value;
 
           CommonMethods().saveUserLoginsDetails(m.userId!, m.name!, m.email!,
               passwordController.text.trim(), true, false, fcmToken);
@@ -183,23 +172,23 @@ class _LoginState extends State<Login> {
               ),
             ),
           );
-        } catch (e) {
+        }).onError((error, stackTrace) {
           setState(() {
             isLoading = false;
           });
 
-          CommonDialog.buildOkDialog(context, false, e.toString());
-        }
+          CommonDialog.buildOkDialog(context, false, error.toString());
+        });
       }
-    } catch (e) {
+    }).onError((error, stackTrace) {
       Navigator.of(context).pop();
 
       setState(() {
         isLoading = false;
       });
 
-      CommonDialog.buildOkDialog(context, false, e.toString());
-    }
+      CommonDialog.buildOkDialog(context, false, error.toString());
+    });
   }
 
   @override
@@ -229,7 +218,7 @@ class _LoginState extends State<Login> {
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
                       controller: emailController,
-                      validator: _emailValidator,
+                      validator: _emailValidator.call,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
@@ -246,7 +235,7 @@ class _LoginState extends State<Login> {
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: TextFormField(
                       controller: passwordController,
-                      validator: _passwordValidator,
+                      validator: _passwordValidator.call,
                       keyboardType: TextInputType.text,
                       obscureText: _isObscure,
                       decoration: InputDecoration(
@@ -449,65 +438,52 @@ class _LoginState extends State<Login> {
                             ),
                             Text(
                               '   Masuk dengan Google',
-                              style: Theme.of(context).textTheme.bodyText1,
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
                         ),
                         onPressed: () async {
                           showDialog(
-                              // The user CANNOT close this dialog  by pressing outsite it
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (_) {
-                                return Dialog(
-                                  // The background color
-                                  backgroundColor: Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 50),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        // The loading indicator
-                                        CircularProgressIndicator(
-                                          color: ColorManager.primary,
-                                        ),
-                                        const SizedBox(height: 15),
-                                        const Text("Menyambungkan")
-                                      ],
-                                    ),
+                            // The user CANNOT close this dialog  by pressing outsite it
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (_) {
+                              return Dialog(
+                                // The background color
+                                backgroundColor: Colors.white,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 50),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // The loading indicator
+                                      CircularProgressIndicator(
+                                        color: ColorManager.primary,
+                                      ),
+                                      const SizedBox(height: 15),
+                                      const Text("Menyambungkan")
+                                    ],
                                   ),
-                                );
-                              });
+                                ),
+                              );
+                            },
+                          );
 
-                          try {
-                            UserCredential? result =
-                                await FbService.signInWithGoogle();
-
+                          await FbService.signInWithGoogle()
+                              .then((value) async {
+                            UserCredential? result = value;
                             var prefs = SharedPreferences.getInstance();
 
-                            String fcmToken = await prefs.then((value) {
-                              return value.getString("fcmToken")!;
-                            });
+                            await prefs.then((value) async {
+                              String fcmToken = value.getString("fcmToken")!;
 
-                            print(result.additionalUserInfo!.isNewUser);
+                              print(result.additionalUserInfo!.isNewUser);
 
-                            if (result.additionalUserInfo!.isNewUser) {
-                              // Close the dialog programmatically
-                              Navigator.of(context).pop();
+                              if (result.additionalUserInfo!.isNewUser) {
+                                // Close the dialog programmatically
+                                Navigator.of(context).pop();
 
-                              regist(
-                                result.user!.email!,
-                                result.user!.displayName!,
-                                "",
-                                true,
-                                fcmToken,
-                              );
-                            } else {
-                              int? res = await AuthService()
-                                  .checkEmail(result.user!.email!);
-
-                              if (res == 0) {
                                 regist(
                                   result.user!.email!,
                                   result.user!.displayName!,
@@ -515,90 +491,79 @@ class _LoginState extends State<Login> {
                                   true,
                                   fcmToken,
                                 );
-                              } else if (res == 1) {
-                                FbService.signOut(context);
-                                Navigator.of(context).pop();
+                              } else {
+                                await AuthService()
+                                    .checkEmail(result.user!.email!)
+                                    .then((value) async {
+                                  int? res = value;
 
-                                setState(() {
-                                  isLoading = false;
-                                });
-
-                                CommonDialog.buildOkDialog(context, false,
-                                    "Akun Anda dibanned, silahkan hubungi admin untuk informasi lebih lanjut.");
-                              } else if (res == 2) {
-                                try {
-                                  Map<String, dynamic> data = {
-                                    "is_google": true,
-                                    "email": result.user!.email!,
-                                  };
-
-                                  try {
-                                    MemberModel m =
-                                        await AuthService().login(data);
-
-                                    CommonMethods().saveUserLoginsDetails(
-                                      m.userId!,
-                                      m.name!,
-                                      m.email!,
+                                  if (res == 0) {
+                                    regist(
+                                      result.user!.email!,
+                                      result.user!.displayName!,
                                       "",
-                                      true,
                                       true,
                                       fcmToken,
                                     );
+                                  } else if (res == 1) {
+                                    FbService.signOut(context);
+                                    Navigator.of(context).pop();
 
                                     setState(() {
                                       isLoading = false;
                                     });
 
-                                    currentMemberGlobal.value = m;
+                                    CommonDialog.buildOkDialog(context, false,
+                                        "Akun Anda dibanned, silahkan hubungi admin untuk informasi lebih lanjut.");
+                                  } else if (res == 2) {
+                                    Map<String, dynamic> data = {
+                                      "is_google": true,
+                                      "email": result.user!.email!,
+                                    };
 
-                                    Navigator.of(context).pop();
+                                    await AuthService()
+                                        .login(data)
+                                        .then((value) {
+                                      MemberModel m = value;
 
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Dashboard(
-                                          member: currentMemberGlobal.value,
+                                      CommonMethods().saveUserLoginsDetails(
+                                        m.userId!,
+                                        m.name!,
+                                        m.email!,
+                                        "",
+                                        true,
+                                        true,
+                                        fcmToken,
+                                      );
+
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+
+                                      currentMemberGlobal.value = m;
+
+                                      Navigator.of(context).pop();
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Dashboard(
+                                            member: currentMemberGlobal.value,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    Navigator.of(context).pop();
-
-                                    setState(() {
-                                      isLoading = false;
+                                      );
                                     });
-
-                                    CommonDialog.buildOkDialog(
-                                        context, false, e.toString());
                                   }
-                                } catch (e) {
-                                  Navigator.of(context).pop();
-
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-
-                                  CommonDialog.buildOkDialog(
-                                      context, false, e.toString());
-                                }
+                                });
                               }
-                            }
-                          } catch (e) {
+                            });
+                          }).onError((error, stackTrace) {
                             Navigator.of(context).pop();
 
                             setState(() {
                               isLoading = false;
                             });
-
-                            CommonDialog.buildOkDialog(
-                                context, false, 'Terjadi Kesalahan Saat Login');
-
-                            log(e.toString());
-
-                            // CommonDialog.buildOkDialog(
-                            //     context, false, e.toString());
-                          }
+                          });
                         },
                       ),
                     ),

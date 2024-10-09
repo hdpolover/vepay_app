@@ -1,7 +1,4 @@
-import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-
-import 'services/app_info_service.dart';
 
 class Maintenance extends StatefulWidget {
   const Maintenance({super.key});
@@ -46,7 +43,7 @@ class _MaintenanceState extends State<Maintenance> {
                     "Service Under Maintenance",
                     softWrap: true,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -62,7 +59,7 @@ class _MaintenanceState extends State<Maintenance> {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText2
+                        .bodyMedium
                         ?.copyWith(color: Colors.grey),
                   ),
                 ),

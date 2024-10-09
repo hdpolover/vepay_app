@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/global_values.dart';
-import 'package:vepay_app/screens/auth/login.dart';
-import 'package:vepay_app/screens/auth/register.dart';
 import 'package:vepay_app/services/app_info_service.dart';
 
 import '../../models/referral_info_model.dart';
@@ -13,7 +11,7 @@ import '../../services/referral_service.dart';
 import '../dashboard.dart';
 
 class Referral extends StatefulWidget {
-  Referral({Key? key}) : super(key: key);
+  const Referral({super.key});
 
   @override
   State<Referral> createState() => _ReferralState();

@@ -28,7 +28,7 @@ class FbService {
       // Once signed in, return the UserCredential
       return _auth.signInWithCredential(credential);
     } catch (signUpError) {
-      throw Exception(signUpError);
+      rethrow;
     }
   }
 
