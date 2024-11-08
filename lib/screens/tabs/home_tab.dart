@@ -92,15 +92,10 @@ class _HomeTabState extends State<HomeTab> {
   Future<void> getPromos() async {
     await PromoService().getPromos().then((value) async {
       promos = value;
-
-      await PromoService().getBerita().then((value) async {
-        promos!.addAll(value);
-
-        await PromoService().getIklan().then((value) {
-          promos!.addAll(value);
-        });
-      });
     });
+
+    // remove items with status 0
+    promos!.removeWhere((element) => element.status == "0");
 
     setState(() {});
   }
@@ -142,7 +137,15 @@ class _HomeTabState extends State<HomeTab> {
     return Scaffold(
       body: SafeArea(
         child: RefreshIndicator(
-          onRefresh: _getAllData,
+          onRefresh: () async {
+            setState(() {
+              rates = [];
+              promos = [];
+              transactionList = [];
+            });
+
+            _getAllData();
+          },
           color: ColorManager.primary,
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -169,9 +172,7 @@ class _HomeTabState extends State<HomeTab> {
                     ? Container()
                     : buildTransSection(),
                 const SizedBox(height: 10),
-                promos != null && promos!.isEmpty
-                    ? Container()
-                    : buildPromotionSection(),
+                promos == null ? Container() : buildPromotionSection(),
                 const SizedBox(height: 20),
               ],
             ),
@@ -283,7 +284,7 @@ class _HomeTabState extends State<HomeTab> {
                 ))
           ],
         ),
-        promos == null
+        promos == null || promos!.isEmpty
             ? SizedBox(
                 height: MediaQuery.of(context).size.height * 0.16,
                 child: ListView.builder(

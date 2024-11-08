@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/models/member_model.dart';
@@ -180,7 +181,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 onTap: () {
                   PersistentNavBarNavigator.pushNewScreen(
                     context,
-                    screen: ContactUs(),
+                    screen: const ContactUs(),
                     withNavBar: false,
                   );
                 },
@@ -202,34 +203,40 @@ class _ProfileTabState extends State<ProfileTab> {
                 title: const Text("Hubungi Kami"),
               ),
               ListTile(
-                onTap: () {
-                  if (widget.member.isGoogle == "1") {
-                    FbService.signOut(context);
+                onTap: () async {
+                  await SharedPreferences.getInstance().then((value) {
+                    final currentFcmToken = value.getString("fcmToken") ?? "";
 
-                    CommonMethods().saveUserLoginsDetails(
-                        "", "", "", "", false, false, "");
+                    print(currentFcmToken);
 
-                    Navigator.of(context, rootNavigator: true).pop();
+                    if (widget.member.isGoogle == "1") {
+                      FbService.signOut(context);
 
-                    PersistentNavBarNavigator.pushNewScreen(
-                      context,
-                      screen: Intro(),
-                      withNavBar: false,
-                    );
-                  } else {
-                    FbService.signOut(context);
+                      CommonMethods().saveUserLoginsDetails(
+                          "", "", "", "", false, false, currentFcmToken);
 
-                    CommonMethods().saveUserLoginsDetails(
-                        "", "", "", "", false, false, "");
+                      Navigator.of(context, rootNavigator: true).pop();
 
-                    Navigator.of(context, rootNavigator: true).pop();
+                      PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const Intro(),
+                        withNavBar: false,
+                      );
+                    } else {
+                      FbService.signOut(context);
 
-                    PersistentNavBarNavigator.pushNewScreen(
-                      context,
-                      screen: Intro(),
-                      withNavBar: false,
-                    );
-                  }
+                      CommonMethods().saveUserLoginsDetails(
+                          "", "", "", "", false, false, currentFcmToken);
+
+                      Navigator.of(context, rootNavigator: true).pop();
+
+                      PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const Intro(),
+                        withNavBar: false,
+                      );
+                    }
+                  });
                 },
                 contentPadding: const EdgeInsets.fromLTRB(15, 5, 5, 5),
                 leading: Container(

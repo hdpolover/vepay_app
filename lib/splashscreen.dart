@@ -6,10 +6,8 @@ import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/common/global_values.dart';
 import 'package:vepay_app/maintenance.dart';
-import 'package:vepay_app/models/app_info_model.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/intro.dart';
-import 'package:vepay_app/screens/auth/referral.dart';
 import 'package:vepay_app/screens/dashboard.dart';
 import 'package:vepay_app/services/app_info_service.dart';
 import 'package:vepay_app/services/auth_service.dart';
@@ -48,98 +46,97 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _goNext() async {
-    try {
-      List<AppInfoModel> temp = await AppInfoService().getAppInfo();
-
+    await AppInfoService().getAppInfo().then((value) async {
       setState(() {
-        appInfoGlobal.value = temp;
+        appInfoGlobal.value = value;
       });
 
       if (AppInfoService().getValueByKey('web_maintenance_mode') == true) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (ctx) => Maintenance(),
+            builder: (ctx) => const Maintenance(),
           ),
         );
       } else {
-        if (await _checkUserLoginStatus()) {
-          var prefs = await SharedPreferences.getInstance();
+        await _checkUserLoginStatus().then((value) async {
+          if (value) {
+            var prefs = await SharedPreferences.getInstance();
 
-          String? email = prefs.getString("email");
-          String? password = prefs.getString("password") ?? "";
-          bool? isGoogle = prefs.getBool("isGoogle") ?? false;
+            String? email = prefs.getString("email");
+            String? password = prefs.getString("password") ?? "";
+            bool? isGoogle = prefs.getBool("isGoogle") ?? false;
 
-          await AuthService().getFcmTokenByEmail(email!).then((value) async {
-            String? fcmFromDb = value;
+            await AuthService().getFcmTokenByEmail(email!).then((value) async {
+              String? fcmFromDb = value;
 
-            var prefs1 = SharedPreferences.getInstance();
+              print("fcm from db: ${fcmFromDb ?? ""}");
 
-            String currentToken =
-                await prefs1.then((value) => value.getString("fcmToken") ?? "");
+              var prefs1 = SharedPreferences.getInstance();
 
-            String fcmToken = "";
+              String currentToken = await prefs1
+                  .then((value) => value.getString("fcmToken") ?? "");
 
-            if (fcmFromDb != null) {
-              if (currentToken.isEmpty || currentToken == fcmFromDb) {
-                fcmToken = fcmFromDb;
-              } else if (currentToken != fcmFromDb) {
+              String fcmToken = "";
+
+              if (fcmFromDb != null) {
+                if (currentToken.isEmpty || currentToken == fcmFromDb) {
+                  fcmToken = fcmFromDb;
+                } else if (currentToken != fcmFromDb) {
+                  fcmToken = currentToken;
+                }
+              } else {
                 fcmToken = currentToken;
               }
-            } else {
-              fcmToken = currentToken;
-            }
 
-            Map<String, dynamic> data;
+              Map<String, dynamic> data;
 
-            if (isGoogle) {
-              data = {
-                'is_google': isGoogle,
-                'email': email,
-                'fcm_token': fcmToken,
-              };
-            } else {
-              data = {
-                'is_google': isGoogle,
-                'email': email,
-                'password': password,
-                'fcm_token': fcmToken,
-              };
-            }
+              if (isGoogle) {
+                data = {
+                  'is_google': isGoogle,
+                  'email': email,
+                  'fcm_token': fcmToken,
+                };
+              } else {
+                data = {
+                  'is_google': isGoogle,
+                  'email': email,
+                  'password': password,
+                  'fcm_token': fcmToken,
+                };
+              }
 
-            try {
-              MemberModel? res = await AuthService().login(data);
+              await AuthService().login(data).then((value) {
+                MemberModel? res = value;
 
-              CommonMethods().saveUserLoginsDetails(
-                res.userId!,
-                res.name ?? res.email!,
-                res.email!,
-                password,
-                true,
-                isGoogle,
-                fcmToken,
-              );
+                CommonMethods().saveUserLoginsDetails(
+                  res.userId!,
+                  res.name ?? res.email!,
+                  res.email!,
+                  password,
+                  true,
+                  isGoogle,
+                  fcmToken,
+                );
 
-              currentMemberGlobal.value = res;
-              //_goToPage(Referral());
+                currentMemberGlobal.value = res;
 
-              _goToPage(Dashboard(member: currentMemberGlobal.value));
-            } catch (e) {
-              buildError(e);
-            }
-          });
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (ctx) => Intro(),
-            ),
-          );
-        }
+                _goToPage(Dashboard(member: currentMemberGlobal.value));
+              }).onError((error, stackTrace) {
+                buildError(error);
+              });
+            });
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (ctx) => const Intro(),
+              ),
+            );
+          }
+        });
       }
-    } catch (e) {
-      CommonDialog.buildWrongWithAuth(context, false, e.toString());
-    }
+    });
   }
 
   buildError(var e) {

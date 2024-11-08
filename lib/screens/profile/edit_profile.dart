@@ -16,7 +16,7 @@ import '../../models/member_model.dart';
 
 class EditProfile extends StatefulWidget {
   MemberModel member;
-  EditProfile({required this.member, Key? key}) : super(key: key);
+  EditProfile({required this.member, super.key});
 
   @override
   State<EditProfile> createState() => _EditProfileState();

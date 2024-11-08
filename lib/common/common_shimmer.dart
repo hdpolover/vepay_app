@@ -71,7 +71,7 @@ class CommonShimmer {
     );
   }
 
-  Widget buildPromoItemShimmer(BuildContext context) {
+  Widget buildPromoItemShimmer(BuildContext context, {double? width}) {
     return Shimmer.fromColors(
       baseColor: Colors.black12,
       highlightColor: Colors.white60,
@@ -83,7 +83,7 @@ class CommonShimmer {
           children: [
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.13,
-              width: MediaQuery.of(context).size.width * 0.5,
+              width: width ?? MediaQuery.of(context).size.width * 0.5,
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 child: Container(

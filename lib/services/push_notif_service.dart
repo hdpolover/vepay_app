@@ -107,7 +107,7 @@ class PushNotifService {
 
     await _firebaseMessaging.getToken().then((value) async {
       var prefs = await SharedPreferences.getInstance();
-      prefs.setString("fcmToken", value ?? "");
+      prefs.setString("fcmToken", value!);
 
       print('FCM Token: $value');
     });

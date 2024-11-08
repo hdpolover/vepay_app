@@ -75,6 +75,7 @@ class _LoginState extends State<Login> {
         Map<String, dynamic> data = {
           "is_google": true,
           "email": m.email,
+          'fcm_token': fcmToken,
         };
 
         await AuthService().login(data).then((value) {
@@ -478,6 +479,9 @@ class _LoginState extends State<Login> {
                             await prefs.then((value) async {
                               String fcmToken = value.getString("fcmToken")!;
 
+                              print(
+                                  "FCM Token from shared preferences: $fcmToken");
+
                               print(result.additionalUserInfo!.isNewUser);
 
                               if (result.additionalUserInfo!.isNewUser) {
@@ -519,6 +523,7 @@ class _LoginState extends State<Login> {
                                     Map<String, dynamic> data = {
                                       "is_google": true,
                                       "email": result.user!.email!,
+                                      'fcm_token': fcmToken,
                                     };
 
                                     await AuthService()
