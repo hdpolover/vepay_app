@@ -12,6 +12,10 @@ class CommonMethods {
     return NumberFormat.simpleCurrency(locale: "id_ID").format(price);
   }
 
+  final numberFormatter = NumberFormat('#,##0', 'id_ID');
+  final decimalFormatter = NumberFormat('#,##0.00', 'id_ID');
+  final flexibleFormatter = NumberFormat('#,##0.##', 'id_ID');
+
   launchWhatsAppUri(String message) async {
     final link = WhatsAppUnilink(
       phoneNumber: '+6288296973558',
@@ -98,9 +102,48 @@ class CommonMethods {
         value = "Email Neteller";
 
         break;
+
+      case "sol":
+        value = "Address";
+
+        break;
+
+      case "ton":
+        value = "Address";
+
+        break;
     }
 
     return value;
+  }
+
+  num parseWithComma(String value) {
+    // String normalized = value.replaceAll('.', '')  // Remove thousand separators
+    //                         .replaceAll(',', '.'); // Convert decimal comma to point
+    return num.parse(value);
+  }
+
+  num parsePreservingTypeWithComma(String value) {
+    if (value.contains('.')) {
+      return parseWithComma(value);
+    }
+    return double.parse(value); // Remove thousand separators for integers
+  }
+  
+  String formatCurrencyNum(String? rateName, num nominal) {
+    if (nominal is int) {
+      return numberFormatter.format(nominal);
+    } else {
+      // For double, preserve original decimal places
+      String original = nominal.toString();
+      int decimalPlaces = original.split('.')[1].length;
+      var customFormatter = NumberFormat('#,##0.${'#' * decimalPlaces}', 'id_ID');
+      if (rateName == "SOL" || rateName == "TON") {
+        return customFormatter.format(nominal).replaceAll(".", ",") + " $rateName";
+      } else {
+        return "\$ " + customFormatter.format(nominal).replaceAll(".", ",");
+      }
+    }
   }
 
   String formatDate(String d, String type) {
