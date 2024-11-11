@@ -253,7 +253,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
             // ignore: prefer_interpolation_to_compose_strings
             WidgetManager()
                 // ignore: prefer_interpolation_to_compose_strings
-                .buildTextItem("Jumlah", "\$" + widget.data['jumlah']!),
+                .buildTextItem("Jumlah", CommonMethods().formatCurrencyNum(widget.rateModel.name, CommonMethods().parsePreservingTypeWithComma(widget.data['jumlah']!))),
             const SizedBox(height: 10),
             WidgetManager().buildTextItem(
               "Rate Withdraw",
@@ -264,7 +264,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
             const SizedBox(height: 10),
             WidgetManager().buildTextItem(
               "Biaya Transaksi",
-              "\$${biayaTransaksi!.toStringAsFixed(2)}",
+              "\$${biayaTransaksi!}",
             ),
           ],
         ),
@@ -297,7 +297,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
             const SizedBox(height: 20),
             WidgetManager().buildTextItem2(
               "Subtotal Tagihan",
-              "\$${subtotalUsd!.toStringAsFixed(2)}",
+              CommonMethods().formatCurrencyNum(widget.rateModel.name, subtotalUsd!),
             ),
             const SizedBox(height: 10),
             WidgetManager().buildTextItem2(
@@ -334,7 +334,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
                     fontWeight: FontWeight.bold,
                   )),
             ),
-            Text("\$${total!.toStringAsFixed(2)}",
+            Text(CommonMethods().formatCurrencyNum(widget.rateModel.name, total!),
                 style: TextStyleManager.instance.heading3.copyWith(
                   fontWeight: FontWeight.bold,
                 )),
