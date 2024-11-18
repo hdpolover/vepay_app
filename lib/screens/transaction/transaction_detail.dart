@@ -116,10 +116,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
               context,
               "Biaya Transaksi",
               CommonMethods.formatCompleteCurrency(
-                (double.parse(widget.transaction.fee!) *
-                        double.parse(widget.transaction.subTotal!)) /
-                    100,
-              ),
+                  double.parse(widget.transaction.fee!)),
             ),
             widget.transaction.type!.toLowerCase() == "withdraw"
                 ? Container()
