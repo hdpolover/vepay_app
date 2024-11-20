@@ -114,6 +114,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
   }
 
   buildDetailSection() {
+    print(widget.withdrawModel.toJson());
     return Card(
       color: Colors.white,
       margin: EdgeInsets.zero,
@@ -136,12 +137,12 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
             const SizedBox(height: 20),
             WidgetManager().buildTextItem2(
               "Subtotal Tagihan",
-              "\$${widget.trData['sub_total_usd'].toStringAsFixed(2)}",
+              CommonMethods().formatCurrencyNum(widget.withdrawModel.withdraw, widget.trData['sub_total_usd'])
             ),
             const SizedBox(height: 10),
             WidgetManager().buildTextItem2(
               "Biaya Transaksi",
-              "\$${widget.trData['fee'].toStringAsFixed(2)}",
+              CommonMethods().formatCurrencyNum(widget.withdrawModel.withdraw, widget.trData['fee'])
             ),
             const SizedBox(height: 15),
             const Divider(
@@ -151,7 +152,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
             const SizedBox(height: 15),
             WidgetManager().buildTextItem2(
               "Total",
-              "\$${widget.trData['total']}",
+              CommonMethods().formatCurrencyNum(widget.withdrawModel.withdraw, widget.trData['total'])
             ),
           ],
         ),
