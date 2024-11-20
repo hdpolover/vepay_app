@@ -112,6 +112,11 @@ class CommonMethods {
         value = "Address";
 
         break;
+
+      case "fdusd":
+        value = "Address";
+
+        break;
     }
 
     return value;
