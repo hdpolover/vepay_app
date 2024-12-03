@@ -676,13 +676,13 @@ class CommonDialog {
 
                         if (transactionModel.type!.toLowerCase() ==
                             'withdraw') {
-                          currency = "\$";
+                          // currency = "\$";
                           saldoYangDiterima =
                               CommonMethods.formatCompleteCurrency(
                                   data['sub_total']);
 
                           message =
-                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${data['total']}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.";
+                              "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: ${CommonMethods().formatCurrencyNum(transactionModel.product, data['total'])}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.";
 
                           print(transactionModel.type.toString() +
                               ": " +
