@@ -289,7 +289,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
             widget.data['blockchain_name'] == null
                 ? Container()
                 : const SizedBox(height: 10),
-            WidgetManager().buildTextItem("Jumlah", widget.data['jumlah']!),
+            WidgetManager().buildTextItem("Jumlah", CommonMethods().formatCurrencyNum(widget.rateModel.name!, CommonMethods().parsePreservingTypeWithComma(widget.data['jumlah']!))),
             const SizedBox(height: 10),
             WidgetManager().buildTextItem(
               "Harga Satuan",
