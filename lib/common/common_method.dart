@@ -62,6 +62,14 @@ class CommonMethods {
         value = "Hash";
 
         break;
+      case "sol":
+        value = "Hash Transaksi";
+
+        break;
+      case "airtm":
+        value = "Nama Pengirim";
+
+        break;
     }
 
     return value;
