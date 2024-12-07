@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/models/member_model.dart';
+import 'package:vepay_app/resources/text_style_manager.dart';
 import 'package:vepay_app/screens/auth/intro.dart';
 import 'package:vepay_app/screens/profile/about_us.dart';
 import 'package:vepay_app/screens/profile/contact_us.dart';
@@ -71,6 +72,7 @@ class _ProfileTabState extends State<ProfileTab> {
 
   buildBody() {
     return Card(
+      surfaceTintColor: Colors.white,
       color: Colors.white,
       child: SizedBox(
         child: Padding(
@@ -287,10 +289,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       ? currentMember!.email!
                       : currentMember!.name!,
                   softWrap: true,
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: TextStyleManager.instance.heading3,
                 ),
               ],
             ),

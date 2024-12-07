@@ -111,7 +111,8 @@ class _TransactionTabState extends State<TransactionTab>
         return StatefulBuilder(
           builder: (BuildContext context,
               StateSetter setState /*You can rename this!*/) {
-            return SizedBox(
+            return Container(
+              color: Colors.white,
               height: MediaQuery.of(context).size.height * 0.8,
               child: NestedScrollView(
                 controller: ScrollController(),

@@ -10,8 +10,7 @@ import '../../resources/color_manager.dart';
 
 class TransactionItemWidget extends StatefulWidget {
   TransactionModel transaction;
-  TransactionItemWidget({required this.transaction, Key? key})
-      : super(key: key);
+  TransactionItemWidget({required this.transaction, super.key});
 
   @override
   State<TransactionItemWidget> createState() => _TransactionItemWidgetState();
@@ -21,6 +20,8 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      surfaceTintColor: Colors.white,
+      color: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(15),
@@ -115,7 +116,7 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
                           const SizedBox(height: 5),
                           Text(
                             CommonMethods.formatCompleteCurrency(
-                                double.parse(widget.transaction.subTotal!)),
+                                double.parse(widget.transaction.total!)),
                             style:
                                 Theme.of(context).textTheme.bodyText1?.copyWith(
                                       fontWeight: FontWeight.bold,

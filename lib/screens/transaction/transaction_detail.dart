@@ -3,13 +3,14 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/models/transaction_model.dart';
+import 'package:vepay_app/resources/text_style_manager.dart';
 
 import '../../common/common_method.dart';
 import '../../resources/color_manager.dart';
 
 class TransactionDetail extends StatefulWidget {
   TransactionModel transaction;
-  TransactionDetail({required this.transaction, Key? key}) : super(key: key);
+  TransactionDetail({required this.transaction, super.key});
 
   @override
   State<TransactionDetail> createState() => _TransactionDetailState();
@@ -38,6 +39,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
 
   buildTop() {
     return Card(
+      surfaceTintColor: Colors.white,
+      color: Colors.white,
       margin: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -48,9 +51,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
           children: [
             Text(
               "Transaksi ${CommonMethods().getStatusLabel(int.parse(widget.transaction.status!))}",
-              style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                    fontSize: 18,
-                  ),
+              style: TextStyleManager.instance.heading3,
             ),
             const SizedBox(height: 20),
             const Divider(
@@ -74,6 +75,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
 
   buildMiddle() {
     return Card(
+      surfaceTintColor: Colors.white,
+      color: Colors.white,
       margin: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -84,9 +87,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
           children: [
             Text(
               "Detail Produk",
-              style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                    fontSize: 18,
-                  ),
+              style: TextStyleManager.instance.heading3,
             ),
             const SizedBox(height: 20),
             CommonWidgets().buildTextItem(context, "Jenis Produk",
@@ -147,6 +148,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
 
   buildBottom() {
     return Card(
+      surfaceTintColor: Colors.white,
+      color: Colors.white,
       margin: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -158,9 +161,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
             const SizedBox(height: 15),
             Text(
               "Rincian Pembayaran",
-              style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                    fontSize: 18,
-                  ),
+              style: TextStyleManager.instance.heading3,
             ),
             const SizedBox(height: 20),
             widget.transaction.type!.toLowerCase() == "withdraw"
@@ -214,9 +215,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
               children: [
                 Text(
                   "Total Pembayaran",
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                        fontSize: 18,
-                      ),
+                  style: TextStyleManager.instance.heading3,
                 ),
                 Text(
                   widget.transaction.type!.toLowerCase() == "withdraw"
@@ -224,9 +223,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       : CommonMethods.formatCompleteCurrency(
                           double.parse(widget.transaction.total!),
                         ),
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                        fontSize: 18,
-                      ),
+                  style: TextStyleManager.instance.heading3,
                 )
               ],
             ),

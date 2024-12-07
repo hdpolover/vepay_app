@@ -11,6 +11,7 @@ class CommonWidgets {
       foregroundColor: Colors.black,
       centerTitle: true,
       backgroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
       elevation: 0,
     );
   }
@@ -52,12 +53,12 @@ class CommonWidgets {
 
     switch (status) {
       case 1:
-        bgColor = const Color.fromARGB(255, 243, 182, 90).withOpacity(0.4);
-        textColor = Colors.orange.withOpacity(0.8);
+        bgColor = Colors.orange;
+        textColor = Colors.white;
         break;
       case 2:
-        bgColor = Colors.grey.withOpacity(0.1);
-        textColor = Colors.green;
+        bgColor = Colors.green;
+        textColor = Colors.white;
         break;
       case 3:
         bgColor = Colors.red;
@@ -65,11 +66,12 @@ class CommonWidgets {
         break;
       case 4:
         bgColor = Colors.grey;
-        textColor = Colors.white;
+        textColor = Colors.black;
         break;
     }
 
     value = Chip(
+      side: const BorderSide(color: Colors.white, width: 1),
       backgroundColor: bgColor,
       label: Text(
         CommonMethods().getStatusLabel(

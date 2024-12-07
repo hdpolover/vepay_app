@@ -191,6 +191,7 @@ class _HomeTabState extends State<HomeTab> {
           "Transaksi Terbaru",
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
         ),
         transactionList == null

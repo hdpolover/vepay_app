@@ -40,6 +40,7 @@ class _RateItemWidgetState extends State<RateItemWidget> {
       },
       child: Card(
         color: Colors.white,
+        surfaceTintColor: Colors.white,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(15),
