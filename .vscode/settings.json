@@ -1,6 +1,6 @@
 {
-    "dart.sdkPath": "/media/second/asdf/installs/flutter/3.16.7-stable",
-    "dart.flutterSdkPath": "/media/second/asdf/installs/flutter/3.16.7-stable",
+    "dart.sdkPath": "C:\\tools\\dart-sdk",
+    "dart.flutterSdkPath": "C:\\dev\\flutter",
     "[dart]": {
         "editor.tabSize": 2,
         "editor.insertSpaces": true,
