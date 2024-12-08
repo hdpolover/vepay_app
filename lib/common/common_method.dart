@@ -154,7 +154,7 @@ class CommonMethods {
       if (rateName == "SOL" || rateName == "TON") {
         return customFormatter.format(nominal).replaceAll(".", ",") + " $rateName";
       } else {
-        return (rupiah ? "Rp" : "\$") + customFormatter.format(nominal).replaceAll(".", ",");
+        return (rupiah ? "Rp" : "\$") + " " + customFormatter.format(nominal).replaceAll(".", ",");
       }
     }
   }
