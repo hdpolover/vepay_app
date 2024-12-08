@@ -107,16 +107,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
             CommonWidgets().buildTextItem(
               context,
               "Subtotal Tagihan",
-              CommonMethods.formatCompleteCurrency(
-                double.parse(widget.transaction.subTotal!),
-              ),
+              CommonMethods().formatRupiahNumString(widget.transaction.subTotal!),
             ),
             const SizedBox(height: 10),
             CommonWidgets().buildTextItem(
               context,
               "Biaya Transaksi",
-              CommonMethods.formatCompleteCurrency(
-                  double.parse(widget.transaction.fee!)),
+              CommonMethods().formatRupiahNumString(widget.transaction.fee!),
             ),
             widget.transaction.type!.toLowerCase() == "withdraw"
                 ? Container()
@@ -126,8 +123,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 : CommonWidgets().buildTextItem(
                     context,
                     "Potongan diskon",
-                    CommonMethods.formatCompleteCurrency((double.parse(
-                        widget.transaction.potonganDiskon!.toString()))),
+                    CommonMethods().formatRupiahNumString(widget.transaction.potonganDiskon!.toString()),
                   ),
             const SizedBox(height: 10),
             CommonWidgets().buildTextItem(
@@ -135,9 +131,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
               "Total",
               widget.transaction.type!.toLowerCase() == "withdraw"
                   ? "\$${widget.transaction.total}"
-                  : CommonMethods.formatCompleteCurrency(
-                      double.parse(widget.transaction.total!),
-                    ),
+                  : CommonMethods().formatRupiahNumString(widget.transaction.total!),
             ),
           ],
         ),

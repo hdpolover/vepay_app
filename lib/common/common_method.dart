@@ -143,7 +143,7 @@ class CommonMethods {
     return double.parse(value); // Remove thousand separators for integers
   }
   
-  String formatCurrencyNum(String? rateName, num nominal) {
+  String formatCurrencyNum(String? rateName, num nominal, [bool rupiah = false]) {
     if (nominal is int) {
       return numberFormatter.format(nominal);
     } else {
@@ -154,9 +154,23 @@ class CommonMethods {
       if (rateName == "SOL" || rateName == "TON") {
         return customFormatter.format(nominal).replaceAll(".", ",") + " $rateName";
       } else {
-        return "\$" + customFormatter.format(nominal).replaceAll(".", ",");
+        return (rupiah ? "Rp" : "\$") + customFormatter.format(nominal).replaceAll(".", ",");
       }
     }
+  }
+
+  String formatRupiahNum(num nominal) {
+    if (nominal is int) {
+      return "Rp" + numberFormatter.format(nominal);
+    } else {
+      String original = nominal.toStringAsFixed(2);
+      String numReturn = "Rp" + NumberFormat('#,##0.00', 'id_ID').format(double.parse(original)).replaceAll(".", ",");
+      return numReturn;
+    }
+  }
+
+  String formatRupiahNumString(String nominal) {
+    return formatRupiahNum(parsePreservingTypeWithComma(nominal));
   }
 
   String formatDate(String d, String type) {

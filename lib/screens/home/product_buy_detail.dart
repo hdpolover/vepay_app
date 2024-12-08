@@ -293,9 +293,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
             const SizedBox(height: 10),
             WidgetManager().buildTextItem(
               "Harga Satuan",
-              CommonMethods.formatCompleteCurrency(
-                double.parse(widget.rateModel.price!),
-              ),
+              CommonMethods().formatRupiahNumString(widget.rateModel.price!),
             ),
           ],
         ),
@@ -326,16 +324,12 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
             const SizedBox(height: 20),
             WidgetManager().buildTextItem2(
               "Subtotal Tagihan",
-              CommonMethods.formatCompleteCurrency(
-                subtotal!,
-              ),
+              CommonMethods().formatRupiahNum(subtotal!),
             ),
             const SizedBox(height: 10),
             WidgetManager().buildTextItem2(
               "Biaya Transaksi",
-              CommonMethods.formatCompleteCurrency(
-                feeFinal!,
-              ),
+              CommonMethods().formatRupiahNum(feeFinal!),
             ),
             widget.rateModel.categories!.toLowerCase() == "vcc"
                 ? Container()
@@ -488,9 +482,7 @@ class _ProductBuyDetailState extends State<ProductBuyDetail> {
               ),
             ),
             Text(
-              CommonMethods.formatCompleteCurrency(
-                total!,
-              ),
+              CommonMethods().formatRupiahNum(total!),
               style: TextStyleManager.instance.heading3,
             ),
           ],
