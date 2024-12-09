@@ -142,29 +142,32 @@ class CommonMethods {
     }
     return double.parse(value); // Remove thousand separators for integers
   }
-  
-  String formatCurrencyNum(String? rateName, num nominal, [bool rupiah = false]) {
+
+  String formatCurrencyNum(String? rateName, num nominal,
+      [bool rupiah = false]) {
     if (nominal is int) {
       return numberFormatter.format(nominal);
     } else {
       // For double, preserve original decimal places
       String original = nominal.toString();
       int decimalPlaces = original.split('.')[1].length;
-      var customFormatter = NumberFormat('#,##0.${'#' * decimalPlaces}', 'id_ID');
+      var customFormatter =
+          NumberFormat('#,##0.${'#' * decimalPlaces}', 'id_ID');
       if (rateName == "SOL" || rateName == "TON") {
-        return customFormatter.format(nominal).replaceAll(".", ",") + " $rateName";
+        return "${customFormatter.format(nominal).replaceAll(".", ",")} $rateName";
       } else {
-        return (rupiah ? "Rp" : "\$") + " " + customFormatter.format(nominal).replaceAll(".", ",");
+        return "${rupiah ? "Rp" : "\$"} ${customFormatter.format(nominal).replaceAll(".", ",")}";
       }
     }
   }
 
   String formatRupiahNum(num nominal) {
     if (nominal is int) {
-      return "Rp" + numberFormatter.format(nominal);
+      return "Rp${numberFormatter.format(nominal)}";
     } else {
       String original = nominal.toStringAsFixed(2);
-      String numReturn = "Rp" + NumberFormat('#,##0.00', 'id_ID').format(double.parse(original)).replaceAll(".", ",");
+      String numReturn =
+          "Rp${NumberFormat('#,##0.00', 'id_ID').format(double.parse(original)).replaceAll(".", ",")}";
       return numReturn;
     }
   }
@@ -258,7 +261,7 @@ class CommonMethods {
 
     // print pay transaction model detail in a loop
     for (var item in transactionModel.toJson().entries) {
-      print(item.key + " : " + item.value.toString());
+      print("${item.key} : ${item.value}");
     }
 
     String body = "";
@@ -295,9 +298,9 @@ class CommonMethods {
 
     try {
       final sendReport = await send(message, smtpServer);
-      print('Message sent: ' + sendReport.toString());
+      print('Message sent: $sendReport');
     } on MailerException catch (e) {
-      print('Message not sent.' + e.toString());
+      print('Message not sent.$e');
       for (var p in e.problems) {
         print('Problem: ${p.code}: ${p.msg}');
       }

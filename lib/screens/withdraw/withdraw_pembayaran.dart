@@ -53,6 +53,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
 
   buildTopSection() {
     return Card(
+      surfaceTintColor: Colors.white,
       color: Colors.white,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
@@ -114,8 +115,8 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
   }
 
   buildDetailSection() {
-    print(widget.withdrawModel.toJson());
     return Card(
+      surfaceTintColor: Colors.white,
       color: Colors.white,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
@@ -136,14 +137,14 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
             ),
             const SizedBox(height: 20),
             WidgetManager().buildTextItem2(
-              "Subtotal Tagihan",
-              CommonMethods().formatCurrencyNum(widget.withdrawModel.withdraw, widget.trData['sub_total_usd'])
-            ),
+                "Subtotal Tagihan",
+                CommonMethods().formatCurrencyNum(widget.withdrawModel.withdraw,
+                    widget.trData['sub_total_usd'])),
             const SizedBox(height: 10),
             WidgetManager().buildTextItem2(
-              "Biaya Transaksi",
-              CommonMethods().formatCurrencyNum(widget.withdrawModel.withdraw, widget.trData['fee'])
-            ),
+                "Biaya Transaksi",
+                CommonMethods().formatCurrencyNum(
+                    widget.withdrawModel.withdraw, widget.trData['fee'])),
             const SizedBox(height: 15),
             const Divider(
               color: Colors.grey,
@@ -151,9 +152,9 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
             ),
             const SizedBox(height: 15),
             WidgetManager().buildTextItem2(
-              "Total",
-              CommonMethods().formatCurrencyNum(widget.withdrawModel.withdraw, widget.trData['total'])
-            ),
+                "Total",
+                CommonMethods().formatCurrencyNum(
+                    widget.withdrawModel.withdraw, widget.trData['total'])),
           ],
         ),
       ),
@@ -162,6 +163,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
 
   buildTransferDetailSection() {
     return Card(
+      surfaceTintColor: Colors.white,
       color: Colors.white,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
@@ -287,6 +289,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
 
   buildBuktiBayarSection() {
     return Card(
+      surfaceTintColor: Colors.white,
       color: Colors.white,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(

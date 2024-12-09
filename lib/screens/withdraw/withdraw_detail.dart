@@ -63,6 +63,9 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
       double tempFeeRp = feeInRp;
 
       fee = tempFeeRp / price;
+
+      // round to 3 decimal places
+      fee = double.parse(fee.toStringAsFixed(3));
     }
 
     biayaTransaksi = fee;
@@ -157,6 +160,9 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
       }
     }
 
+    // round to 2 decimal places
+    tempFee = double.parse(tempFee.toStringAsFixed(3));
+
     return tempFee;
   }
 
@@ -188,6 +194,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
   buildTopSection() {
     return Card(
       color: Colors.white,
+      surfaceTintColor: Colors.white,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -253,7 +260,12 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
             // ignore: prefer_interpolation_to_compose_strings
             WidgetManager()
                 // ignore: prefer_interpolation_to_compose_strings
-                .buildTextItem("Jumlah", CommonMethods().formatCurrencyNum(widget.rateModel.name, CommonMethods().parsePreservingTypeWithComma(widget.data['jumlah']!))),
+                .buildTextItem(
+                    "Jumlah",
+                    CommonMethods().formatCurrencyNum(
+                        widget.rateModel.name,
+                        CommonMethods().parsePreservingTypeWithComma(
+                            widget.data['jumlah']!))),
             const SizedBox(height: 10),
             WidgetManager().buildTextItem(
               "Rate Withdraw",
@@ -274,6 +286,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
 
   buildMiddleSection() {
     return Card(
+      surfaceTintColor: Colors.white,
       color: Colors.white,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
@@ -297,7 +310,8 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
             const SizedBox(height: 20),
             WidgetManager().buildTextItem2(
               "Subtotal Tagihan",
-              CommonMethods().formatCurrencyNum(widget.rateModel.name, subtotalUsd!),
+              CommonMethods()
+                  .formatCurrencyNum(widget.rateModel.name, subtotalUsd!),
             ),
             const SizedBox(height: 10),
             WidgetManager().buildTextItem2(
@@ -314,6 +328,7 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
 
   buildBottomSection() {
     return Card(
+      surfaceTintColor: Colors.white,
       color: Colors.white,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
@@ -334,7 +349,9 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
                     fontWeight: FontWeight.bold,
                   )),
             ),
-            Text(CommonMethods().formatCurrencyNum(widget.rateModel.name, total!),
+            Text(
+                CommonMethods()
+                    .formatCurrencyNum(widget.rateModel.name, total!),
                 style: TextStyleManager.instance.heading3.copyWith(
                   fontWeight: FontWeight.bold,
                 )),

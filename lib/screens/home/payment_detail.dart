@@ -43,6 +43,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
 
   buildTopSection() {
     return Card(
+      surfaceTintColor: Colors.white,
       color: Colors.white,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
@@ -106,6 +107,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
 
   buildDetailSection() {
     return Card(
+      surfaceTintColor: Colors.white,
       color: Colors.white,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
@@ -165,6 +167,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
 
   buildTransferDetailSection() {
     return Card(
+      surfaceTintColor: Colors.white,
       color: Colors.white,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
@@ -288,6 +291,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
 
   buildBuktiBayarSection() {
     return Card(
+      surfaceTintColor: Colors.white,
       color: Colors.white,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
