@@ -163,7 +163,7 @@ class CommonMethods {
       var customFormatter =
           NumberFormat('#,##0.${'#' * decimalPlaces}', 'id_ID');
       if (rateName == "SOL" || rateName == "TON") {
-        return "${customFormatter.format(nominal).replaceAll(".", ",")} $rateName";
+        return "${NumberFormat.simpleCurrency(name: "").format(nominal)} $rateName";
       } else {
         return "${rupiah ? "Rp" : "\$"}${customFormatter.format(nominal).replaceAll(".", ",")}";
       }

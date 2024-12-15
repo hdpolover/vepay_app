@@ -702,7 +702,7 @@ class CommonDialog {
                           }
                         } else {
                           currency = "Rp.";
-                          saldoYangDiterima = "\$${data['jumlah']}";
+                          saldoYangDiterima = CommonMethods().formatCurrencyNum(transactionModel.product, CommonMethods().parsePreservingTypeWithComma(data['jumlah']));
 
                           if (transactionModel.product!.toLowerCase() ==
                               'vcc') {
