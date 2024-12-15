@@ -134,6 +134,16 @@ class CommonMethods {
         value = "Address";
 
         break;
+      
+      case "usdc":
+        value = "Address";
+
+        break;
+      
+      case "payoneer":
+        value = "Email Payoneer";
+
+        break;
     }
 
     return value;

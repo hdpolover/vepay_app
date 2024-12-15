@@ -223,7 +223,7 @@ class _HomeTabState extends State<HomeTab> {
 
   buildProductSection() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.28,
+      height: MediaQuery.of(context).size.height * 0.301,
       child: ResponsiveGridList(
         minItemsPerRow: 4,
         horizontalGridSpacing: 4,
