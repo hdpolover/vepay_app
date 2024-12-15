@@ -707,7 +707,7 @@ class CommonDialog {
                           if (transactionModel.product!.toLowerCase() ==
                               'vcc') {
                             message =
-                                "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${double.parse(transactionModel.total!).toStringAsFixed(2)} \n\nTerima kasih.";
+                                "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: ${CommonMethods.formatCompleteCurrency(double.parse(transactionModel.total!))} \n\nTerima kasih.";
 
                             print(transactionModel.type.toString() +
                                 ": " +
@@ -721,7 +721,7 @@ class CommonDialog {
                             Navigator.of(context, rootNavigator: true).pop();
                           } else {
                             message =
-                                "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: $currency${data['total'].toStringAsFixed(2)}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.";
+                                "Halo, Admin.\n\nMohon proses pesanan saya dengan detail sebagai berikut:\n\n*${transactionModel.type}*\n\n*Kode Transaksi*: *${transactionModel.kodeTransaksi}*\n*Produk*: ${transactionModel.product}\n*Nama Pengguna*: ${transactionModel.name}\n*Total*: ${CommonMethods.formatCompleteCurrency(data['total'])}\n*Saldo yang akan diterima*: $saldoYangDiterima \n\nTerima kasih.";
 
                             print(transactionModel.type.toString() +
                                 ": " +
