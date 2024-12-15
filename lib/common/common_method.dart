@@ -75,6 +75,10 @@ class CommonMethods {
         value = "Hash Transaksi";
 
         break;
+      case "usdc":
+        value = "Hash Transaksi";
+
+        break;
     }
 
     return value;
