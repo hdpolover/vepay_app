@@ -70,6 +70,11 @@ class CommonMethods {
         value = "Nama Pengirim";
 
         break;
+
+      case "ton":
+        value = "Hash Transaksi";
+
+        break;
     }
 
     return value;
