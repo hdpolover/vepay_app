@@ -258,6 +258,9 @@ class _WithdrawTabState extends State<WithdrawTab> {
             : TextFormField(
                 controller: norekController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   hintText: "Nomor rekening/E-Wallet",
