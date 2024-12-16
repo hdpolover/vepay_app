@@ -70,6 +70,15 @@ class CommonMethods {
         value = "Nama Pengirim";
 
         break;
+
+      case "ton":
+        value = "Hash Transaksi";
+
+        break;
+      case "usdc":
+        value = "Hash Transaksi";
+
+        break;
     }
 
     return value;
@@ -125,6 +134,16 @@ class CommonMethods {
         value = "Address";
 
         break;
+      
+      case "usdc":
+        value = "Address";
+
+        break;
+      
+      case "payoneer":
+        value = "Email Payoneer";
+
+        break;
     }
 
     return value;
@@ -154,9 +173,9 @@ class CommonMethods {
       var customFormatter =
           NumberFormat('#,##0.${'#' * decimalPlaces}', 'id_ID');
       if (rateName == "SOL" || rateName == "TON") {
-        return "${customFormatter.format(nominal).replaceAll(".", ",")} $rateName";
+        return "${NumberFormat.simpleCurrency(name: "").format(nominal)} $rateName";
       } else {
-        return "${rupiah ? "Rp" : "\$"} ${customFormatter.format(nominal).replaceAll(".", ",")}";
+        return "${rupiah ? "Rp" : "\$"}${customFormatter.format(nominal).replaceAll(".", ",")}";
       }
     }
   }
