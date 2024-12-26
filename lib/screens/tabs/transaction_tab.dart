@@ -296,7 +296,7 @@ class _TransactionTabState extends State<TransactionTab>
                               width: MediaQuery.of(context).size.width,
                               height: 20),
                           SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.5,
+                            // height: MediaQuery.of(context).size.height * 0.5,
                             child: ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
