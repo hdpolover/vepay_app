@@ -297,13 +297,14 @@ class _TransactionTabState extends State<TransactionTab>
                               height: 20),
                           SizedBox(
                             // height: MediaQuery.of(context).size.height * 0.5,
-                            child: ListView.builder(
+                            child: ListView.separated(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: itemRates.length,
                               itemBuilder: (context, index) {
                                 return CheckboxListTile(
                                   title: Text(itemRates[index].name!),
+                                  secondary: Image.network(itemRates[index].image!),
                                   value: selectedItemRates
                                       .contains(itemRates[index]),
                                   onChanged: (value) {
@@ -318,11 +319,14 @@ class _TransactionTabState extends State<TransactionTab>
                                   },
                                 );
                               },
+                              separatorBuilder: (BuildContext context, int index) {
+                                return const SizedBox(height: 10,);
+                              },
                             ),
                           ),
                           SizedBox(
                               width: MediaQuery.of(context).size.width,
-                              height: 10),
+                              height: 24),
                           Center(
                             child: SizedBox(
                               width: 276,
