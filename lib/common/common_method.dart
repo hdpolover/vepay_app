@@ -144,6 +144,11 @@ class CommonMethods {
         value = "Email Payoneer";
 
         break;
+
+      case "airtm":
+        value = "Email AirTM";
+
+        break;
     }
 
     return value;
@@ -175,7 +180,7 @@ class CommonMethods {
       if (rateName == "SOL" || rateName == "TON") {
         return "${NumberFormat.simpleCurrency(name: "").format(nominal)} $rateName";
       } else {
-        return "${rupiah ? "Rp" : "\$"}${customFormatter.format(nominal).replaceAll(".", ",")}";
+        return "${rupiah ? "Rp" : "\$"}${NumberFormat.simpleCurrency(name: "").format(nominal)}";
       }
     }
   }
@@ -184,9 +189,12 @@ class CommonMethods {
     if (nominal is int) {
       return "Rp${numberFormatter.format(nominal)}";
     } else {
+
       String original = nominal.toStringAsFixed(2);
-      String numReturn =
-          "Rp${NumberFormat('#,##0.00', 'id_ID').format(double.parse(original)).replaceAll(".", ",")}";
+      String numReturn = "Rp${NumberFormat.simpleCurrency(name: "").format(double.parse(original))}";
+      numReturn = numReturn.replaceAll('.', 'T');
+      numReturn = numReturn.replaceAll(',', '.');
+      numReturn = numReturn.replaceAll('T', ',');
       return numReturn;
     }
   }
