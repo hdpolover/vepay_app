@@ -222,15 +222,20 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   buildProductSection() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final minItemWidth = screenWidth * 0.4; // Adjust this value as needed
+    final maxItemHeight = screenWidth > 600 ? screenHeight * 0.6 : screenHeight * 0.29;
+
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.301,
+      height: screenWidth > 600 ? screenWidth * 0.31 : maxItemHeight,
       child: ResponsiveGridList(
-        minItemsPerRow: 4,
+        minItemsPerRow:  4,
         horizontalGridSpacing: 4,
         verticalGridSpacing: 4,
         listViewBuilderOptions: ListViewBuilderOptions(
             physics: const NeverScrollableScrollPhysics()),
-        minItemWidth: MediaQuery.of(context).size.width * 0.25,
+        minItemWidth: minItemWidth,
         children: rates.isEmpty
             ? List.generate(
                 8,
@@ -381,105 +386,108 @@ class _HomeTabState extends State<HomeTab> {
       builder: (BuildContext context) {
         final formKey = GlobalKey<FormState>();
 
-        return AlertDialog(
-          title: const Text('Silahkan Lengkapi Data Anda'),
-          content: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Visibility(
-                  visible: isShowPhone,
-                  child: TextFormField(
-                    controller: phoneController,
-                    validator: MultiValidator([
-                      RequiredValidator(
-                          errorText: 'Harap masukan nomor telepon'),
-                      MinLengthValidator(9,
-                          errorText:
-                              "Panjang nomor telepon minimal 10 karakter"),
-                      MaxLengthValidator(15,
-                          errorText:
-                              "Panjang nomor telepon maksimal 15 karakter"),
-                    ]),
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      hintText: 'Nomor Telepon (WhatsApp)',
-                      prefix: const Text("+62",
-                          style: TextStyle(color: Colors.black)),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: ColorManager.primary,
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: const Text('Silahkan Lengkapi Data Anda'),
+            content: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Visibility(
+                    visible: isShowPhone,
+                    child: TextFormField(
+                      controller: phoneController,
+                      validator: MultiValidator([
+                        RequiredValidator(
+                            errorText: 'Harap masukan nomor telepon'),
+                        MinLengthValidator(9,
+                            errorText:
+                                "Panjang nomor telepon minimal 10 karakter"),
+                        MaxLengthValidator(15,
+                            errorText:
+                                "Panjang nomor telepon maksimal 15 karakter"),
+                      ]),
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintText: 'Nomor Telepon (WhatsApp)',
+                        prefix: const Text("+62",
+                            style: TextStyle(color: Colors.black)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: ColorManager.primary,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Visibility(
-                  visible: isShowName,
-                  child: TextFormField(
-                    controller: nameController,
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: 'Harap masukan nama'),
-                    ]),
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      hintText: 'Nama',
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: ColorManager.primary,
+                  const SizedBox(height: 10),
+                  Visibility(
+                    visible: isShowName,
+                    child: TextFormField(
+                      controller: nameController,
+                      validator: MultiValidator([
+                        RequiredValidator(errorText: 'Harap masukan nama'),
+                      ]),
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintText: 'Nama',
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: ColorManager.primary,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () async {
-                if (formKey.currentState!.validate()) {
-                  // Do something with the entered data
-                  String phone = phoneController.text;
-                  String name = nameController.text;
-
-                  var data = ProfileRequestModel(
-                    userId: userId,
-                    name: name.isEmpty ? nameField : name,
-                    phone: phone.isEmpty ? phoneField : phone,
-                  );
-
-                  try {
-                    CommonDialog.showLoading(context);
-
-                    bool res = await AuthService().updateDetailProfile(data);
-
-                    Navigator.of(context).pop();
-
-                    if (res) {
-                      CommonDialog.buildOkUpdateDialog(
-                          context, true, "Berhasil memperbarui profil.");
-                    } else {
-                      CommonDialog.buildOkDialog(
-                          context, false, "Terjadi kesalahan. Coba lagi.");
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    // Do something with the entered data
+                    String phone = phoneController.text;
+                    String name = nameController.text;
+          
+                    var data = ProfileRequestModel(
+                      userId: userId,
+                      name: name.isEmpty ? nameField : name,
+                      phone: phone.isEmpty ? phoneField : phone,
+                    );
+          
+                    try {
+                      CommonDialog.showLoading(context);
+          
+                      bool res = await AuthService().updateDetailProfile(data);
+          
+                      Navigator.of(context).pop();
+          
+                      if (res) {
+                        CommonDialog.buildOkUpdateDialog(
+                            context, true, "Berhasil memperbarui profil.");
+                      } else {
+                        CommonDialog.buildOkDialog(
+                            context, false, "Terjadi kesalahan. Coba lagi.");
+                      }
+                    } catch (e) {
+                      CommonDialog.buildOkDialog(context, false, e.toString());
                     }
-                  } catch (e) {
-                    CommonDialog.buildOkDialog(context, false, e.toString());
+          
+                    phoneController.dispose();
+                    nameController.dispose();
+          
+                    _getAllData();
                   }
-
-                  phoneController.dispose();
-                  nameController.dispose();
-
-                  _getAllData();
-                }
-              },
-              child: const Text('Submit'),
-            ),
-          ],
+                },
+                child: const Text('Submit'),
+              ),
+            ],
+          ),
         );
       },
     );

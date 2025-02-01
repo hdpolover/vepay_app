@@ -19,6 +19,8 @@ class ProductItemWidget extends StatefulWidget {
 class _ProductItemWidgetState extends State<ProductItemWidget> {
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return InkWell(
       onTap: () {
         if (widget.rateModel.categories == "vcc") {
@@ -59,7 +61,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
       child: Padding(
         padding: const EdgeInsets.all(4),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.135,
+          height: screenWidth > 600 ? screenHeight * 0.25 : screenHeight * 0.135,
           width: MediaQuery.of(context).size.width * 0.2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -69,7 +71,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                 borderRadius: BorderRadius.circular(10.0),
                 child: FancyShimmerImage(
                   width: MediaQuery.of(context).size.width * 0.155,
-                  height: MediaQuery.of(context).size.height * 0.075,
+                  height: screenWidth > 600 ? screenHeight * 0.2 : screenHeight * 0.075,
                   boxFit: BoxFit.cover,
                   imageUrl: widget.rateModel.image!,
                   errorWidget: Image.network(
@@ -82,7 +84,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                 textAlign: TextAlign.center,
                 softWrap: true,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: 13,
+                      fontSize: screenWidth > 600 ? 16 : 13,
                     ),
               ),
             ],

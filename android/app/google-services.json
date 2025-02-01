@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "721643785078",
     "project_id": "vepay-c8b0f",
-    "storage_bucket": "vepay-c8b0f.appspot.com"
+    "storage_bucket": "vepay-c8b0f.firebasestorage.app"
   },
   "client": [
     {
@@ -27,6 +27,14 @@
           "android_info": {
             "package_name": "id.vepay.vepay",
             "certificate_hash": "15a5cf17bd4d1f37dc3774814e0643087828e684"
+          }
+        },
+        {
+          "client_id": "721643785078-htmg4ald1gi1ibfgh572cm8f4s4aitkq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.vepay.vepay",
+            "certificate_hash": "0c95b7cef7b6fbfde96f1a7bf7ccae97b012f502"
           }
         },
         {
