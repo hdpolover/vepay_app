@@ -60,7 +60,7 @@ class _VccDetailState extends State<VccDetail> {
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText1
+                          .bodySmall
                           ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
@@ -69,7 +69,7 @@ class _VccDetailState extends State<VccDetail> {
                     "Nama Pemegang Kartu",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodySmall
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                   const SizedBox(height: 10),
@@ -77,7 +77,7 @@ class _VccDetailState extends State<VccDetail> {
                     widget.vcc.holder!,
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodySmall
                         ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 20),
@@ -85,7 +85,7 @@ class _VccDetailState extends State<VccDetail> {
                     "Jenis VCC",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodySmall
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                   const SizedBox(height: 10),
@@ -93,7 +93,7 @@ class _VccDetailState extends State<VccDetail> {
                     widget.vcc.jenisVcc!,
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodySmall
                         ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 20),
@@ -101,7 +101,7 @@ class _VccDetailState extends State<VccDetail> {
                     "Nomor Kartu",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodySmall
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                   const SizedBox(height: 10),
@@ -112,7 +112,7 @@ class _VccDetailState extends State<VccDetail> {
                           widget.vcc.number!,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1
+                              .bodySmall
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -140,7 +140,7 @@ class _VccDetailState extends State<VccDetail> {
                     "Tanggal Kadaluarsa",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodySmall
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                   const SizedBox(height: 10),
@@ -148,7 +148,7 @@ class _VccDetailState extends State<VccDetail> {
                     widget.vcc.validDate!,
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodySmall
                         ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 20),
@@ -156,7 +156,7 @@ class _VccDetailState extends State<VccDetail> {
                     "Kode Keamanan",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodySmall
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                   const SizedBox(height: 10),
@@ -167,7 +167,7 @@ class _VccDetailState extends State<VccDetail> {
                         isObscure ? "***" : widget.vcc.securityCode!,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodySmall
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       InkWell(
@@ -188,7 +188,7 @@ class _VccDetailState extends State<VccDetail> {
                               "Lihat Kode",
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1
+                                  .bodySmall
                                   ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       color: ColorManager.primary),
@@ -203,7 +203,7 @@ class _VccDetailState extends State<VccDetail> {
                     "Saldo",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodySmall
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                   const SizedBox(height: 10),
@@ -212,7 +212,7 @@ class _VccDetailState extends State<VccDetail> {
                         double.parse(widget.vcc.saldo!)),
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodySmall
                         ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 20),

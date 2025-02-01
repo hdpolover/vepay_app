@@ -59,7 +59,10 @@ class _VccState extends State<Vcc> {
               const SizedBox(height: 20),
               Text(
                 "Jangan kuatir! VCC dapat kamu beli di Vepay.id dengan proses yang sangat mudah dan cepat",
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
               ),
             ],
           ),

@@ -117,7 +117,7 @@ class _EditProfileState extends State<EditProfile> {
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
-                          .subtitle1
+                          .bodySmall
                           ?.copyWith(fontWeight: FontWeight.normal),
                     ),
                   ),
@@ -152,7 +152,7 @@ class _EditProfileState extends State<EditProfile> {
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .subtitle1
+                                          .bodySmall
                                           ?.copyWith(
                                               fontWeight: FontWeight.normal)),
                                 ),
@@ -188,7 +188,7 @@ class _EditProfileState extends State<EditProfile> {
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle1
+                                      .bodySmall
                                       ?.copyWith(
                                           fontWeight: FontWeight.normal)),
                             ],
@@ -314,7 +314,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   SizedBox(
                       height: 13, width: MediaQuery.of(context).size.width),
-                  Text("Nama", style: Theme.of(context).textTheme.subtitle2),
+                  Text("Nama", style: Theme.of(context).textTheme.bodySmall),
                   SizedBox(
                       height: 15, width: MediaQuery.of(context).size.width),
                   TextFormField(
@@ -334,7 +334,7 @@ class _EditProfileState extends State<EditProfile> {
                   SizedBox(
                       height: 13, width: MediaQuery.of(context).size.width),
                   Text("Jenis Kelamin",
-                      style: Theme.of(context).textTheme.subtitle2),
+                      style: Theme.of(context).textTheme.bodySmall),
                   SizedBox(height: 5, width: MediaQuery.of(context).size.width),
                   Row(
                     children: [
@@ -371,7 +371,7 @@ class _EditProfileState extends State<EditProfile> {
                   SizedBox(
                       height: 13, width: MediaQuery.of(context).size.width),
                   Text("Tanggal Lahir",
-                      style: Theme.of(context).textTheme.subtitle2),
+                      style: Theme.of(context).textTheme.bodySmall),
                   SizedBox(
                       height: 15, width: MediaQuery.of(context).size.width),
                   TextFormField(
@@ -394,7 +394,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   SizedBox(
                       height: 13, width: MediaQuery.of(context).size.width),
-                  Text("Email", style: Theme.of(context).textTheme.subtitle2),
+                  Text("Email", style: Theme.of(context).textTheme.bodySmall),
                   SizedBox(
                       height: 15, width: MediaQuery.of(context).size.width),
                   TextFormField(
@@ -414,7 +414,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   SizedBox(
                       height: 13, width: MediaQuery.of(context).size.width),
-                  Text("Alamat", style: Theme.of(context).textTheme.subtitle2),
+                  Text("Alamat", style: Theme.of(context).textTheme.bodySmall),
                   SizedBox(
                       height: 15, width: MediaQuery.of(context).size.width),
                   TextFormField(
@@ -434,7 +434,7 @@ class _EditProfileState extends State<EditProfile> {
                   SizedBox(
                       height: 13, width: MediaQuery.of(context).size.width),
                   Text("Nomor Telepon",
-                      style: Theme.of(context).textTheme.subtitle2),
+                      style: Theme.of(context).textTheme.bodySmall),
                   SizedBox(
                       height: 15, width: MediaQuery.of(context).size.width),
                   TextFormField(
@@ -624,7 +624,7 @@ class _EditProfileState extends State<EditProfile> {
               dividerColor: Colors.grey,
               //Non selected days of the month color
               textTheme: const TextTheme(
-                bodyText2: TextStyle(color: Colors.black),
+                bodySmall: TextStyle(color: Colors.black),
               ),
               colorScheme: ColorScheme.fromSwatch().copyWith(
                 //Selected dates background color

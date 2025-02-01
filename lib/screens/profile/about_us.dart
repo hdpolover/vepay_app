@@ -76,7 +76,7 @@ class _AboutUsState extends State<AboutUs> {
                           AppInfoService().removeHtmlTags(
                               AppInfoService().getValueByKey('web_app_name')!),
                           style:
-                              Theme.of(context).textTheme.bodyText1?.copyWith(
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -84,7 +84,11 @@ class _AboutUsState extends State<AboutUs> {
                         const SizedBox(height: 10),
                         Text(
                           version == null ? "v -" : "v$version",
-                          style: Theme.of(context).textTheme.caption,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    fontSize: 15,
+                                    color: Colors.grey,
+                                  ),
                         ),
                       ],
                     ),

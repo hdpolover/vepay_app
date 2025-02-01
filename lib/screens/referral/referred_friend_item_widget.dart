@@ -50,7 +50,7 @@ class _ReferredFriendItemWidgetState extends State<ReferredFriendItemWidget> {
                   Text(
                     widget.referredFriendModel.name!,
                     softWrap: true,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
                         ),

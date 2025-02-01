@@ -25,6 +25,11 @@ class TextStyleManager {
         fontWeight: FontWeight.bold,
       );
 
+  TextStyle get body18 => const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.normal,
+      );
+
   TextStyle get body1 => const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.normal,

@@ -702,7 +702,10 @@ class CommonDialog {
                           }
                         } else {
                           currency = "Rp.";
-                          saldoYangDiterima = CommonMethods().formatCurrencyNum(transactionModel.product, CommonMethods().parsePreservingTypeWithComma(data['jumlah']));
+                          saldoYangDiterima = CommonMethods().formatCurrencyNum(
+                              transactionModel.product,
+                              CommonMethods().parsePreservingTypeWithComma(
+                                  data['jumlah']));
 
                           if (transactionModel.product!.toLowerCase() ==
                               'vcc') {
@@ -814,7 +817,7 @@ class CommonDialog {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .titleMedium
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -915,7 +918,7 @@ class CommonDialog {
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .titleMedium
                         ?.copyWith(fontWeight: FontWeight.normal),
                   ),
                 ),

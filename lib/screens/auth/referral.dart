@@ -104,7 +104,7 @@ class _ReferralState extends State<Referral> {
                           : referralInfoModel!.titleReferralIntro!,
                       softWrap: true,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline4?.copyWith(
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -123,7 +123,7 @@ class _ReferralState extends State<Referral> {
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText2
+                          .bodySmall
                           ?.copyWith(color: Colors.grey),
                     ),
                   ),

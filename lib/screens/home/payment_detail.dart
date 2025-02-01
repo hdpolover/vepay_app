@@ -584,7 +584,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
-                          .subtitle1
+                          .bodySmall
                           ?.copyWith(fontWeight: FontWeight.normal),
                     ),
                   ),
@@ -619,7 +619,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .subtitle1
+                                          .bodySmall
                                           ?.copyWith(
                                               fontWeight: FontWeight.normal)),
                                 ),
@@ -655,7 +655,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle1
+                                      .bodySmall
                                       ?.copyWith(
                                           fontWeight: FontWeight.normal)),
                             ],

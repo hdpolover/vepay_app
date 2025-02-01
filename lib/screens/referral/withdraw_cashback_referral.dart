@@ -114,7 +114,7 @@ class _WithdrawCashbackReferralState extends State<WithdrawCashbackReferral> {
           Text(
             'Withdraw Cashback',
             style:
-                Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18),
+                Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 18),
           ),
           const SizedBox(height: 20),
           TextFormField(

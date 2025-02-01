@@ -537,7 +537,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
-                          .subtitle1
+                          .bodySmall
                           ?.copyWith(fontWeight: FontWeight.normal),
                     ),
                   ),
@@ -572,7 +572,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .subtitle1
+                                          .bodySmall
                                           ?.copyWith(
                                               fontWeight: FontWeight.normal)),
                                 ),
@@ -608,7 +608,7 @@ class _WithdrawPaymentState extends State<WithdrawPayment> {
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle1
+                                      .bodySmall
                                       ?.copyWith(
                                           fontWeight: FontWeight.normal)),
                             ],

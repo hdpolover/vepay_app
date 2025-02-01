@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_widgets.dart';
+import 'package:vepay_app/resources/text_style_manager.dart';
 import 'package:vepay_app/screens/auth/check_email.dart';
 
 import '../../resources/color_manager.dart';
@@ -68,10 +69,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               Text(
                 "Jangan Khawatir!\nMasukkan email Anda, dan kami akan mengirimkan link untuk mengubah password.",
                 textAlign: TextAlign.justify,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    ?.copyWith(fontSize: 18),
+                style: TextStyleManager.instance.body18,
               ),
               const SizedBox(height: 20),
               TextFormField(

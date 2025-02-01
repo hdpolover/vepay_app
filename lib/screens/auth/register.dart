@@ -488,7 +488,7 @@ class _RegisterState extends State<Register> {
                             ),
                             Text(
                               '   Daftar dengan Google',
-                              style: Theme.of(context).textTheme.bodyText1,
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
                         ),

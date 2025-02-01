@@ -225,12 +225,13 @@ class _HomeTabState extends State<HomeTab> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final minItemWidth = screenWidth * 0.4; // Adjust this value as needed
-    final maxItemHeight = screenWidth > 600 ? screenHeight * 0.6 : screenHeight * 0.29;
+    final maxItemHeight =
+        screenWidth > 600 ? screenHeight * 0.6 : screenHeight * 0.29;
 
     return SizedBox(
       height: screenWidth > 600 ? screenWidth * 0.31 : maxItemHeight,
       child: ResponsiveGridList(
-        minItemsPerRow:  4,
+        minItemsPerRow: 4,
         horizontalGridSpacing: 4,
         verticalGridSpacing: 4,
         listViewBuilderOptions: ListViewBuilderOptions(
@@ -347,7 +348,7 @@ class _HomeTabState extends State<HomeTab> {
                 softWrap: true,
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
+                    .bodySmall
                     ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ],
@@ -453,20 +454,20 @@ class _HomeTabState extends State<HomeTab> {
                     // Do something with the entered data
                     String phone = phoneController.text;
                     String name = nameController.text;
-          
+
                     var data = ProfileRequestModel(
                       userId: userId,
                       name: name.isEmpty ? nameField : name,
                       phone: phone.isEmpty ? phoneField : phone,
                     );
-          
+
                     try {
                       CommonDialog.showLoading(context);
-          
+
                       bool res = await AuthService().updateDetailProfile(data);
-          
+
                       Navigator.of(context).pop();
-          
+
                       if (res) {
                         CommonDialog.buildOkUpdateDialog(
                             context, true, "Berhasil memperbarui profil.");
@@ -477,10 +478,10 @@ class _HomeTabState extends State<HomeTab> {
                     } catch (e) {
                       CommonDialog.buildOkDialog(context, false, e.toString());
                     }
-          
+
                     phoneController.dispose();
                     nameController.dispose();
-          
+
                     _getAllData();
                   }
                 },

@@ -33,7 +33,10 @@ class EmptyWidget extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               emptyDesc,
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
               textAlign: TextAlign.center,
             ),
           ],

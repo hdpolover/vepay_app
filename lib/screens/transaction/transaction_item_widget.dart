@@ -59,7 +59,7 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
                     children: [
                       Text(
                         widget.transaction.type!,
-                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
                             ),
@@ -94,7 +94,7 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
                         : "Saldo ${widget.transaction.product}",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodySmall
                         ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   widget.transaction.akunTujuan == null
@@ -118,7 +118,7 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
                             CommonMethods.formatCompleteCurrency(
                                 double.parse(widget.transaction.total!)),
                             style:
-                                Theme.of(context).textTheme.bodyText1?.copyWith(
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),
