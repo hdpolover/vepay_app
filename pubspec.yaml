@@ -60,6 +60,7 @@ dependencies:
   url_launcher: ^6.1.7
   webview_flutter: ^4.0.2
   whatsapp_unilink: ^2.1.0
+  responsive_framework: ^1.5.1
 
 icons_launcher:
   image_path: 'assets/new_logo_big.png'
