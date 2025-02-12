@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:vepay_app/common/common_shimmer.dart';
 import 'package:vepay_app/models/member_model.dart';

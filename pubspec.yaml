@@ -41,7 +41,7 @@ dependencies:
     sdk: flutter
   flutter_credit_card: ^4.0.1
   flutter_local_notifications: ^17.2.1+2
-  flutter_widget_from_html: ^0.14.11
+  flutter_widget_from_html: ^0.15.2
   font_awesome_flutter: ^10.2.1
   form_field_validator: ^1.1.0
   google_sign_in: ^6.0.2
@@ -52,7 +52,7 @@ dependencies:
   intl: ^0.18.0
   mailer: ^6.0.1
   package_info_plus: ^5.0.1
-  persistent_bottom_nav_bar: ^5.0.2
+  persistent_bottom_nav_bar: ^6.2.1
   rename: ^3.0.1
   responsive_grid_list: ^1.2.5
   shared_preferences: ^2.0.15
