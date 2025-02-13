@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/common/global_values.dart';
+import 'package:vepay_app/common/responsive_utils.dart';
 import 'package:vepay_app/maintenance.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/screens/auth/intro.dart';
@@ -164,10 +166,10 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.35),
+              SizedBox(height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isMobile ? (CommonResponsiveUtils.isLandscape(context) ? 0.35 : 0.35) : (CommonResponsiveUtils.isLandscape(context) ? 0.2 : 0.3))),
 
               Image(
-                width: MediaQuery.of(context).size.width * 0.38,
+                width: MediaQuery.of(context).size.width * 0.35,
                 image: const AssetImage('assets/logo_main.png'),
               ),
               // SizedBox(height: MediaQuery.of(context).size.height * 0.05),

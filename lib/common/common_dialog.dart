@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/common/global_values.dart';
 import 'package:vepay_app/models/pay_transaction_model.dart';

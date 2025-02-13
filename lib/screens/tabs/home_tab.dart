@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:vepay_app/common/common_shimmer.dart';
+import 'package:vepay_app/common/responsive_utils.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/models/profile_request_model.dart';
 import 'package:vepay_app/models/promo_model.dart';
@@ -105,12 +107,13 @@ class _HomeTabState extends State<HomeTab> {
       List<RateModel> tempRates = await RateService().getRates("top_up");
 
       if (tempRates.length <= 9) {
-        tempRates
-            .removeWhere((element) => element.name!.toLowerCase() == "more");
+        // tempRates
+        //     .sublist(0, 3);
+            // .removeWhere((element) => element.name!.toLowerCase() == "more");
 
         rates = tempRates;
       } else {
-        rates = tempRates;
+        rates = tempRates.sublist(0, 8);
       }
 
       setState(() {});
@@ -172,7 +175,7 @@ class _HomeTabState extends State<HomeTab> {
                     ? Container()
                     : buildTransSection(),
                 const SizedBox(height: 10),
-                promos == null ? Container() : buildPromotionSection(),
+                promos == null ? Container() : buildPromotionSection(context),
                 const SizedBox(height: 20),
               ],
             ),
@@ -196,7 +199,8 @@ class _HomeTabState extends State<HomeTab> {
         ),
         transactionList == null
             ? SizedBox(
-                height: MediaQuery.of(context).size.height * 0.16,
+          // height: MediaQuery.of(context).size.height * 0.16,
+          height: MediaQuery.of(context).size.height * 0.50,
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shrinkWrap: true,
@@ -225,11 +229,11 @@ class _HomeTabState extends State<HomeTab> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final minItemWidth = screenWidth * 0.4; // Adjust this value as needed
-    final maxItemHeight =
-        screenWidth > 600 ? screenHeight * 0.6 : screenHeight * 0.29;
+    final maxItemHeight = ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? screenHeight * 0.6 : screenHeight * 0.29;
 
     return SizedBox(
-      height: screenWidth > 600 ? screenWidth * 0.31 : maxItemHeight,
+      // height: ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? screenWidth * 0.32 : maxItemHeight,
+      height: ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? screenWidth * (ResponsiveBreakpoints.of(context).orientation == Orientation.portrait ? 0.48 : 0.32) : maxItemHeight,
       child: ResponsiveGridList(
         minItemsPerRow: 4,
         horizontalGridSpacing: 4,
@@ -258,7 +262,7 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  buildPromotionSection() {
+  buildPromotionSection(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,7 +297,8 @@ class _HomeTabState extends State<HomeTab> {
         ),
         promos == null || promos!.isEmpty
             ? SizedBox(
-                height: MediaQuery.of(context).size.height * 0.16,
+          // height: MediaQuery.of(context).size.height * 0.16,
+          height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? 0.3 : 0.16),
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shrinkWrap: true,
@@ -305,7 +310,8 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               )
             : SizedBox(
-                height: MediaQuery.of(context).size.height * 0.21,
+          // height: MediaQuery.of(context).size.height * 0.21,
+          height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.5 : 0.3) : 0.21),
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shrinkWrap: true,

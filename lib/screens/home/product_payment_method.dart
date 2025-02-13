@@ -1,7 +1,7 @@
 import 'package:expansion_widget/expansion_widget.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/models/payment_method_model.dart';

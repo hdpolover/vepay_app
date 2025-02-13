@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as modalSheet;
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/screens/tabs/home_tab.dart';
@@ -182,15 +182,16 @@ class _DashboardState extends State<Dashboard> {
           controller: _controller,
           screens: _buildScreens(),
           items: _navBarsItems(),
-          confineInSafeArea: true,
+          confineToSafeArea: true,
           backgroundColor: Colors.white,
           handleAndroidBackButtonPress: true,
           resizeToAvoidBottomInset: true,
           stateManagement: true,
           navBarHeight: kBottomNavigationBarHeight * 1.2,
-          hideNavigationBarWhenKeyboardShows: true,
-          padding: const NavBarPadding.only(top: 15),
-          popActionScreens: PopActionScreensType.all,
+          // hideNavigationBarWhenKeyboardAppears: true,
+          // padding: const NavBarPadding.only(top: 15),
+          padding: const EdgeInsets.only(top: 15),
+          popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
           bottomScreenMargin: 20,
           // onWillPop: (context) async {
           //   await showDialog(
@@ -213,17 +214,28 @@ class _DashboardState extends State<Dashboard> {
           selectedTabScreenContext: (context) {
             var testContext = context;
           },
-          hideNavigationBar: _hideNavBar,
-          popAllScreensOnTapOfSelectedTab: true,
-          itemAnimationProperties: const ItemAnimationProperties(
-            duration: Duration(milliseconds: 400),
-            curve: Curves.ease,
+          isVisible: !_hideNavBar,
+          // popAllScreensOnTapOfSelectedTab: true,
+          animationSettings: const NavBarAnimationSettings(
+            navBarItemAnimation: ItemAnimationSettings(
+              duration: Duration(milliseconds: 400),
+              curve: Curves.ease,
+            ),
+            screenTransitionAnimation: ScreenTransitionAnimationSettings(
+              animateTabTransition: true,
+              curve: Curves.ease,
+              duration: Duration(milliseconds: 200),
+            ),
           ),
-          screenTransitionAnimation: const ScreenTransitionAnimation(
-            animateTabTransition: true,
-            curve: Curves.ease,
-            duration: Duration(milliseconds: 200),
-          ),
+          // itemAnimationProperties: const ItemAnimationProperties(
+          //   duration: Duration(milliseconds: 400),
+          //   curve: Curves.ease,
+          // ),
+          // screenTransitionAnimation: const ScreenTransitionAnimation(
+          //   animateTabTransition: true,
+          //   curve: Curves.ease,
+          //   duration: Duration(milliseconds: 200),
+          // ),
           navBarStyle:
               NavBarStyle.style6, // Choose the nav bar style with this property
         ),
