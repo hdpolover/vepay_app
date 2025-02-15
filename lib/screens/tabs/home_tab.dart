@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -417,6 +418,12 @@ class _HomeTabState extends State<HomeTab> {
                                 "Panjang nomor telepon maksimal 15 karakter"),
                       ]),
                       keyboardType: TextInputType.phone,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'^ ?\d*')),
+                        FilteringTextInputFormatter.deny(RegExp(r'^ ?\D*')),
+                        FilteringTextInputFormatter.deny(' '),
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         hintText: 'Nomor Telepon (WhatsApp)',
