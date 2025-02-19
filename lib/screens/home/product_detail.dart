@@ -93,6 +93,30 @@ class _ProductDetailState extends State<ProductDetail> {
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
                         RegExp(r'(^\d*[\.\,]?\d{0,2})')),
+                    TextInputFormatter.withFunction((oldValue, newValue) {
+                      if (oldValue.text.length > newValue.text.length) {
+                        return newValue;
+                      }
+
+                      if (newValue.text.contains('.')) {
+                        // Split the input into whole number and decimal parts
+                        List<String> parts = newValue.text.split('.');
+
+                        // Only allow one decimal point
+                        if (parts.length > 2) return oldValue;
+
+                        // Check if whole number part is more than 4 digits
+                        if (parts[0].length > 4) return oldValue;
+
+                        // Allow the decimal part
+                        return newValue;
+                      }
+
+                      if (newValue.text.length > 4) return oldValue;
+
+                      // Allow the new value if all checks pass
+                      return newValue;
+                    })
                   ],
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),

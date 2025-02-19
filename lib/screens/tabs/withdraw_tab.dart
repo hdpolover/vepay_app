@@ -284,6 +284,8 @@ class _WithdrawTabState extends State<WithdrawTab> {
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
+                  FilteringTextInputFormatter.allow(RegExp(r'^ ?\d*')),
+                  FilteringTextInputFormatter.deny(' '),
                 ],
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),

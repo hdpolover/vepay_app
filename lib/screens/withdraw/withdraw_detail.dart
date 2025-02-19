@@ -276,7 +276,9 @@ class _WithdrawDetailState extends State<WithdrawDetail> {
             const SizedBox(height: 10),
             WidgetManager().buildTextItem(
               "Biaya Transaksi",
-              "\$${biayaTransaksi!}",
+              CommonMethods().formatCurrencyNum(
+                  widget.rateModel.name,
+                      biayaTransaksi!),
             ),
           ],
         ),
