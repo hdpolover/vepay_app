@@ -99,6 +99,67 @@ class _TransactionTabState extends State<TransactionTab>
 
   int? selectedIndex;
 
+  void _showProductPopup() {
+    showDialog(context: context, builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return Dialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.5,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      // physics: const NeverScrollableScrollPhysics(),
+                      itemCount: itemRates.length,
+                      itemBuilder: (context, index) {
+                        return CheckboxListTile(
+                          title: Text(itemRates[index].name!),
+                          secondary: Image.network(itemRates[index].image!),
+                          value: selectedItemRates
+                              .contains(itemRates[index]),
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == true) {
+                                if (!selectedItemRates.contains(itemRates[index])) {
+                                  selectedItemRates.add(itemRates[index]);
+                                }
+                              } else {
+                                selectedItemRates.remove(itemRates[index]);
+                              }
+                            });
+                          },
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(height: 10,);
+                      },
+                    ),
+                  ),
+                ),
+                ElevatedButton(onPressed: () {
+                  Navigator.pop(context);
+                }, child: Text("Close"))
+              ],
+            ),
+          ),
+        );
+        }
+      );
+    });
+  }
+
   void _showFilterPopup() {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -281,52 +342,29 @@ class _TransactionTabState extends State<TransactionTab>
                               ),
                             ],
                           ),
+                          
                           SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: 20),
-                          Text(
-                            "Produk",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Produk",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                        fontWeight: FontWeight.bold, fontSize: 20),
+                              ),
+                              ElevatedButton(onPressed: () {
+                            _showProductPopup();
+                          }, child: const Text("Pilih")),
+                            ],
                           ),
                           SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: 20),
-                          SizedBox(
-                            // height: MediaQuery.of(context).size.height * 0.5,
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: itemRates.length,
-                              itemBuilder: (context, index) {
-                                return CheckboxListTile(
-                                  title: Text(itemRates[index].name!),
-                                  secondary: Image.network(itemRates[index].image!),
-                                  value: selectedItemRates
-                                      .contains(itemRates[index]),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedItemRates.add(itemRates[index]);
-                                      } else {
-                                        selectedItemRates
-                                            .remove(itemRates[index]);
-                                      }
-                                    });
-                                  },
-                                );
-                              },
-                              separatorBuilder: (BuildContext context, int index) {
-                                return const SizedBox(height: 10,);
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 24),
                           Center(
                             child: SizedBox(
                               width: 276,
