@@ -312,7 +312,7 @@ class _HomeTabState extends State<HomeTab> {
               )
             : SizedBox(
           // height: MediaQuery.of(context).size.height * 0.21,
-          height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.5 : 0.3) : 0.21),
+          height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.5 : 0.24) : 0.21),
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shrinkWrap: true,

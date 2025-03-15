@@ -23,13 +23,14 @@ class _PromoNewsDetailState extends State<PromoNewsDetail> {
         children: [
           Padding(
             padding: const EdgeInsets.all(15.0),
-            child: FancyShimmerImage(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.2,
-              boxFit: BoxFit.fill,
-              imageUrl: widget.promo.image!,
-              errorWidget: Image.network(
-                  'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
+            child: AspectRatio(
+              aspectRatio: 3.15 / 1.5,
+              child: FancyShimmerImage(
+                boxFit: BoxFit.cover,
+                imageUrl: widget.promo.image!,
+                errorWidget: Image.network(
+                    'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
+              ),
             ),
           ),
           Padding(
