@@ -263,7 +263,10 @@ class _WithdrawAltState extends State<WithdrawAlt> {
             ? Container()
             : TextFormField(
                 controller: norekController,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                ],
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   hintText: "Nomor rekening/E-Wallet",

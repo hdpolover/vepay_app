@@ -26,59 +26,46 @@ class _PromoItemWidgetState extends State<PromoItemWidget> {
           ? const EdgeInsets.symmetric(horizontal: 5, vertical: 5)
           : const EdgeInsets.symmetric(horizontal: 5),
       child: InkWell(
-        onTap: () async {
-          if (widget.promo.jenisKonten == "1") {
-            PersistentNavBarNavigator.pushNewScreen(
-              context,
-              screen: PromoDetail(
-                promo: widget.promo,
-              ),
-              withNavBar: false,
-            );
-          } else if (widget.promo.jenisKonten == "2") {
-            PersistentNavBarNavigator.pushNewScreen(
-              context,
-              screen: PromoNewsDetail(
-                promo: widget.promo,
-              ),
-              withNavBar: false,
-            );
-          } else if (widget.promo.jenisKonten == "3") {
-            final url = Uri.parse(widget.promo.redirectLink!);
+          onTap: () async {
+            if (widget.promo.jenisKonten == "1") {
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: PromoDetail(
+                  promo: widget.promo,
+                ),
+                withNavBar: false,
+              );
+            } else if (widget.promo.jenisKonten == "2") {
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: PromoNewsDetail(
+                  promo: widget.promo,
+                ),
+                withNavBar: false,
+              );
+            } else if (widget.promo.jenisKonten == "3") {
+              final url = Uri.parse(widget.promo.redirectLink!);
 
-            if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-              CommonDialog.buildOkDialog(
-                  context, false, "Terjadi kesalahan. Silahkan coba lagi.");
+              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                CommonDialog.buildOkDialog(
+                    context, false, "Terjadi kesalahan. Silahkan coba lagi.");
+              }
             }
-          }
-        },
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? 0.4 : 0.18),
-          width: widget.source == "all"
-              ? double.infinity
-              // : MediaQuery.of(context).size.width * 0.8,
-                : MediaQuery.of(context).size.width * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? 0.4 : 0.8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
+          },
+          child: SizedBox(
+            child: AspectRatio(
+              aspectRatio: 3.15 / 1.5,
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
                 child: FancyShimmerImage(
-                  width: widget.source == "all"
-                      ? double.infinity
-                      : MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.3 : 0.2) : 0.18),
                   boxFit: BoxFit.cover,
                   imageUrl: widget.promo.image!,
                   errorWidget: Image.network(
                       'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
+          )),
     );
   }
 }
