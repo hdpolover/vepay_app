@@ -363,15 +363,20 @@ class _HomeTabState extends State<HomeTab> {
         ),
         Row(
           children: [
+            // Image(
+            //   width: MediaQuery.of(context).size.width * 0.08,
+            //   height: MediaQuery.of(context).size.height * 0.04,
+            //   image: const AssetImage('assets/vepay_logo.png'),
+            // ),
+            // Image(
+            //   width: MediaQuery.of(context).size.width * 0.18,
+            //   height: MediaQuery.of(context).size.height * 0.05,
+            //   image: const AssetImage('assets/vepay_text.png'),
+            // ),
             Image(
-              width: MediaQuery.of(context).size.width * 0.08,
-              height: MediaQuery.of(context).size.height * 0.04,
-              image: const AssetImage('assets/vepay_logo.png'),
-            ),
-            Image(
-              width: MediaQuery.of(context).size.width * 0.18,
+              // width: MediaQuery.of(context).size.width * 0.18,
               height: MediaQuery.of(context).size.height * 0.05,
-              image: const AssetImage('assets/vepay_text.png'),
+              image: const AssetImage('assets/vepay_logo_2.png'),
             ),
           ],
         ),
