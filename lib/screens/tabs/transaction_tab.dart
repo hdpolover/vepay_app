@@ -342,25 +342,53 @@ class _TransactionTabState extends State<TransactionTab>
                               ),
                             ],
                           ),
-                          
                           SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Produk",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(
-                                        fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                              ElevatedButton(onPressed: () {
-                            _showProductPopup();
-                          }, child: const Text("Pilih")),
-                            ],
+                          Text(
+                            "Produk",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 20),
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: itemRates.length,
+                            itemBuilder: (context, index) {
+                              return CheckboxListTile(
+                                title: Text(itemRates[index].name!),
+                                secondary:
+                                    Image.network(itemRates[index].image!),
+                                value: selectedItemRates
+                                    .contains(itemRates[index]),
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      if (!selectedItemRates
+                                          .contains(itemRates[index])) {
+                                        selectedItemRates
+                                            .add(itemRates[index]);
+                                      }
+                                    } else {
+                                      selectedItemRates
+                                          .remove(itemRates[index]);
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return const SizedBox(
+                                height: 10,
+                              );
+                            },
                           ),
                           SizedBox(
                               width: MediaQuery.of(context).size.width,

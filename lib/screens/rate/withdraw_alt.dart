@@ -333,7 +333,7 @@ class _WithdrawAltState extends State<WithdrawAlt> {
                               CommonDialog.buildOkDialog(context, false,
                                   "Harap pilih blockchain terlebih dahulu");
                             } else {
-                              if (int.parse(totalController.text.trim()) == 0) {
+                              if (num.parse(totalController.text.trim()) == 0) {
                                 CommonDialog.buildOkDialog(context, false,
                                     "Jumlah harus lebih dari 0");
                               } else {
