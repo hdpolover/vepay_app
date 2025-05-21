@@ -228,32 +228,28 @@ class _HomeTabState extends State<HomeTab> {
 
   buildProductSection() {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final minItemWidth = screenWidth * 0.4; // Adjust this value as needed
-    final maxItemHeight = ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? screenHeight * 0.6 : screenHeight * 0.29;
+    final minItemWidth = screenWidth * 0.4;
 
-    return SizedBox(
-      // height: ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? screenWidth * 0.32 : maxItemHeight,
-      height: ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? screenWidth * (ResponsiveBreakpoints.of(context).orientation == Orientation.portrait ? 0.48 : 0.32) : maxItemHeight,
-      child: ResponsiveGridList(
-        minItemsPerRow: 4,
-        horizontalGridSpacing: 4,
-        verticalGridSpacing: 4,
-        listViewBuilderOptions: ListViewBuilderOptions(
-            physics: const NeverScrollableScrollPhysics()),
-        minItemWidth: minItemWidth,
-        children: rates.isEmpty
-            ? List.generate(
-                8,
-                (index) => CommonShimmer().buildProductItemShimmer(context),
-                growable: false,
-              )
-            : List.generate(
-                rates.length,
-                (index) => buildProductItemWidget(rates[index]),
-                growable: false,
-              ),
+    return ResponsiveGridList(
+      minItemsPerRow: 4,
+      horizontalGridSpacing: 4,
+      verticalGridSpacing: 4,
+      listViewBuilderOptions: ListViewBuilderOptions(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true, // This allows the grid to size based on content
       ),
+      minItemWidth: minItemWidth,
+      children: rates.isEmpty
+          ? List.generate(
+              8,
+              (index) => CommonShimmer().buildProductItemShimmer(context),
+              growable: false,
+            )
+          : List.generate(
+              rates.length,
+              (index) => buildProductItemWidget(rates[index]),
+              growable: false,
+            ),
     );
   }
 
