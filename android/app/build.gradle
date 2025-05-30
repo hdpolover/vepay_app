@@ -33,9 +33,11 @@ def keystoreProperties = new Properties()
 
 android {
     compileSdkVersion flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    // ndkVersion flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -105,6 +107,8 @@ dependencies {
     implementation "androidx.activity:activity:1.6.0-alpha05"
 
     implementation 'com.google.android.recaptcha:recaptcha:18.4.0'
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
