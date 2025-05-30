@@ -40,16 +40,27 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: FancyShimmerImage(
-                      width: MediaQuery.of(context).size.width * 0.15,
-                      height: MediaQuery.of(context).size.height * 0.06,
-                      boxFit: BoxFit.cover,
-                      imageUrl: widget.transaction.imgProduct!,
-                      errorWidget: Image.network(
-                          'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
-                    ),
+                  child: LayoutBuilder(
+                    builder: (context, constrains) {
+                      final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+                      // Define appropriate dimensions for different device types
+                      final double width = isTablet ? 120.0 : 60.0;
+                      final double height = isTablet ? 80.0 : 60.0;
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: FancyShimmerImage(
+                          // width: MediaQuery.of(context).size.width * 0.15,
+                          // height: MediaQuery.of(context).size.height * 0.06,
+                          width: width,
+                          height: height,
+                          boxFit: BoxFit.cover,
+                          imageUrl: widget.transaction.imgProduct!,
+                          errorWidget: Image.network(
+                              'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
+                        ),
+                      );
+                    }
                   ),
                 ),
                 Expanded(

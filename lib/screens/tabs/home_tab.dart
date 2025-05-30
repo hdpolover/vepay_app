@@ -199,18 +199,30 @@ class _HomeTabState extends State<HomeTab> {
               ),
         ),
         transactionList == null
-            ? SizedBox(
-          // height: MediaQuery.of(context).size.height * 0.16,
-          height: MediaQuery.of(context).size.height * 0.50,
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  shrinkWrap: true,
-                  itemCount: 2,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return CommonShimmer().buildPromoItemShimmer(context);
-                  },
-                ),
+            ? LayoutBuilder(
+                builder: (context, constraints) {
+                  final height = MediaQuery.of(context).size.height *
+                      (ResponsiveBreakpoints.of(context).isTablet ||
+                              ResponsiveBreakpoints.of(context).isDesktop
+                          ? (ResponsiveBreakpoints.of(context).orientation ==
+                                  Orientation.landscape
+                              ? 0.4
+                              : 0.3)
+                          : 0.2);
+
+                  return Container(
+                    height: height,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      shrinkWrap: true,
+                      itemCount: 2,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return CommonShimmer().buildPromoItemShimmer(context);
+                      },
+                    ),
+                  );
+                },
               )
             : ListView.builder(
                 padding: const EdgeInsets.symmetric(vertical: 10),
@@ -292,36 +304,60 @@ class _HomeTabState extends State<HomeTab> {
                 ))
           ],
         ),
-        promos == null || promos!.isEmpty
-            ? SizedBox(
-          // height: MediaQuery.of(context).size.height * 0.16,
-          height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? 0.3 : 0.16),
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  shrinkWrap: true,
-                  itemCount: 2,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return CommonShimmer().buildPromoItemShimmer(context);
-                  },
-                ),
-              )
-            : SizedBox(
-          // height: MediaQuery.of(context).size.height * 0.21,
-          height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.5 : 0.24) : 0.21),
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  shrinkWrap: true,
-                  itemCount: promos!.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return PromoItemWidget(
-                      promo: promos![index],
-                      source: "home",
-                    );
-                  },
-                ),
-              ),
+        LayoutBuilder(builder: (context, constraints) {
+          final height = MediaQuery.of(context).size.height *
+              (ResponsiveBreakpoints.of(context).isTablet ||
+                  ResponsiveBreakpoints.of(context).isDesktop ?
+              (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.5 : 0.24) : 0.21);
+
+          return Container(
+            height: height,
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              shrinkWrap: true,
+              itemCount: promos?.length ?? 2,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return promos == null || promos!.isEmpty
+                    ? CommonShimmer().buildPromoItemShimmer(context)
+                    : PromoItemWidget(
+                        promo: promos![index],
+                        source: "home",
+                      );
+              },
+            ),
+          );
+        })
+        // promos == null || promos!.isEmpty
+        //     ? SizedBox(
+        //   // height: MediaQuery.of(context).size.height * 0.16,
+        //   height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? 0.3 : 0.16),
+        //         child: ListView.builder(
+        //           padding: const EdgeInsets.symmetric(vertical: 10),
+        //           shrinkWrap: true,
+        //           itemCount: 2,
+        //           scrollDirection: Axis.horizontal,
+        //           itemBuilder: (context, index) {
+        //             return CommonShimmer().buildPromoItemShimmer(context);
+        //           },
+        //         ),
+        //       )
+        //     : SizedBox(
+        //   // height: MediaQuery.of(context).size.height * 0.21,
+        //   height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.5 : 0.24) : 0.21),
+        //         child: ListView.builder(
+        //           padding: const EdgeInsets.symmetric(vertical: 10),
+        //           shrinkWrap: true,
+        //           itemCount: promos!.length,
+        //           scrollDirection: Axis.horizontal,
+        //           itemBuilder: (context, index) {
+        //             return PromoItemWidget(
+        //               promo: promos![index],
+        //               source: "home",
+        //             );
+        //           },
+        //         ),
+        //       ),
       ],
     );
   }
