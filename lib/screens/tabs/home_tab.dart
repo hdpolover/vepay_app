@@ -405,11 +405,28 @@ class _HomeTabState extends State<HomeTab> {
             //   height: MediaQuery.of(context).size.height * 0.05,
             //   image: const AssetImage('assets/vepay_text.png'),
             // ),
-            Image(
-              // width: MediaQuery.of(context).size.width * 0.18,
-              height: MediaQuery.of(context).size.height * 0.05,
-              image: const AssetImage('assets/vepay_logo_2.png'),
-            ),
+            LayoutBuilder(builder: (context, constrains) {
+              final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+              final double logoHeight = isTablet
+                  ? MediaQuery.of(context).size.height * 0.06
+                  : MediaQuery.of(context).size.height * 0.04;
+
+              return Container(
+                constraints: BoxConstraints(
+                  maxHeight: logoHeight,
+                  minHeight: 24.0, // Minimum height for visibility
+                ),
+                child: Image.asset(
+                  'assets/vepay_logo_2.png',
+                  fit: BoxFit.contain,
+                ),
+              );
+            }),
+            // Image(
+            //   // width: MediaQuery.of(context).size.width * 0.18,
+            //   height: MediaQuery.of(context).size.height * 0.05,
+            //   image: const AssetImage('assets/vepay_logo_2.png'),
+            // ),
           ],
         ),
       ],
