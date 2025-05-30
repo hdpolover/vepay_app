@@ -87,6 +87,7 @@ android {
         signingConfig signingConfigs.debug
     }
    }
+    namespace 'com.example.vepay_app'
 }
 
 flutter {
