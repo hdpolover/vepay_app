@@ -1,4 +1,5 @@
-import 'dart:developer';
+import 'dart:developer' as dev;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,7 +59,7 @@ class _HomeTabState extends State<HomeTab> {
     try {
       member = await AuthService().getMemberDetail();
 
-      log(member!.toJson().toString(), name: 'TEST');
+      dev.log(member!.toJson().toString(), name: 'TEST');
 
       // * handle user ketika nomor hp null atau kosong
       if (member!.phone!.isEmpty ||
@@ -407,14 +408,27 @@ class _HomeTabState extends State<HomeTab> {
             // ),
             LayoutBuilder(builder: (context, constrains) {
               final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-              final double logoHeight = isTablet
-                  ? MediaQuery.of(context).size.height * 0.06
-                  : MediaQuery.of(context).size.height * 0.04;
+              final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+              double logoHeight;
+
+              if (isTablet) {
+                // Different sizing for tablet orientations
+                logoHeight = isLandscape
+                    ? MediaQuery.of(context).size.height * 0.05  // Larger in landscape to compensate for smaller height
+                    : MediaQuery.of(context).size.height * 0.03; // Standard size in portrait
+              } else {
+                // Phone sizing
+                logoHeight = isLandscape
+                    ? MediaQuery.of(context).size.height * 0.09  // Larger in landscape to compensate for smaller height
+                    : MediaQuery.of(context).size.height * 0.035; // Standard size in portrait
+              }
+
+              final minHeight = min(16.0, logoHeight * 0.8);
 
               return Container(
                 constraints: BoxConstraints(
                   maxHeight: logoHeight,
-                  minHeight: 24.0, // Minimum height for visibility
+                  minHeight: minHeight, // Minimum height for visibility
                 ),
                 child: Image.asset(
                   'assets/vepay_logo_2.png',

@@ -61,10 +61,8 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
       },
       child: Padding(
         padding: const EdgeInsets.all(4),
-        child: SizedBox(
-          height: ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? screenHeight * (ResponsiveBreakpoints.of(context).orientation == Orientation.portrait ? 0.15 : 0.25) : screenHeight * 0.135,
-          width: MediaQuery.of(context).size.width * 0.2,
-          child: Column(
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -72,24 +70,29 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                 borderRadius: BorderRadius.circular(10.0),
                 child: FancyShimmerImage(
                   width: MediaQuery.of(context).size.width * 0.155,
-                  height: ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? screenHeight * (ResponsiveBreakpoints.of(context).orientation == Orientation.portrait ? 0.1 : 0.2) : screenHeight * 0.075,
+                  height: ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop
+                      ? screenHeight * (ResponsiveBreakpoints.of(context).orientation == Orientation.portrait ? 0.08 : 0.25)
+                      : screenHeight * 0.07,
                   boxFit: BoxFit.cover,
                   imageUrl: widget.rateModel.image!,
                   errorWidget: Image.network(
                       'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
                 ),
               ),
-              const SizedBox(height: 10),
-              Text(
-                widget.rateModel.name!,
-                textAlign: TextAlign.center,
-                softWrap: true,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: screenWidth > 600 ? 16 : 13,
-                    ),
+              const SizedBox(height: 6), // Reduced spacing
+              Flexible(
+                child: Text(
+                  widget.rateModel.name!,
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  maxLines: 2, // Limit to 2 lines
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: screenWidth > 600 ? 14 : 12, // Slightly smaller font
+                  ),
+                ),
               ),
-            ],
-          ),
+            ]
         ),
       ),
     );

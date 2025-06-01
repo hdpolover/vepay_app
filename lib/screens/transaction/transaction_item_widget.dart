@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:vepay_app/models/transaction_model.dart';
 import 'package:vepay_app/screens/transaction/transaction_detail.dart';
 
@@ -136,29 +139,73 @@ class _TransactionItemWidgetState extends State<TransactionItemWidget> {
                           const SizedBox(height: 10),
                         ],
                       ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        height: MediaQuery.of(context).size.height * 0.04,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green, // background
-                            foregroundColor: Colors.white, // foreground
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final isTablet = ResponsiveBreakpoints.of(context).isTablet;
+                          final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+                          final screenWidth = MediaQuery.of(context).size.width;
+
+                          final buttonWidth = isTablet
+                              ? max(120.0, screenWidth * (isLandscape ? 0.15 : 0.18))
+                              : max(80.0, screenWidth * (isLandscape ? 0.20 : 0.25));
+
+                          final buttonHeight = buttonWidth * (isLandscape ? 0.18 : 0.2);
+                          return Container(
+                            width: buttonWidth,
+                            height: buttonHeight,
+                            constraints: const BoxConstraints(
+                              minWidth: 100.0,
+                              minHeight: 36.0,
                             ),
-                          ),
-                          child: const Text('Detail'),
-                          onPressed: () async {
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: TransactionDetail(
-                                transaction: widget.transaction,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
                               ),
-                              withNavBar: false,
-                            );
-                          },
-                        ),
-                      ),
+                              child: const FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text('Detail'),
+                              ),
+                              onPressed: () async {
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen: TransactionDetail(
+                                    transaction: widget.transaction,
+                                  ),
+                                  withNavBar: false,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      )
+                      // SizedBox(
+                      //   width: MediaQuery.of(context).size.width * 0.3,
+                      //   height: MediaQuery.of(context).size.height * 0.04,
+                      //   child: ElevatedButton(
+                      //     style: ElevatedButton.styleFrom(
+                      //       backgroundColor: Colors.green, // background
+                      //       foregroundColor: Colors.white, // foreground
+                      //       shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(15),
+                      //       ),
+                      //     ),
+                      //     child: const Text('Detail'),
+                      //     onPressed: () async {
+                      //       PersistentNavBarNavigator.pushNewScreen(
+                      //         context,
+                      //         screen: TransactionDetail(
+                      //           transaction: widget.transaction,
+                      //         ),
+                      //         withNavBar: false,
+                      //       );
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   )
                 ],
