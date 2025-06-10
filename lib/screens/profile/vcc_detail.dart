@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:vepay_app/common/common_method.dart';
 import 'package:vepay_app/common/common_widgets.dart';
 import 'package:vepay_app/models/vcc_model.dart';
@@ -30,24 +31,54 @@ class _VccDetailState extends State<VccDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CreditCardWidget(
-              cardBgColor: ColorManager.primary,
-              bankName: "VCC",
-              cardNumber: widget.vcc.number!,
-              expiryDate: widget.vcc.validDate!,
-              cardHolderName: widget.vcc.holder!,
-              cvvCode: widget.vcc.securityCode!,
-              isHolderNameVisible: true,
-              isChipVisible: true,
-              showBackView: false,
-              obscureCardCvv: false,
-              obscureCardNumber: false,
-              onCreditCardWidgetChange:
-                  (CreditCardBrand) {}, //true when you want to show cvv(back) view
-              cardType: widget.vcc.jenisVcc!.toLowerCase() == "visa"
-                  ? CardType.visa
-                  : CardType
-                      .mastercard, //Optional if you want to override Card Type
+            Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final isLandscape = MediaQuery.of(context).orientation ==
+                      Orientation.landscape;
+
+                  // Determine width based on device type and orientation
+                  double cardWidth;
+                  if (ResponsiveBreakpoints.of(context).isTablet || 
+                      ResponsiveBreakpoints.of(context).isDesktop) {
+                    cardWidth =
+                        constraints.maxWidth * (isLandscape ? 0.4 : 0.8); // 80% width for tablets
+                  } else if (ResponsiveBreakpoints.of(context).isMobile) {
+                    cardWidth = constraints.maxWidth *
+                        (isLandscape ? 0.5 : 1); // 50% width for phones in landscape
+                  } else {
+                    cardWidth = double.infinity; // Default for other cases
+                  }
+
+                  return SizedBox(
+                    width: cardWidth,
+                    child: AspectRatio(
+                      aspectRatio: 1.6,
+                      child: CreditCardWidget(
+                        cardBgColor: ColorManager.primary,
+                        bankName: "VCC",
+                        cardNumber: widget.vcc.number!,
+                        expiryDate: widget.vcc.validDate!,
+                        cardHolderName: widget.vcc.holder!,
+                        cvvCode: widget.vcc.securityCode!,
+                        isHolderNameVisible: true,
+                        isChipVisible: true,
+                        showBackView: false,
+                        obscureCardCvv: false,
+                        obscureCardNumber: false,
+                        onCreditCardWidgetChange:
+                            (CreditCardBrand) {}, //true when you want to show cvv(back) view
+                        cardType: widget.vcc.jenisVcc!.toLowerCase() == "visa"
+                            ? CardType.visa
+                            : CardType
+                                .mastercard, //Optional if you want to override Card Type
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
