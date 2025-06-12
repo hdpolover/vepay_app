@@ -1,4 +1,5 @@
-import 'dart:developer';
+import 'dart:developer' as dev;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,7 +59,7 @@ class _HomeTabState extends State<HomeTab> {
     try {
       member = await AuthService().getMemberDetail();
 
-      log(member!.toJson().toString(), name: 'TEST');
+      dev.log(member!.toJson().toString(), name: 'TEST');
 
       // * handle user ketika nomor hp null atau kosong
       if (member!.phone!.isEmpty ||
@@ -199,18 +200,30 @@ class _HomeTabState extends State<HomeTab> {
               ),
         ),
         transactionList == null
-            ? SizedBox(
-          // height: MediaQuery.of(context).size.height * 0.16,
-          height: MediaQuery.of(context).size.height * 0.50,
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  shrinkWrap: true,
-                  itemCount: 2,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return CommonShimmer().buildPromoItemShimmer(context);
-                  },
-                ),
+            ? LayoutBuilder(
+                builder: (context, constraints) {
+                  final height = MediaQuery.of(context).size.height *
+                      (ResponsiveBreakpoints.of(context).isTablet ||
+                              ResponsiveBreakpoints.of(context).isDesktop
+                          ? (ResponsiveBreakpoints.of(context).orientation ==
+                                  Orientation.landscape
+                              ? 0.4
+                              : 0.3)
+                          : 0.2);
+
+                  return Container(
+                    height: height,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      shrinkWrap: true,
+                      itemCount: 2,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return CommonShimmer().buildPromoItemShimmer(context);
+                      },
+                    ),
+                  );
+                },
               )
             : ListView.builder(
                 padding: const EdgeInsets.symmetric(vertical: 10),
@@ -228,32 +241,28 @@ class _HomeTabState extends State<HomeTab> {
 
   buildProductSection() {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final minItemWidth = screenWidth * 0.4; // Adjust this value as needed
-    final maxItemHeight = ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? screenHeight * 0.6 : screenHeight * 0.29;
+    final minItemWidth = screenWidth * 0.4;
 
-    return SizedBox(
-      // height: ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? screenWidth * 0.32 : maxItemHeight,
-      height: ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? screenWidth * (ResponsiveBreakpoints.of(context).orientation == Orientation.portrait ? 0.48 : 0.32) : maxItemHeight,
-      child: ResponsiveGridList(
-        minItemsPerRow: 4,
-        horizontalGridSpacing: 4,
-        verticalGridSpacing: 4,
-        listViewBuilderOptions: ListViewBuilderOptions(
-            physics: const NeverScrollableScrollPhysics()),
-        minItemWidth: minItemWidth,
-        children: rates.isEmpty
-            ? List.generate(
-                8,
-                (index) => CommonShimmer().buildProductItemShimmer(context),
-                growable: false,
-              )
-            : List.generate(
-                rates.length,
-                (index) => buildProductItemWidget(rates[index]),
-                growable: false,
-              ),
+    return ResponsiveGridList(
+      minItemsPerRow: 4,
+      horizontalGridSpacing: 4,
+      verticalGridSpacing: 4,
+      listViewBuilderOptions: ListViewBuilderOptions(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true, // This allows the grid to size based on content
       ),
+      minItemWidth: minItemWidth,
+      children: rates.isEmpty
+          ? List.generate(
+              8,
+              (index) => CommonShimmer().buildProductItemShimmer(context),
+              growable: false,
+            )
+          : List.generate(
+              rates.length,
+              (index) => buildProductItemWidget(rates[index]),
+              growable: false,
+            ),
     );
   }
 
@@ -296,36 +305,60 @@ class _HomeTabState extends State<HomeTab> {
                 ))
           ],
         ),
-        promos == null || promos!.isEmpty
-            ? SizedBox(
-          // height: MediaQuery.of(context).size.height * 0.16,
-          height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? 0.3 : 0.16),
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  shrinkWrap: true,
-                  itemCount: 2,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return CommonShimmer().buildPromoItemShimmer(context);
-                  },
-                ),
-              )
-            : SizedBox(
-          // height: MediaQuery.of(context).size.height * 0.21,
-          height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.5 : 0.24) : 0.21),
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  shrinkWrap: true,
-                  itemCount: promos!.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return PromoItemWidget(
-                      promo: promos![index],
-                      source: "home",
-                    );
-                  },
-                ),
-              ),
+        LayoutBuilder(builder: (context, constraints) {
+          final height = MediaQuery.of(context).size.height *
+              (ResponsiveBreakpoints.of(context).isTablet ||
+                  ResponsiveBreakpoints.of(context).isDesktop ?
+              (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.5 : 0.24) : 0.21);
+
+          return Container(
+            height: height,
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              shrinkWrap: true,
+              itemCount: promos?.length ?? 2,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return promos == null || promos!.isEmpty
+                    ? CommonShimmer().buildPromoItemShimmer(context)
+                    : PromoItemWidget(
+                        promo: promos![index],
+                        source: "home",
+                      );
+              },
+            ),
+          );
+        })
+        // promos == null || promos!.isEmpty
+        //     ? SizedBox(
+        //   // height: MediaQuery.of(context).size.height * 0.16,
+        //   height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? 0.3 : 0.16),
+        //         child: ListView.builder(
+        //           padding: const EdgeInsets.symmetric(vertical: 10),
+        //           shrinkWrap: true,
+        //           itemCount: 2,
+        //           scrollDirection: Axis.horizontal,
+        //           itemBuilder: (context, index) {
+        //             return CommonShimmer().buildPromoItemShimmer(context);
+        //           },
+        //         ),
+        //       )
+        //     : SizedBox(
+        //   // height: MediaQuery.of(context).size.height * 0.21,
+        //   height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.5 : 0.24) : 0.21),
+        //         child: ListView.builder(
+        //           padding: const EdgeInsets.symmetric(vertical: 10),
+        //           shrinkWrap: true,
+        //           itemCount: promos!.length,
+        //           scrollDirection: Axis.horizontal,
+        //           itemBuilder: (context, index) {
+        //             return PromoItemWidget(
+        //               promo: promos![index],
+        //               source: "home",
+        //             );
+        //           },
+        //         ),
+        //       ),
       ],
     );
   }
@@ -373,11 +406,41 @@ class _HomeTabState extends State<HomeTab> {
             //   height: MediaQuery.of(context).size.height * 0.05,
             //   image: const AssetImage('assets/vepay_text.png'),
             // ),
-            Image(
-              // width: MediaQuery.of(context).size.width * 0.18,
-              height: MediaQuery.of(context).size.height * 0.05,
-              image: const AssetImage('assets/vepay_logo_2.png'),
-            ),
+            LayoutBuilder(builder: (context, constrains) {
+              final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+              final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+              double logoHeight;
+
+              if (isTablet) {
+                // Different sizing for tablet orientations
+                logoHeight = isLandscape
+                    ? MediaQuery.of(context).size.height * 0.05  // Larger in landscape to compensate for smaller height
+                    : MediaQuery.of(context).size.height * 0.03; // Standard size in portrait
+              } else {
+                // Phone sizing
+                logoHeight = isLandscape
+                    ? MediaQuery.of(context).size.height * 0.09  // Larger in landscape to compensate for smaller height
+                    : MediaQuery.of(context).size.height * 0.035; // Standard size in portrait
+              }
+
+              final minHeight = min(16.0, logoHeight * 0.8);
+
+              return Container(
+                constraints: BoxConstraints(
+                  maxHeight: logoHeight,
+                  minHeight: minHeight, // Minimum height for visibility
+                ),
+                child: Image.asset(
+                  'assets/vepay_logo_2.png',
+                  fit: BoxFit.contain,
+                ),
+              );
+            }),
+            // Image(
+            //   // width: MediaQuery.of(context).size.width * 0.18,
+            //   height: MediaQuery.of(context).size.height * 0.05,
+            //   image: const AssetImage('assets/vepay_logo_2.png'),
+            // ),
           ],
         ),
       ],

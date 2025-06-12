@@ -19,117 +19,99 @@ class _ContactUsState extends State<ContactUs> {
       floatingActionButton: CommonWidgets().buildFloatingWaButton(),
       appBar: CommonWidgets().buildCommonAppBar("Hubungi Kami"),
       body: SafeArea(
-          child: Stack(
-        children: [
-          Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height * 0.3,
-                width: MediaQuery.of(context).size.width,
-                // padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
-                // margin: const EdgeInsets.symmetric(horizontal: 5),
-                decoration: BoxDecoration(
-                  // borderRadius:
-                  //     const BorderRadius.all(Radius.circular(10)), //here
-                  color: ColorManager.primary,
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.3,
+              color: ColorManager.primary,
+              padding: const EdgeInsets.symmetric(vertical: 32),
+              child: Container(
+                width: 180,
+                height: 120,
+                alignment: Alignment.center,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: Image.asset(
+                  'assets/logo_white.png',
+                  width: double.infinity,
+                  fit: BoxFit.contain,
+                  // height: MediaQuery.of(context).size.height * 0.15,
                 ),
-              )
-            ],
-          ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  height: MediaQuery.of(context).size.height * 0.15,
-                  image: const AssetImage('assets/logo_white.png'),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 30),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Text(
-                              AppInfoService().removeHtmlTags(
-                                  AppInfoService().getValueByKey('web_title')!),
-                              style: TextStyleManager.instance.heading3,
-                              textAlign: TextAlign.center,
-                            ),
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: LayoutBuilder(
+                    builder: (context, constrains) {
+                      final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(isTablet ? 40.0 : 30.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Text(
+                                  AppInfoService().removeHtmlTags(AppInfoService().getValueByKey('web_title')!),
+                                  style: TextStyleManager.instance.heading3,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              SizedBox(height: isTablet ? 24.0 : 20.0),
+                              Text("Alamat", style: TextStyleManager.instance.body2),
+                              SizedBox(height: isTablet ? 12.0 : 10.0),
+                              Text(
+                                AppInfoService().removeHtmlTags(AppInfoService().getValueByKey('web_alamat')!),
+                                style: TextStyleManager.instance.body2,
+                              ),
+                              SizedBox(height: isTablet ? 24.0 : 20.0),
+                              Text("Email", style: TextStyleManager.instance.body2),
+                              SizedBox(height: isTablet ? 12.0 : 10.0),
+                              Text(
+                                AppInfoService().removeHtmlTags(AppInfoService().getValueByKey('web_email')!),
+                                style: TextStyleManager.instance.body2,
+                              ),
+                              SizedBox(height: isTablet ? 24.0 : 20.0),
+                              Text("WhatsApp", style: TextStyleManager.instance.body2),
+                              SizedBox(height: isTablet ? 12.0 : 10.0),
+                              Text(
+                                AppInfoService().removeHtmlTags(AppInfoService().getValueByKey('web_telepon')!),
+                                style: TextStyleManager.instance.body2,
+                              ),
+                              SizedBox(height: isTablet ? 24.0 : 20.0),
+                              Text("Website", style: TextStyleManager.instance.body2),
+                              SizedBox(height: isTablet ? 12.0 : 10.0),
+                              Text(
+                                AppInfoService().removeHtmlTags(AppInfoService().getValueByKey('web_website')!),
+                                style: TextStyleManager.instance.body2,
+                              ),
+                              SizedBox(height: isTablet ? 36.0 : 30.0),
+                              Center(
+                                child: Text(
+                                  AppInfoService().removeHtmlTags(AppInfoService().getValueByKey('web_info_desc')!),
+                                  style: TextStyleManager.instance.body2,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 20),
-                          Text(
-                            "Alamat",
-                            style: TextStyleManager.instance.body2,
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                              AppInfoService().removeHtmlTags(AppInfoService()
-                                  .getValueByKey('web_alamat')!),
-                              style: TextStyleManager.instance.body2),
-                          const SizedBox(height: 20),
-                          Text(
-                            "Email",
-                            style: TextStyleManager.instance.body2,
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            AppInfoService().removeHtmlTags(
-                                AppInfoService().getValueByKey('web_email')!),
-                            style: TextStyleManager.instance.body2,
-                          ),
-                          const SizedBox(height: 20),
-                          Text(
-                            "WhatsApp",
-                            style: TextStyleManager.instance.body2,
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                              AppInfoService().removeHtmlTags(AppInfoService()
-                                  .getValueByKey('web_telepon')!),
-                              style: TextStyleManager.instance.body2),
-                          const SizedBox(height: 20),
-                          Text(
-                            "Website",
-                            style: TextStyleManager.instance.body2,
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                              AppInfoService().removeHtmlTags(AppInfoService()
-                                  .getValueByKey('web_website')!),
-                              style: TextStyleManager.instance.body2),
-                          const SizedBox(height: 30),
-                          Center(
-                            child: Text(
-                              AppInfoService().removeHtmlTags(AppInfoService()
-                                  .getValueByKey('web_info_desc')!),
-                              style: TextStyleManager.instance.body2,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    }
                   ),
                 )
-              ],
-            ),
-          ),
-        ],
-      )),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

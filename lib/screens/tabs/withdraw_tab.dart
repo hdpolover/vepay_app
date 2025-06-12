@@ -144,7 +144,7 @@ class _WithdrawTabState extends State<WithdrawTab> {
                           children: [
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(3.0),
                                 child: DropdownButton<BlockchainModel>(
                                   isExpanded: true,
                                   icon: const FaIcon(FontAwesomeIcons.sortDown),
