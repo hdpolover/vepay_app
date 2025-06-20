@@ -145,9 +145,7 @@ class _WithdrawAltState extends State<WithdrawAlt> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: DropdownButton<BlockchainModel>(
+                              child: DropdownButton<BlockchainModel>(
                                   isExpanded: true,
                                   icon: const FaIcon(FontAwesomeIcons.sortDown),
                                   iconSize: 16,
@@ -170,7 +168,6 @@ class _WithdrawAltState extends State<WithdrawAlt> {
                                     );
                                   },
                                 ),
-                              ),
                             ),
                           ],
                         ),
