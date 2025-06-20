@@ -17,10 +17,10 @@ class _MyAppState extends State<MyApp> {
       title: 'Vepay',
       builder: (context, child) =>
     ResponsiveBreakpoints.builder(child: child!, breakpoints: [
-  const Breakpoint(start: 0, end: 959, name: MOBILE),        // Much larger mobile range
-  const Breakpoint(start: 960, end: 1279, name: TABLET),     // Tablet range
-  const Breakpoint(start: 1280, end: 1919, name: DESKTOP),
-  const Breakpoint(start: 1920, end: double.infinity, name: '4K'),
+  const Breakpoint(start: 0, end: 480, name: MOBILE),        // Much larger mobile range
+  const Breakpoint(start: 481, end: 1024, name: TABLET),     // Tablet range
+  const Breakpoint(start: 1025, end: 1920, name: DESKTOP),
+  const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
 ]),
       home: const SplashScreen(),
     );

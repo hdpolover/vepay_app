@@ -44,7 +44,7 @@ class _VccDetailState extends State<VccDetail> {
                   if (ResponsiveBreakpoints.of(context).isTablet || 
                       ResponsiveBreakpoints.of(context).isDesktop) {
                     cardWidth =
-                        constraints.maxWidth * (isLandscape ? 0.4 : 0.8); // 80% width for tablets
+                        constraints.maxWidth * (isLandscape ? 0.32 : 0.6); // 80% width for tablets
                   } else if (ResponsiveBreakpoints.of(context).isMobile) {
                     cardWidth = constraints.maxWidth *
                         (isLandscape ? 0.5 : 1); // 50% width for phones in landscape
