@@ -1,4 +1,4 @@
-package id.vepay.vepay_app
+package id.vepay.vepay
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 
