@@ -1,0 +1,78 @@
+name: vepay_app
+description: A new Flutter project.
+
+# Prevents accidental publishing to pub.dev
+publish_to: 'none'
+
+# App version and build number
+version: 1.4.5+66
+
+environment:
+  sdk: '>=3.2.4 <4.0.0'
+
+dependencies:
+  bottom_sheet: ^4.0.0
+  cupertino_icons: ^1.0.2
+  easy_image_viewer: ^1.2.0
+  expansion_widget: ^0.1.0
+  fancy_shimmer_image: ^2.0.2
+  firebase_auth: ^6.1.0
+  firebase_core: ^4.1.1
+  firebase_messaging: ^16.0.2
+  carousel_slider: ^5.0.0
+  flutter:
+    sdk: flutter
+  flutter_credit_card: ^4.1.0
+  flutter_local_notifications: ^19.4.2
+  flutter_widget_from_html: ^0.17.1
+  font_awesome_flutter: ^10.2.1
+  form_field_validator: ^1.1.0
+  google_sign_in: ^6.0.2
+  html: ^0.15.3
+  http: ^1.2.0
+  icons_launcher: ^3.0.3
+  image_picker: ^1.0.7
+  intl: ^0.20.2
+  mailer: ^6.0.1
+  package_info_plus: ^9.0.0
+  persistent_bottom_nav_bar: ^6.2.1
+  rename: ^3.0.1
+  responsive_grid_list: ^1.2.5
+  shared_preferences: ^2.0.15
+  shimmer: ^3.0.0
+  url_launcher: ^6.1.7
+  webview_flutter: ^4.0.2
+  whatsapp_unilink: ^2.1.0
+  responsive_framework: ^1.5.1
+  flutter_native_splash: ^2.4.1
+
+icons_launcher:
+  image_path: 'assets/new_logo_big.png'
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  # Assets folder
+  assets:
+    - assets/
+
+# Native splash screen configuration
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/new_logo_big.png
+  android_12:
+    color: "#ffffff"
+    image: assets/new_logo_big.png
+  android: true
+  ios: true
+  web: false
