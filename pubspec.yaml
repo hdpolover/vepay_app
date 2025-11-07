@@ -14,26 +14,27 @@ dependencies:
   bottom_sheet: ^4.0.0
   cupertino_icons: ^1.0.2
   easy_image_viewer: ^1.2.0
-  expansion_widget: ^0.0.3
+  expansion_widget: ^0.1.0
   fancy_shimmer_image: ^2.0.2
-  firebase_auth: ^4.6.3
-  firebase_core: ^2.8.0
-  firebase_messaging: ^14.7.10
+  firebase_auth: ^6.1.0
+  firebase_core: ^4.1.1
+  firebase_messaging: ^16.0.2
+  carousel_slider: ^5.0.0
   flutter:
     sdk: flutter
   flutter_credit_card: ^4.1.0
-  flutter_local_notifications: ^17.2.1+2
-  flutter_widget_from_html: ^0.15.2
+  flutter_local_notifications: ^19.4.2
+  flutter_widget_from_html: ^0.17.1
   font_awesome_flutter: ^10.2.1
   form_field_validator: ^1.1.0
   google_sign_in: ^6.0.2
   html: ^0.15.3
   http: ^1.2.0
-  icons_launcher: ^2.0.5
+  icons_launcher: ^3.0.3
   image_picker: ^1.0.7
-  intl: ^0.18.0
+  intl: ^0.20.2
   mailer: ^6.0.1
-  package_info_plus: ^5.0.1
+  package_info_plus: ^9.0.0
   persistent_bottom_nav_bar: ^6.2.1
   rename: ^3.0.1
   responsive_grid_list: ^1.2.5
@@ -54,7 +55,7 @@ icons_launcher:
       enable: true
 
 dev_dependencies:
-  flutter_lints: ^3.0.1
+  flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
 

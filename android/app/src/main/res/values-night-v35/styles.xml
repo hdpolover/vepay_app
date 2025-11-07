@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 15+ (API 35+) compatible dark themes -->
+    <!-- These themes remove all deprecated APIs that are disabled in Android 15 -->
+    
+    <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
+        <!-- Show a splash screen on the activity -->
+        <item name="android:windowBackground">@drawable/launch_background</item>
+        <!-- Edge-to-edge configuration for Android 15+ -->
+        <item name="android:windowLayoutInDisplayCutoutMode">always</item>
+        <!-- Force dark status bar icons for dark theme -->
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <!-- Remove deprecated attributes - these are now handled by Flutter -->
+        <!-- Android 15 enforces edge-to-edge automatically -->
+    </style>
+    
+    <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
+        <item name="android:windowBackground">?android:colorBackground</item>
+        <!-- Edge-to-edge configuration for Android 15+ -->
+        <item name="android:windowLayoutInDisplayCutoutMode">always</item>
+        <!-- Force dark status bar icons for dark theme -->
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <!-- Remove deprecated attributes - these are now handled by Flutter -->
+        <!-- Android 15 enforces edge-to-edge automatically -->
+    </style>
+</resources>

@@ -1,4 +1,4 @@
-# vepay_app
+# vepay
 
 A new Flutter project.
 

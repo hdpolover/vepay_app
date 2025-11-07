@@ -1,22 +1,22 @@
 import 'dart:developer' as dev;
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+// ## PERUBAHAN ADA DI BARIS INI ##
+import 'package:flutter/material.dart' hide CarouselController;
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:vepay_app/common/common_shimmer.dart';
-import 'package:vepay_app/common/responsive_utils.dart';
 import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/models/profile_request_model.dart';
 import 'package:vepay_app/models/promo_model.dart';
 import 'package:vepay_app/resources/color_manager.dart';
 import 'package:vepay_app/screens/home/product_item_widget.dart';
-import 'package:vepay_app/screens/home/promo_item_widget.dart';
 import 'package:vepay_app/screens/home/promo_see_all.dart';
 import 'package:vepay_app/services/promo_service.dart';
+import 'package:vepay_app/screens/home/promo_slider_widget.dart';
 
 import '../../common/common_dialog.dart';
 import '../../models/rate_model.dart';
@@ -27,8 +27,8 @@ import '../../services/transaction_service.dart';
 import '../transaction/transaction_item_widget.dart';
 
 class HomeTab extends StatefulWidget {
-  MemberModel member;
-  HomeTab({required this.member, super.key});
+  final MemberModel member;
+  const HomeTab({required this.member, super.key});
 
   @override
   State<HomeTab> createState() => _HomeTabState();
@@ -43,10 +43,9 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   void initState() {
+    super.initState();
     setMember();
     _getAllData();
-
-    super.initState();
   }
 
   setMember() {
@@ -61,7 +60,6 @@ class _HomeTabState extends State<HomeTab> {
 
       dev.log(member!.toJson().toString(), name: 'TEST');
 
-      // * handle user ketika nomor hp null atau kosong
       if (member!.phone!.isEmpty ||
           member?.phone == null ||
           member!.phone!.length < 10 ||
@@ -94,14 +92,16 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Future<void> getPromos() async {
-    await PromoService().getPromos().then((value) async {
-      promos = value;
-    });
-
-    // remove items with status 0
-    promos!.removeWhere((element) => element.status == "0");
-
-    setState(() {});
+    try {
+      List<PromoModel> value = await PromoService().getPromos();
+      // remove items with status 0
+      value.removeWhere((element) => element.status == "0");
+      setState(() {
+        promos = value;
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> getRates() async {
@@ -109,10 +109,6 @@ class _HomeTabState extends State<HomeTab> {
       List<RateModel> tempRates = await RateService().getRates("top_up");
 
       if (tempRates.length <= 9) {
-        // tempRates
-        //     .sublist(0, 3);
-            // .removeWhere((element) => element.name!.toLowerCase() == "more");
-
         rates = tempRates;
       } else {
         rates = tempRates.sublist(0, 8);
@@ -127,7 +123,6 @@ class _HomeTabState extends State<HomeTab> {
   Future<void> getTrans() async {
     try {
       transactionList = await TransactionService().getTransactionHistory();
-
       setState(() {});
     } catch (e) {
       print(e);
@@ -145,8 +140,8 @@ class _HomeTabState extends State<HomeTab> {
           onRefresh: () async {
             setState(() {
               rates = [];
-              promos = [];
-              transactionList = [];
+              promos = null;
+              transactionList = null;
             });
 
             _getAllData();
@@ -173,11 +168,10 @@ class _HomeTabState extends State<HomeTab> {
                 ),
                 const SizedBox(height: 15),
                 buildProductSection(),
-                transactionList != null && transactionList!.isEmpty
-                    ? Container()
-                    : buildTransSection(),
+                if (transactionList != null && transactionList!.isNotEmpty)
+                  buildTransSection(),
                 const SizedBox(height: 10),
-                promos == null ? Container() : buildPromotionSection(context),
+                buildPromotionSection(context),
                 const SizedBox(height: 20),
               ],
             ),
@@ -187,7 +181,7 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  buildTransSection() {
+  Widget buildTransSection() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,51 +189,51 @@ class _HomeTabState extends State<HomeTab> {
         Text(
           "Transaksi Terbaru",
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        transactionList == null
-            ? LayoutBuilder(
-                builder: (context, constraints) {
-                  final height = MediaQuery.of(context).size.height *
-                      (ResponsiveBreakpoints.of(context).isTablet ||
-                              ResponsiveBreakpoints.of(context).isDesktop
-                          ? (ResponsiveBreakpoints.of(context).orientation ==
-                                  Orientation.landscape
-                              ? 0.4
-                              : 0.3)
-                          : 0.2);
+        if (transactionList == null)
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final height = MediaQuery.of(context).size.height *
+                  (ResponsiveBreakpoints.of(context).isTablet ||
+                      ResponsiveBreakpoints.of(context).isDesktop
+                      ? (ResponsiveBreakpoints.of(context).orientation ==
+                      Orientation.landscape
+                      ? 0.4
+                      : 0.3)
+                      : 0.2);
 
-                  return Container(
-                    height: height,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      shrinkWrap: true,
-                      itemCount: 2,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return CommonShimmer().buildPromoItemShimmer(context);
-                      },
-                    ),
-                  );
-                },
-              )
-            : ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                shrinkWrap: true,
-                itemCount: transactionList!.length > 1 ? 2 : 1,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return TransactionItemWidget(
-                      transaction: transactionList![index]);
-                },
-              ),
+              return SizedBox(
+                height: height,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  shrinkWrap: true,
+                  itemCount: 2,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return CommonShimmer().buildPromoItemShimmer(context);
+                  },
+                ),
+              );
+            },
+          )
+        else
+          ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            shrinkWrap: true,
+            itemCount: transactionList!.length > 1 ? 2 : 1,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return TransactionItemWidget(transaction: transactionList![index]);
+            },
+          ),
       ],
     );
   }
 
-  buildProductSection() {
+  Widget buildProductSection() {
     final screenWidth = MediaQuery.of(context).size.width;
     final minItemWidth = screenWidth * 0.4;
 
@@ -249,30 +243,30 @@ class _HomeTabState extends State<HomeTab> {
       verticalGridSpacing: 4,
       listViewBuilderOptions: ListViewBuilderOptions(
         physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true, // This allows the grid to size based on content
+        shrinkWrap: true,
       ),
       minItemWidth: minItemWidth,
       children: rates.isEmpty
           ? List.generate(
-              8,
-              (index) => CommonShimmer().buildProductItemShimmer(context),
-              growable: false,
-            )
+        8,
+            (index) => CommonShimmer().buildProductItemShimmer(context),
+        growable: false,
+      )
           : List.generate(
-              rates.length,
-              (index) => buildProductItemWidget(rates[index]),
-              growable: false,
-            ),
+        rates.length,
+            (index) => buildProductItemWidget(rates[index]),
+        growable: false,
+      ),
     );
   }
 
-  buildProductItemWidget(RateModel rateModel) {
+  Widget buildProductItemWidget(RateModel rateModel) {
     return ProductItemWidget(
       rateModel: rateModel,
     );
   }
 
-  buildPromotionSection(BuildContext context) {
+  Widget buildPromotionSection(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,11 +277,12 @@ class _HomeTabState extends State<HomeTab> {
             Text(
               "Promo dan Berita",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            TextButton(
+            if (promos != null && promos!.isNotEmpty)
+              TextButton(
                 onPressed: () {
                   PersistentNavBarNavigator.pushNewScreen(
                     context,
@@ -302,74 +297,42 @@ class _HomeTabState extends State<HomeTab> {
                   style: TextStyle(
                     color: ColorManager.primary,
                   ),
-                ))
+                ),
+              )
           ],
         ),
-        LayoutBuilder(builder: (context, constraints) {
-          final height = MediaQuery.of(context).size.height *
-              (ResponsiveBreakpoints.of(context).isTablet ||
-                  ResponsiveBreakpoints.of(context).isDesktop ?
-              (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.5 : 0.24) : 0.21);
-
-          return Container(
-            height: height,
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              shrinkWrap: true,
-              itemCount: promos?.length ?? 2,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return promos == null || promos!.isEmpty
-                    ? CommonShimmer().buildPromoItemShimmer(context)
-                    : PromoItemWidget(
-                        promo: promos![index],
-                        source: "home",
-                      );
-              },
-            ),
-          );
-        })
-        // promos == null || promos!.isEmpty
-        //     ? SizedBox(
-        //   // height: MediaQuery.of(context).size.height * 0.16,
-        //   height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? 0.3 : 0.16),
-        //         child: ListView.builder(
-        //           padding: const EdgeInsets.symmetric(vertical: 10),
-        //           shrinkWrap: true,
-        //           itemCount: 2,
-        //           scrollDirection: Axis.horizontal,
-        //           itemBuilder: (context, index) {
-        //             return CommonShimmer().buildPromoItemShimmer(context);
-        //           },
-        //         ),
-        //       )
-        //     : SizedBox(
-        //   // height: MediaQuery.of(context).size.height * 0.21,
-        //   height: MediaQuery.of(context).size.height * (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop ? (ResponsiveBreakpoints.of(context).orientation == Orientation.landscape ? 0.5 : 0.24) : 0.21),
-        //         child: ListView.builder(
-        //           padding: const EdgeInsets.symmetric(vertical: 10),
-        //           shrinkWrap: true,
-        //           itemCount: promos!.length,
-        //           scrollDirection: Axis.horizontal,
-        //           itemBuilder: (context, index) {
-        //             return PromoItemWidget(
-        //               promo: promos![index],
-        //               source: "home",
-        //             );
-        //           },
-        //         ),
-        //       ),
+        const SizedBox(height: 10),
+        if (promos == null)
+          LayoutBuilder(builder: (context, constraints) {
+            final height = MediaQuery.of(context).size.height *
+                (ResponsiveBreakpoints.of(context).isTablet ||
+                    ResponsiveBreakpoints.of(context).isDesktop
+                    ? (ResponsiveBreakpoints.of(context).orientation ==
+                    Orientation.landscape
+                    ? 0.5
+                    : 0.24)
+                    : 0.21);
+            return SizedBox(
+              height: height,
+              child: CommonShimmer().buildPromoItemShimmer(context),
+            );
+          })
+        else
+          PromoSliderWidget(
+            promos: promos!,
+            source: "home",
+          ),
       ],
     );
   }
 
-  buildHeader() {
+  Widget buildHeader() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         CircleAvatar(
-          backgroundImage: NetworkImage(member!.photo ??
+          backgroundImage: NetworkImage(member?.photo ??
               "https://vectorified.com/images/user-icon-1.png"),
           radius: 30,
         ),
@@ -381,68 +344,49 @@ class _HomeTabState extends State<HomeTab> {
             children: [
               const Text("Halo,"),
               const SizedBox(height: 3),
-              Text(
-                (member!.name!.isEmpty || member?.name == null)
-                    ? "${member!.email}!"
-                    : "${member!.name}!",
-                softWrap: true,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+              if (member != null)
+                Text(
+                  (member!.name!.isEmpty || member?.name == null)
+                      ? "${member!.email}!"
+                      : "${member!.name}!",
+                  softWrap: true,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
             ],
           ),
         ),
-        Row(
-          children: [
-            // Image(
-            //   width: MediaQuery.of(context).size.width * 0.08,
-            //   height: MediaQuery.of(context).size.height * 0.04,
-            //   image: const AssetImage('assets/vepay_logo.png'),
-            // ),
-            // Image(
-            //   width: MediaQuery.of(context).size.width * 0.18,
-            //   height: MediaQuery.of(context).size.height * 0.05,
-            //   image: const AssetImage('assets/vepay_text.png'),
-            // ),
-            LayoutBuilder(builder: (context, constrains) {
-              final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-              final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
-              double logoHeight;
+        LayoutBuilder(builder: (context, constrains) {
+          final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+          final isLandscape =
+              MediaQuery.of(context).orientation == Orientation.landscape;
+          double logoHeight;
 
-              if (isTablet) {
-                // Different sizing for tablet orientations
-                logoHeight = isLandscape
-                    ? MediaQuery.of(context).size.height * 0.05  // Larger in landscape to compensate for smaller height
-                    : MediaQuery.of(context).size.height * 0.03; // Standard size in portrait
-              } else {
-                // Phone sizing
-                logoHeight = isLandscape
-                    ? MediaQuery.of(context).size.height * 0.09  // Larger in landscape to compensate for smaller height
-                    : MediaQuery.of(context).size.height * 0.035; // Standard size in portrait
-              }
+          if (isTablet) {
+            logoHeight = isLandscape
+                ? MediaQuery.of(context).size.height * 0.05
+                : MediaQuery.of(context).size.height * 0.03;
+          } else {
+            logoHeight = isLandscape
+                ? MediaQuery.of(context).size.height * 0.09
+                : MediaQuery.of(context).size.height * 0.035;
+          }
 
-              final minHeight = min(16.0, logoHeight * 0.8);
+          final minHeight = min(16.0, logoHeight * 0.8);
 
-              return Container(
-                constraints: BoxConstraints(
-                  maxHeight: logoHeight,
-                  minHeight: minHeight, // Minimum height for visibility
-                ),
-                child: Image.asset(
-                  'assets/vepay_logo_2.png',
-                  fit: BoxFit.contain,
-                ),
-              );
-            }),
-            // Image(
-            //   // width: MediaQuery.of(context).size.width * 0.18,
-            //   height: MediaQuery.of(context).size.height * 0.05,
-            //   image: const AssetImage('assets/vepay_logo_2.png'),
-            // ),
-          ],
-        ),
+          return Container(
+            constraints: BoxConstraints(
+              maxHeight: logoHeight,
+              minHeight: minHeight,
+            ),
+            child: Image.asset(
+              'assets/vepay_logo_2.png',
+              fit: BoxFit.contain,
+            ),
+          );
+        }),
       ],
     );
   }
@@ -471,19 +415,18 @@ class _HomeTabState extends State<HomeTab> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Visibility(
-                    visible: isShowPhone,
-                    child: TextFormField(
+                  if (isShowPhone)
+                    TextFormField(
                       controller: phoneController,
                       validator: MultiValidator([
                         RequiredValidator(
                             errorText: 'Harap masukan nomor telepon'),
                         MinLengthValidator(9,
                             errorText:
-                                "Panjang nomor telepon minimal 10 karakter"),
+                            "Panjang nomor telepon minimal 10 karakter"),
                         MaxLengthValidator(15,
                             errorText:
-                                "Panjang nomor telepon maksimal 15 karakter"),
+                            "Panjang nomor telepon maksimal 15 karakter"),
                       ]),
                       keyboardType: TextInputType.phone,
                       inputFormatters: [
@@ -504,11 +447,9 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                     ),
-                  ),
                   const SizedBox(height: 10),
-                  Visibility(
-                    visible: isShowName,
-                    child: TextFormField(
+                  if (isShowName)
+                    TextFormField(
                       controller: nameController,
                       validator: MultiValidator([
                         RequiredValidator(errorText: 'Harap masukan nama'),
@@ -524,7 +465,6 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -532,7 +472,6 @@ class _HomeTabState extends State<HomeTab> {
               TextButton(
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    // Do something with the entered data
                     String phone = phoneController.text;
                     String name = nameController.text;
 
