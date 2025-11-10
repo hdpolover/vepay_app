@@ -68,11 +68,11 @@ flutter:
 
 # Native splash screen configuration
 flutter_native_splash:
-  color: "#ffffff"
-  image: assets/new_logo_big.png
+  color: "#FFFFFF"
+  image: assets/logovepaybarusyazana.png
   android_12:
-    color: "#ffffff"
-    image: assets/new_logo_big.png
+    color: "#FFFFFF"
+    image: assets/logovepaybarusyazana.png
   android: true
   ios: true
   web: false
