@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/services/push_notif_service.dart';
-
 import 'my_app.dart';
 
 Future<void> main() async {
@@ -37,3 +36,4 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
+

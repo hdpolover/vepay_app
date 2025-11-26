@@ -610,30 +610,35 @@ class _EditProfileState extends State<EditProfile> {
   displayDatePicker() {
     showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
+        // Coba kita set initialDate ke tanggal yang sudah ada jika ada
+        initialDate: _selectedDate ?? DateTime.now(),
         firstDate: DateTime(1950, 1, 1),
-        lastDate: DateTime.now(),
+        lastDate: DateTime(3000, 1, 1),
         builder: (context, child) {
           return Theme(
             data: ThemeData.light().copyWith(
-              //Header background color
-              primaryColor: ColorManager.primary,
-              //Background color
-              scaffoldBackgroundColor: Colors.grey[50],
-              //Divider color
-              dividerColor: Colors.grey,
-              //Non selected days of the month color
-              textTheme: const TextTheme(
-                bodySmall: TextStyle(color: Colors.black),
-              ),
-              colorScheme: ColorScheme.fromSwatch().copyWith(
-                //Selected dates background color
+              // 1. Menggunakan ColorScheme.light untuk styling yang lebih modern & lengkap
+              colorScheme: ColorScheme.light(
+                // Warna utama (latar belakang header, tanggal terpilih)
                 primary: ColorManager.primary,
-                //Month title and week days color
+                // Teks di atas warna utama (teks di header, teks tanggal terpilih)
+                onPrimary: Colors.white,
+                // Teks lain (nama bulan, hari, tanggal tidak terpilih)
+                // INI PENTING: Juga mengatur warna teks untuk input manual
                 onSurface: Colors.black,
-                //Header elements and selected dates text color
-                //onPrimary: Colors.white,
+                // Latar belakang dialog
+                surface: Colors.white,
               ),
+
+              // 2. Menyesuaikan warna tombol OK/Cancel
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: ColorManager.primary, // Warna teks tombol
+                ),
+              ),
+
+              // 3. Mengatur warna latar belakang dialog secara eksplisit
+              dialogBackgroundColor: Colors.white,
             ),
             child: child!,
           );
