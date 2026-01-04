@@ -1,6 +1,8 @@
+import 'dart:convert'; // --- BARU: Untuk decode JSON
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:http/http.dart' as http; // --- BARU: Import http
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/common/common_dialog.dart';
 import 'package:vepay_app/common/common_method.dart';
@@ -28,6 +30,9 @@ class _LoginState extends State<Login> {
   bool isLoading = false;
   bool _isObscure = true;
 
+  // --- BARU: Variabel untuk menyimpan IP ---
+  String _ipAddress = "Memuat IP...";
+
   final _formKey = GlobalKey<FormState>();
 
   final _passwordValidator = MultiValidator([
@@ -41,6 +46,41 @@ class _LoginState extends State<Login> {
     RequiredValidator(errorText: 'Harap masukan email'),
     EmailValidator(errorText: "Harap masukan email yang valid")
   ]);
+
+  @override
+  void initState() {
+    super.initState();
+    // --- BARU: Panggil fungsi ambil IP saat layar dibuka ---
+    _getIpAddress();
+  }
+
+  // --- BARU: Fungsi untuk mengambil IP Address ---
+  Future<void> _getIpAddress() async {
+    try {
+      final response = await http.get(Uri.parse('https://api.ipify.org?format=json'));
+      if (response.statusCode == 200) {
+        // Jika berhasil, update variabel _ipAddress
+        final data = jsonDecode(response.body);
+        if (mounted) {
+          setState(() {
+            _ipAddress = data['ip'];
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            _ipAddress = "Gagal memuat IP";
+          });
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _ipAddress = "-"; // Gagal koneksi
+        });
+      }
+    }
+  }
 
   regist(String e, String n, String p, bool isGoogle, String fcmToken) async {
     Map<String, dynamic> data;
@@ -144,7 +184,7 @@ class _LoginState extends State<Login> {
         });
 
         CommonDialog.buildOkDialog(context, false,
-            "Akun Anda dibanned, silahkan hubungi admin untuk informasi lebih lanjut.");
+            "Akun Anda dibanned, silahkan hubungi admin untuk informasi lebih lanjut.");
       } else if (res == 2) {
         Map<String, dynamic> data = {
           "is_google": false,
@@ -253,11 +293,11 @@ class _LoginState extends State<Login> {
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color:
-                                _isObscure ? Colors.grey : ColorManager.primary,
+                            _isObscure ? Colors.grey : ColorManager.primary,
                           ),
                           onPressed: () {
                             setState(
-                              () {
+                                  () {
                                 _isObscure = !_isObscure;
                               },
                             );
@@ -268,102 +308,40 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  //   child: Row(
-                  //     children: [
-                  //       Transform.scale(
-                  //         scale: 1.5,
-                  //         child: Checkbox(
-                  //           checkColor: Colors.white,
-                  //           activeColor: ColorManager.primary,
-                  //           value: checkValue,
-                  //           side: BorderSide(
-                  //             color: ColorManager.primary,
-                  //             width: 2,
-                  //           ),
-                  //           onChanged: (value) {
-                  //             setState(() {
-                  //               checkValue = value!;
-                  //             });
-                  //           },
-                  //         ),
-                  //       ),
-                  //       const SizedBox(width: 5),
-                  //       //       Expanded(
-                  //       //         child: GestureDetector(
-                  //       //           onTap: () {
-                  //       //             Navigator.push(
-                  //       //               context,
-                  //       //               MaterialPageRoute(
-                  //       //                 builder: (context) => WebViewPage(
-                  //       //                   title: "ToS dan Privacy Policy",
-                  //       //                   url: "",
-                  //       //                 ),
-                  //       //               ),
-                  //       //             );
-                  //       //           },
-                  //       //           child: RichText(
-                  //       //             text: TextSpan(
-                  //       //               children: [
-                  //       //                 const TextSpan(
-                  //       //                   text:
-                  //       //                       'Dengan mendaftar, Anda telah menyetujui ',
-                  //       //                   style: TextStyle(
-                  //       //                     color: Colors.black,
-                  //       //                   ),
-                  //       //                 ),
-                  //       //                 TextSpan(
-                  //       //                   text: 'Terms of Service and Privacy Policy',
-                  //       //                   style: TextStyle(
-                  //       //                     color: ColorManager.primary,
-                  //       //                   ),
-                  //       //                 ),
-                  //       //               ],
-                  //       //             ),
-                  //       //           ),
-                  //       //         ),
-                  //       //       ),
-                  //       //     ],
-                  //       //   ),
-                  //       // ),
-                  //       // const SizedBox(height: 20),
-                  //     ],
-                  //   ),
-                  // ),
+
                   isLoading
                       ? CircularProgressIndicator(
-                          color: ColorManager.primary,
-                        )
+                    color: ColorManager.primary,
+                  )
                       : Padding(
-                          padding: EdgeInsets.symmetric(horizontal: w * 0.02),
-                          child: SizedBox(
-                            height: h * 0.06,
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    ColorManager.primary, // background
-                                foregroundColor: Colors.white, // foreground
-                              ),
-                              child: const Text('Masuk'),
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-
-                                  var prefs = SharedPreferences.getInstance();
-
-                                  String fcmToken = await prefs.then((value) =>
-                                      value.getString("fcmToken") ?? "");
-
-                                  login(fcmToken);
-                                }
-                              },
-                            ),
-                          ),
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.02),
+                    child: SizedBox(
+                      height: h * 0.06,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                          ColorManager.primary, // background
+                          foregroundColor: Colors.white, // foreground
                         ),
+                        child: const Text('Masuk'),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              isLoading = true;
+                            });
+
+                            var prefs = SharedPreferences.getInstance();
+
+                            String fcmToken = await prefs.then((value) =>
+                            value.getString("fcmToken") ?? "");
+
+                            login(fcmToken);
+                          }
+                        },
+                      ),
+                    ),
+                  ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.035),
                   InkWell(
                     onTap: () {
@@ -454,7 +432,7 @@ class _LoginState extends State<Login> {
                                 backgroundColor: Colors.white,
                                 child: Padding(
                                   padding:
-                                      const EdgeInsets.symmetric(vertical: 50),
+                                  const EdgeInsets.symmetric(vertical: 50),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -518,7 +496,7 @@ class _LoginState extends State<Login> {
                                     });
 
                                     CommonDialog.buildOkDialog(context, false,
-                                        "Akun Anda dibanned, silahkan hubungi admin untuk informasi lebih lanjut.");
+                                        "Akun Anda dibanned, silahkan hubungi admin untuk informasi lebih lanjut.");
                                   } else if (res == 2) {
                                     Map<String, dynamic> data = {
                                       "is_google": true,
@@ -572,6 +550,17 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
+
+                  // --- BARU: Menampilkan Text IP Address ---
+                  const SizedBox(height: 30),
+                  Text(
+                    "IP Address: $_ipAddress",
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),
@@ -581,3 +570,4 @@ class _LoginState extends State<Login> {
     );
   }
 }
+
