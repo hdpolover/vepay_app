@@ -45,6 +45,8 @@ dependencies:
   whatsapp_unilink: ^2.1.0
   responsive_framework: ^1.5.1
   flutter_native_splash: ^2.4.1
+  network_info_plus: ^5.0.2
+  dart_ipify: ^1.1.1
 
 icons_launcher:
   image_path: 'assets/new_logo_big.png'

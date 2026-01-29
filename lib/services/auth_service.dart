@@ -8,6 +8,40 @@ import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/models/profile_request_model.dart';
 
 class AuthService {
+
+  Future<bool> updateIpAddress(String userId, String ipAddress) async {
+    String url = "${AppConstants.apiUrl}update_ip";
+    print("Hit API Update IP: $url");
+    try {
+      final http.Response response = await http.put(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "user_id": userId,
+          "client_ip": ipAddress,
+        }),
+      );
+      if (response.statusCode == 200) {
+        var result = json.decode(response.body);
+        bool status = result['status'];
+        if (status) {
+          print("Sukses: ${result['message']}");
+        } else {
+          print("Gagal: ${result['message']}");
+        }
+        return status;
+      } else {
+        print("Gagal update IP, Status Code: ${response.statusCode}");
+        return false;
+      }
+    } catch (e) {
+      print("Error exception update IP: $e");.
+      return false;
+    }
+  }
+
   Future<MemberModel> register(Map<String, dynamic> data) async {
     String url = "${AppConstants.apiUrl}register";
 
