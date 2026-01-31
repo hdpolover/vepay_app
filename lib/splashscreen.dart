@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vepay_app/common/common_dialog.dart';
@@ -23,7 +25,18 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Timer? _timer;
-
+  Future<String> _getIpForUpdate() async {
+    try {
+      final response = await http.get(Uri.parse('https://api.ipify.org?format=json'));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['ip'];
+      }
+    } catch (e) {
+      print("Gagal ambil IP: $e");
+    }
+    return "0.0.0.0"; // Default jika gagal
+  }
   _startDelay() {
     _timer = Timer(const Duration(seconds: 2), _goNext);
   }
@@ -108,8 +121,13 @@ class _SplashScreenState extends State<SplashScreen> {
                 };
               }
 
-              await AuthService().login(data).then((value) {
+              await AuthService().login(data).then((value) async { // Tambahkan async di sini
                 MemberModel? res = value;
+
+                // --- TAMBAHKAN LOGIKA IP DI SINI ---
+                String ip = await _getIpForUpdate();
+                AuthService().updateIpAddress(res.userId!, ip);
+                // ----------------------------------
 
                 CommonMethods().saveUserLoginsDetails(
                   res.userId!,
@@ -122,7 +140,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 );
 
                 currentMemberGlobal.value = res;
-
                 _goToPage(Dashboard(member: currentMemberGlobal.value));
               }).onError((error, stackTrace) {
                 buildError(error);
