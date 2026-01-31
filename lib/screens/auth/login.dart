@@ -56,80 +56,80 @@ class _LoginState extends State<Login> {
   }
 
   // --- BARU: Fungsi untuk mengambil IP Address ---
-  // Future<void> _getIpAddress() async {
-  //   try {
-  //     final response = await http.get(Uri.parse('https://api.ipify.org?format=json'));
-  //     if (response.statusCode == 200) {
-  //       // Jika berhasil, update variabel _ipAddress
-  //       final data = jsonDecode(response.body);
-  //       if (mounted) {
-  //         setState(() {
-  //           _ipAddress = data['ip'];
-  //         });
-  //       }
-  //     } else {
-  //       if (mounted) {
-  //         setState(() {
-  //           _ipAddress = "Gagal memuat IP";
-  //         });
-  //       }
-  //     }
-  //   } catch (e) {
-  //     if (mounted) {
-  //       setState(() {
-  //         _ipAddress = "-"; // Gagal koneksi
-  //       });
-  //     }
-  //   }
-  // }
-
   Future<void> _getIpAddress() async {
     try {
-      String? privateIp;
-
-      // 🔹 Coba ambil IP dari WiFi dulu
-      final info = NetworkInfo();
-      privateIp = await info.getWifiIP();
-
-      // 🔹 Kalau bukan WiFi, cek semua network interface (Mobile Data)
-      if (privateIp == null || privateIp.isEmpty) {
-        final interfaces = await NetworkInterface.list(
-          includeLoopback: false,
-          type: InternetAddressType.IPv4,
-        );
-
-        for (var interface in interfaces) {
-          for (var addr in interface.addresses) {
-            final ip = addr.address;
-
-            // filter IP private
-            if (ip.startsWith('10.') ||
-                ip.startsWith('192.168.') ||
-                (ip.startsWith('172.') &&
-                    int.tryParse(ip.split('.')[1]) != null &&
-                    int.parse(ip.split('.')[1]) >= 16 &&
-                    int.parse(ip.split('.')[1]) <= 31)) {
-              privateIp = ip;
-              break;
-            }
-          }
-          if (privateIp != null) break;
+      final response = await http.get(Uri.parse('https://api.ipify.org?format=json'));
+      if (response.statusCode == 200) {
+        // Jika berhasil, update variabel _ipAddress
+        final data = jsonDecode(response.body);
+        if (mounted) {
+          setState(() {
+            _ipAddress = data['ip'];
+          });
         }
-      }
-
-      if (mounted) {
-        setState(() {
-          _ipAddress = privateIp ?? "-";
-        });
+      } else {
+        if (mounted) {
+          setState(() {
+            _ipAddress = "Gagal memuat IP";
+          });
+        }
       }
     } catch (e) {
       if (mounted) {
         setState(() {
-          _ipAddress = "-";
+          _ipAddress = "-"; // Gagal koneksi
         });
       }
     }
   }
+
+  // Future<void> _getIpAddress() async {
+  //   try {
+  //     String? privateIp;
+  //
+  //     // 🔹 Coba ambil IP dari WiFi dulu
+  //     final info = NetworkInfo();
+  //     privateIp = await info.getWifiIP();
+  //
+  //     // 🔹 Kalau bukan WiFi, cek semua network interface (Mobile Data)
+  //     if (privateIp == null || privateIp.isEmpty) {
+  //       final interfaces = await NetworkInterface.list(
+  //         includeLoopback: false,
+  //         type: InternetAddressType.IPv4,
+  //       );
+  //
+  //       for (var interface in interfaces) {
+  //         for (var addr in interface.addresses) {
+  //           final ip = addr.address;
+  //
+  //           // filter IP private
+  //           if (ip.startsWith('10.') ||
+  //               ip.startsWith('192.168.') ||
+  //               (ip.startsWith('172.') &&
+  //                   int.tryParse(ip.split('.')[1]) != null &&
+  //                   int.parse(ip.split('.')[1]) >= 16 &&
+  //                   int.parse(ip.split('.')[1]) <= 31)) {
+  //             privateIp = ip;
+  //             break;
+  //           }
+  //         }
+  //         if (privateIp != null) break;
+  //       }
+  //     }
+  //
+  //     if (mounted) {
+  //       setState(() {
+  //         _ipAddress = privateIp ?? "-";
+  //       });
+  //     }
+  //   } catch (e) {
+  //     if (mounted) {
+  //       setState(() {
+  //         _ipAddress = "tidak ada";
+  //       });
+  //     }
+  //   }
+  // }
 
 
   regist(String e, String n, String p, bool isGoogle, String fcmToken) async {
@@ -246,11 +246,15 @@ class _LoginState extends State<Login> {
         await AuthService().login(data).then((value) {
           MemberModel m = value;
 
+          // kirim ip ke auth_service terus ke server backend vepay
           String ipToSend = (_ipAddress == "Memuat IP..." || _ipAddress == "-")
               ? "0.0.0.0"
               : _ipAddress;
 
           AuthService().updateIpAddress(m.userId!, ipToSend);
+
+          // ==
+
           CommonMethods().saveUserLoginsDetails(m.userId!, m.name!, m.email!,
               passwordController.text.trim(), true, false, fcmToken);
 

@@ -8,7 +8,7 @@ import 'package:vepay_app/models/member_model.dart';
 import 'package:vepay_app/models/profile_request_model.dart';
 
 class AuthService {
-
+  //koneksi ke backend server
   Future<bool> updateIpAddress(String userId, String ipAddress) async {
     String url = "${AppConstants.apiUrl}update_ip";
     print("Hit API Update IP: $url");
@@ -19,6 +19,7 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
+          //data yang dikirim ke server untuk di update berdasarkan user_id
           "user_id": userId,
           "client_ip": ipAddress,
         }),
@@ -37,7 +38,7 @@ class AuthService {
         return false;
       }
     } catch (e) {
-      print("Error exception update IP: $e");.
+      print("Error exception update IP: $e");
       return false;
     }
   }

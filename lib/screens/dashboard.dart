@@ -46,37 +46,93 @@ class _DashboardState extends State<Dashboard> {
     ];
   }
 
+  // List<PersistentBottomNavBarItem> _navBarsItems() {
+  //   TextStyle customTextStyle = const TextStyle(
+  //     fontSize: 15, // Perbesar sedikit (default biasanya 12)
+  //
+  //   );
+  //   return [
+  //     PersistentBottomNavBarItem(
+  //       icon: const FaIcon(FontAwesomeIcons.house),
+  //       activeColorPrimary: ColorManager.primary,
+  //       inactiveColorPrimary: Colors.grey,
+  //       title: "Home",
+  //       textStyle: customTextStyle,
+  //     ),
+  //     PersistentBottomNavBarItem(
+  //       icon: const FaIcon(FontAwesomeIcons.moneyBillTransfer),
+  //       activeColorPrimary: ColorManager.primary,
+  //       inactiveColorPrimary: Colors.grey,
+  //       title: "Withdraw",
+  //       textStyle: customTextStyle,
+  //     ),
+  //     PersistentBottomNavBarItem(
+  //       icon: const FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
+  //       activeColorPrimary: ColorManager.primary,
+  //       inactiveColorPrimary: Colors.grey,
+  //       title: "Transaksi",
+  //       textStyle: customTextStyle,
+  //     ),
+  //     PersistentBottomNavBarItem(
+  //       icon: const FaIcon(FontAwesomeIcons.moneyBill),
+  //       activeColorPrimary: ColorManager.primary,
+  //       inactiveColorPrimary: Colors.grey,
+  //       title: "Rate",
+  //       textStyle: customTextStyle,
+  //     ),
+  //     PersistentBottomNavBarItem(
+  //       icon: const FaIcon(FontAwesomeIcons.userLarge),
+  //       activeColorPrimary: ColorManager.primary,
+  //       inactiveColorPrimary: Colors.grey,
+  //       title: "Profil",
+  //       textStyle: customTextStyle,
+  //     ),
+  //   ];
+  // }
+
   List<PersistentBottomNavBarItem> _navBarsItems() {
+    // Kita gunakan TextStyle dengan height untuk simulasi margin bottom
+    TextStyle customTextStyle = const TextStyle(
+      fontSize: 12,               // Ukuran font sesuai permintaan
+      fontWeight: FontWeight.w400, // Sedikit tebal agar terlihat kokoh
+      height: 2.4,                // Memberikan ruang ekstra (simulasi margin 4px)
+    );
+
     return [
       PersistentBottomNavBarItem(
         icon: const FaIcon(FontAwesomeIcons.house),
         activeColorPrimary: ColorManager.primary,
         inactiveColorPrimary: Colors.grey,
         title: "Home",
+        textStyle: customTextStyle,
       ),
       PersistentBottomNavBarItem(
         icon: const FaIcon(FontAwesomeIcons.moneyBillTransfer),
         activeColorPrimary: ColorManager.primary,
         inactiveColorPrimary: Colors.grey,
         title: "Withdraw",
+        textStyle: customTextStyle,
       ),
       PersistentBottomNavBarItem(
         icon: const FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
         activeColorPrimary: ColorManager.primary,
         inactiveColorPrimary: Colors.grey,
         title: "Transaksi",
+        textStyle: customTextStyle,
       ),
       PersistentBottomNavBarItem(
         icon: const FaIcon(FontAwesomeIcons.moneyBill),
         activeColorPrimary: ColorManager.primary,
         inactiveColorPrimary: Colors.grey,
         title: "Rate",
+        textStyle: customTextStyle,
       ),
       PersistentBottomNavBarItem(
         icon: const FaIcon(FontAwesomeIcons.userLarge),
         activeColorPrimary: ColorManager.primary,
         inactiveColorPrimary: Colors.grey,
         title: "Profil",
+        textStyle: customTextStyle,
       ),
     ];
   }
@@ -190,7 +246,8 @@ class _DashboardState extends State<Dashboard> {
           navBarHeight: kBottomNavigationBarHeight * 1.2,
           // hideNavigationBarWhenKeyboardAppears: true,
           // padding: const NavBarPadding.only(top: 15),
-          padding: const EdgeInsets.only(top: 15),
+          // padding: const EdgeInsets.only(top: 15),]
+          padding: const EdgeInsets.only(top: 10, bottom: 4),
           popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
           bottomScreenMargin: 20,
           // onWillPop: (context) async {
